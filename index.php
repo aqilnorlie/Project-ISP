@@ -902,8 +902,10 @@
             </div>
           </div>
           <!-- ./col -->
+          <!--
           <div class="col-lg-3 col-6">
-            <!-- small box -->
+            <!---
+           
             <div class="small-box bg-warning">
               <div class="inner">
                 <h3>44</h3>
@@ -916,6 +918,7 @@
               <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
+             -->
           <!-- ./col -->
           <!----
           <div class="col-lg-3 col-6">
@@ -932,9 +935,10 @@
               <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
-        -->
+        
           <!-- ./col -->
-        </div>
+         </div>
+          
         <!-- /.row -->
         <!-- Main row -->
         <div class="row">
@@ -943,8 +947,10 @@
             <!-- Custom tabs (Charts with tabs)-->
           
             <!-- /.card -->
-
+            
+            
             <!-- DIRECT CHAT -->
+            
             <div class="card direct-chat direct-chat-primary">
               <div class="card-header">
                 <h3 class="card-title">Direct Chat</h3>
@@ -963,6 +969,7 @@
                 </div>
               </div>
               <!-- /.card-header -->
+              
               <div class="card-body">
                 <!-- Conversations are loaded here -->
                 <div class="direct-chat-messages">
@@ -1280,15 +1287,16 @@
           <!-- /.Left col -->
           <!-- right col (We are only adding the ID to make the widgets sortable)-->
           <section class="col-lg-5 connectedSortable">
-
-            <!-- Map card -->
+          
+           <!--
             <div class="card bg-gradient-primary">
               <div class="card-header border-0">
                 <h3 class="card-title">
                   <i class="fas fa-map-marker-alt mr-1"></i>
                   Visitors
                 </h3>
-                <!-- card tools -->
+            
+                
                 <div class="card-tools">
                   <button type="button" class="btn btn-primary btn-sm daterange" title="Date range">
                     <i class="far fa-calendar-alt"></i>
@@ -1297,6 +1305,8 @@
                     <i class="fas fa-minus"></i>
                   </button>
                 </div>
+              -->
+
                 <!-- /.card-tools -->
               </div>
               <div class="card-body">
@@ -1315,10 +1325,12 @@
                     <div class="text-white">Online</div>
                   </div>
                   <!-- ./col -->
+                  <!--
                   <div class="col-4 text-center">
                     <div id="sparkline-3"></div>
                     <div class="text-white">Sales</div>
                   </div>
+                  -->
                   <!-- ./col -->
                 </div>
                 <!-- /.row -->
@@ -1331,7 +1343,7 @@
               <div class="card-header border-0">
                 <h3 class="card-title">
                   <i class="fas fa-th mr-1"></i>
-                  Sales Graph
+                  Sales Grap
                 </h3>
 
                 <div class="card-tools">
