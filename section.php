@@ -198,7 +198,18 @@
                 <div class="card-body">
                   <div class="form-group">
                     <label for="sectionNumber">Section Number</label>
-                    <input type="text" class="form-control" id="sectionNumber" placeholder="SELECT ONE" nama="sectionNumber">
+                    <!--(TEST) <input type="text" class="form-control" id="sectionNumber" placeholder="SELECT ONE" nama="sectionNumber"> -->
+                    <div class="input-group"> <!-- amik ni dr roles -->
+                      <div class="custom-file">
+                        <select class="form-control" name="SectionNumber" id="SectionNumber">
+                          <option value="" disabled selected hidden>SELECT ONE</option>
+                          <option value="A">A</option>
+                          <option value="B">B</option>
+                          <option value="C">C</option>
+                          <option value="D">D</option>
+                        </select>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="card-body">
@@ -230,10 +241,11 @@
             <!-- add User form elements -->
             <div style="width:1250px"class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Add User</h3>
+                <h3 class="card-title">Sections</h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
+              <!--
               <form>
                 <div class="card-body">
                   <div class="form-group">
@@ -260,13 +272,18 @@
                     <label class="form-check-label" for="exampleCheck1"><b>Allow</b> User to access the system</label>
                   </div>
                 </div>
+                -->
                 <!-- /.card-body --> 
-
+                
+              <!--
                 <div class="card-footer">
                   <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
-              </form>
-            </div>
+                </form>
+              </div> 
+                -->
+                
+          
 
             <div class="card">
               <div class="card-header">
