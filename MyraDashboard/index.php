@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>aqil | Dashboard</title>
+  <title>Dashboard</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -129,6 +129,16 @@
              </a>
            </li>
          </li>
+
+         <li class="nav-item menu-open">
+           <li class="nav-item">
+             <a href="../Myrasection/section.php" class="nav-link">
+               <i class="nav-icon fas fa-user-graduate"></i>
+               <p>Section (yang ni nnti kena buang)</p>
+             </a>
+           </li>
+         </li>
+
          <li class="nav-item menu-open">
          <li class="nav-item">
              <a href="../MyraReport/report.php" class="nav-link">

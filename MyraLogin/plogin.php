@@ -42,7 +42,7 @@ if($row > 0){
 
 //<?php
 include("connection.php");
-include("function.php");
+include("MyraFunctionLogin.php");
 
 if(isset($_POST['btnLog']))
 {
@@ -79,7 +79,7 @@ if(isset($_POST['btnLog']))
     if($json['status'] == "true")
     {  
         
-        if(checkStaffLogin($conn2, $conn1, $userid) == true) //look for this function in functions.php file
+        if(checkStaffLogin($conn2, $conn1, $userid) == true) //look for this function in MyrafunctionsLogin.php file
 
             header("Location: ../MyraDashboard/index.php");
         else

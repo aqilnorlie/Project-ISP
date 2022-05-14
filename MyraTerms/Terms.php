@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>aqil | Dashboard</title>
+  <title>Term</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -126,7 +126,7 @@
             </li>
           <li class="nav-item menu-open">
           <li class="nav-item">
-             <a href="section.php" class="nav-link">
+             <a href="../Myrasection/section.php" class="nav-link">
                <i class="nav-icon fas fa-database"></i>
                <p>Section</p>
              </a>
@@ -142,14 +142,14 @@
          </li>
          <li class="nav-item menu-open">
          <li class="nav-item">
-             <a href="Terms.php.php" class="nav-link active">
+             <a href="../MyraTerms/Terms.php" class="nav-link active">
                <i class="nav-icon fas fa-database"></i>
                <p>Terms</p>
              </a>
            </li>
          </li>
           <li class="nav-item">
-            <a href="../MyraLoginlogin.php" class="nav-link">
+            <a href="../MyraLogin/login.php" class="nav-link">
               <i class="nav-icon fas fa-power-off"></i>
               <p>
                 Log Out
@@ -175,7 +175,7 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item"><a href="../MyraDashboard/index.php">Home</a></li>
               <li class="breadcrumb-item active">Terms</li>
             </ol>
           </div>
@@ -204,7 +204,7 @@
                     <div class="input-group">
                       <div class="custom-file">
                         <select class="form-control" name="sectionNumber" id="sectionNumber">
-                        <option value="" disabled selected hidden>Select Section</option>
+                        <option value="" disabled selected hidden>SELECT SUB-SECTION</option>
                           <option value="DummyA">DummyA</option>
                           <option value="DummyB">DummyB</option>
                       </select>

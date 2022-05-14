@@ -539,12 +539,17 @@ function changePtftPassword($dbh2, $id, $curpassword, $newpassword)
 function checkStaffLogin($dbh, $dbh3, $userid)
 {
     $found = false;
-    $data = ["userid" => $userid];
+    $data = [":userid" => $userid];
     //$sql = "SELECT * FROM classbook_backup_jengka.vw_staff_phg a LEFT JOIN attendancerptdb.user_roles b ON a.USER_ID = b.USER_ID WHERE a.USER_ID = :userid";
-    $sql = "SELECT c.USER_ID,c.USER_NAME, m.roleId, m.statusId 
-    FROM myra.myraroleassignment m 
+    $sql = "SELECT * FROM myra.myraroleassignment m 
     JOIN classbook_backup_jengka.vw_staff_phg c 
-    ON C.USER_ID = m.USER_ID;";
+    ON C.USER_ID = m.USER_ID 
+    WHERE c.USER_ID = :userid";
+    
+    //"SELECT c.USER_ID,c.USER_NAME, m.roleId, m.statusId 
+    //FROM myra.myraroleassignment m 
+    //JOIN classbook_backup_jengka.vw_staff_phg c 
+    //ON C.USER_ID = m.USER_ID;";
 
     $stmt = $dbh3->prepare($sql);
     $stmt->execute($data);

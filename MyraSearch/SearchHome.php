@@ -3,7 +3,7 @@
 <head>    <!-- Nanti kene betulkan sebab loading interface stuck-->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>aqil | Dashboard</title>
+  <title>Search</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -42,7 +42,7 @@
     <!-- Left navbar links -->
     <ul class="navbar-nav ml-auto">
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="../MyraLogin/login.php" class="nav-link">Sign</a>
+        <a href="../MyraLogin/login.php" class="nav-link">Login</a>
       </li>
     </ul>
 
