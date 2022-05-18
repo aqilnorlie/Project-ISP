@@ -182,9 +182,9 @@
       <div class="container-fluid">
         <div class="row">
           <!-- left column -->
-          <div class="col-md-6">
+          <div class="col-md-15">
             <!-- general form elements -->
-            <div class="card card-primary col-12">
+            <div class="card card-primary col-sm-15">
               <div class="card-header">
                 <h3 class="card-title">Search Lecturer</h3>
               </div>
