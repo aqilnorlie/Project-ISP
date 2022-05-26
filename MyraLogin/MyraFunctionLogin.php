@@ -7,8 +7,15 @@ function nameRoleGreeting($dbh, $userfullname, $roleid)
 
 function getRoleTitles($dbh, $roleid)
 {
+    
+
     $data = ["roleid" => $roleid];
-    $sql = "SELECT roletitle FROM attendancerptdb.roles WHERE roleid = :roleid";
+    //$sql = "SELECT roletitle FROM attendancerptdb.roles WHERE roleid = :roleid";
+    $sql = "SELECT roleTitle FROM myra.myraroles r,myra.myraroleassignment m 
+    JOIN classbook_backup_jengka.vw_staff_phg c 
+    ON C.USER_ID = m.USER_ID 
+    WHERE r.roleId = :roleId";
+
     $stmt = $dbh->prepare($sql);
     $stmt->execute($data);
     $rowCount = $stmt->rowCount();
@@ -16,7 +23,7 @@ function getRoleTitles($dbh, $roleid)
     {
         $d = $stmt->fetch(PDO::FETCH_ASSOC);
         
-        $roletitle = $d['roletitle'];
+        $roletitle = $d['roleTitle'];
     }
     else
         $roletitle = "LECTURER";
@@ -536,6 +543,8 @@ function changePtftPassword($dbh2, $id, $curpassword, $newpassword)
 
 /////start: permanent staff/ptft functions/////
 
+
+
 function checkStaffLogin($dbh, $dbh3, $userid)
 {
     $found = false;
@@ -545,12 +554,8 @@ function checkStaffLogin($dbh, $dbh3, $userid)
     JOIN classbook_backup_jengka.vw_staff_phg c 
     ON C.USER_ID = m.USER_ID 
     WHERE c.USER_ID = :userid";
-    
-    //"SELECT c.USER_ID,c.USER_NAME, m.roleId, m.statusId 
-    //FROM myra.myraroleassignment m 
-    //JOIN classbook_backup_jengka.vw_staff_phg c 
-    //ON C.USER_ID = m.USER_ID;";
 
+    
     $stmt = $dbh3->prepare($sql);
     $stmt->execute($data);
     $rowCount = $stmt->rowCount();
@@ -565,14 +570,17 @@ function checkStaffLogin($dbh, $dbh3, $userid)
         //get role or assign default role
         if(!is_null($d['roleId']))
         {
+         
             $roleid = $d['roleId'];
             $_SESSION['roleid'] = $d['roleId'];
+
+            
         }
-        else
+        /*else
         {
             $roleid = 55;
             $_SESSION['roleid'] = 55; //default - lecturer
-        }
+        } */
         
         /*$logintoken = generateToken(32);
         $_SESSION['logintoken'] = $logintoken;
