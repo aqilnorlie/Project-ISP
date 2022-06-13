@@ -1,6 +1,7 @@
 <?php 
 
 include('sconnection.php'); 
+session_start();
 
 ?>
 
@@ -9,7 +10,7 @@ include('sconnection.php');
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Add Section</title>
+  <title>Edit Section</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -177,12 +178,12 @@ include('sconnection.php');
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Add Section</h1>
+            <h1>Edit Section</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="../MyraDashboard/index.php">Home</a></li>
-              <li class="breadcrumb-item active">Add Section</li>
+              <li class="breadcrumb-item active">Edit Section</li>
             </ol>
           </div>
         </div>
@@ -198,18 +199,44 @@ include('sconnection.php');
             <!-- general form elements -->
             <div style="width:1250px" class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Add Section</h3>
+                <h3 class="card-title">Edit Section</h3>
               </div>
               <!-- /.card-header -->
+
               <!-- form start -->
-              <form action="psection.php" method="POST">
+
+              <?php
+              if(isset($_GET['sectionNumber']))
+              {
+                $sectionNumber = $_GET['sectionNumber'];
+
+                $query = "SELECT * FROM myrasection WHERE sectionNumber=:sectionNumber LIMIT 1";
+                $statement = $pdo->prepare($query);
+                $data = [':sectionNumber' => $sectionNumber];
+                $statement->execute($data);
+
+                $result = $statement->fetch(PDO::FETCH_ASSOC); //PDO::FETCH_ASSOC
+                $_SESSION["sectionNumberNew"]=$result['sectionNumber'];
+              }
+              ?>
+
+              <form action="peditsection.php" method="POST">
+
+                <!-- <input type="hidden" name="sectionId" value="<? //= $result['sectionId']; ?>"> -->
+
                 <div class="card-body">
                   <div class="form-group">
                     <label for="sectionNumber">Section Number</label>
                     <!--(TEST) <input type="text" class="form-control" id="sectionNumber" placeholder="SELECT ONE" nama="sectionNumber"> -->
-                    <div class="input-group"> <!-- amik ni dr roles -->
-                      <div class="custom-file">
-                        <select class="form-control" name="sectionNumber" id="sectionNumber">
+                    <!-- <div class="card-body"> amik ni dr roles -->
+                      <!-- <div class="form-group"> -->
+                        <!-- <label for="sectionNumber">Section Title (Malay)</label> -->
+
+                        <!-- <input type="text" class="form-control" id="sectionNumber" name="sectionNumber" value="<? //= $result['sectionNumber']; ?>" maxlength="1"> -->
+
+                        <input type="text" class="form-control" id="sectionNumber" name="sectionNumber" disabled value="<?= $_SESSION["sectionNumberNew"]; ?>">
+
+                        <!-- <select class="form-control" name="sectionNumber" id="sectionNumber">
                           <option value="" disabled selected hidden>SELECT ONE</option>
                           <option value="A">A</option>
                           <option value="B">B</option>
@@ -219,33 +246,40 @@ include('sconnection.php');
                           <option value="F">F</option>
                           <option value="G">G</option>
                           <option value="H">H</option>
-                        </select>
-                      </div>
-                    </div>
+                        </select> -->
+                      <!-- </div> -->
+                    <!-- </div> -->
                   </div>
                 </div>
                 <div class="card-body">
                   <div class="form-group">
                     <label for="sectionTitleMalay">Section Title (Malay)</label>
-                    <input type="text" class="form-control" id="sectionTitleMalay" name="sectionTitleMalay">
+                    <input type="text" class="form-control" id="sectionTitleMalay" name="sectionTitleMalay" value="<?= $result['sectionTitleMalay']; ?>">
                   </div>
                 </div>
                 <div class="card-body">
                   <div class="form-group">
                     <label for="sectiontitleEnglish">Section Title (English)</label>
-                    <input type="text" class="form-control" id="sectionTitleEnglish" name="sectionTitleEnglish" >
+                    <input type="text" class="form-control" id="sectionTitleEnglish" name="sectionTitleEnglish" value="<?= $result['sectionTitleEnglish']; ?>">
                   </div>
                 </div>
+                <!-- <div class="card-body">
+                  <div class="form-group">
+                    <label for="sectionHistoryProcess">Edit Process Details</label>
+                    <input type="text" class="form-control" id="sectionHistoryProcess" name="sectionHistoryProcess" >
+                  </div>
+                </div> -->
                 <div class="card-body">
                   <div class="form-group">
                     <label for="sectionDescription">Description</label><br>
-                    <textarea name="sectionDescription" id="myTextarea" cols="150" rows="4"></textarea>
+                    <textarea name="sectionDescription" id="myTextarea" cols="150" rows="4"><?= $result['sectionDescription']; ?></textarea>
                   </div>
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                  <input type="submit" value="Save" class="btn btn-primary">
-                  <input type="reset" value="Reset" class="btn btn-primary">
+                  <input type="submit" name="submit_update" value="Save Edit" class="btn btn-primary">
+                  <a href="section.php" class="btn btn-primary">Back to Add Section</a>
+                  <!-- <input type="reset" value="Reset" class="btn btn-primary"> -->
                 </div>
               </form>
             </div>
@@ -294,7 +328,7 @@ include('sconnection.php');
                 </form>
               </div> 
                 -->
-            
+                
             <!-- utk display data dlm table -->
             <?php
             //database connect
@@ -306,17 +340,17 @@ include('sconnection.php');
             // $dsn = "mysql:host=$host;dbname=$dbname1;";
 
             // $pdo = new PDO($dsn, $username, $password);
-            $sql = "SELECT * FROM myrasection";
-            $d = $pdo->query($sql);               
-            ?>
+            // $sql = "SELECT * FROM myrasection";
+            // $d = $pdo->query($sql);               
+            // ?>
             <!-- end display data table -->
 
-            <div class="card" style="width:1250px">
+            <!-- <div class="card" style="width:1250px">
               <div class="card-header">
                 <h3 class="card-title">All Section Details</h3>
-              </div>
+              </div> -->
               <!-- /.card-header -->
-              <div class="card-body">
+              <!-- <div class="card-body">
                 <table id="example2" class="table table-bordered table-hover">
                   <thead>
                   <tr>
@@ -331,34 +365,28 @@ include('sconnection.php');
                     <th>Action</th>
                   </tr>
                   </thead>
-                  <tbody>
-                  <?php foreach($d as $data)                   
-                  {
+                  <tbody> -->
+                  <?//php foreach($d as $data)                   
+                  //{
                   ?>
-                  <tr>
-                    <td><?php echo $data['sectionNumber'];?></td>
-                    <td><?php echo $data['sectionTitleMalay'];?></td>
-                    <td><?php echo $data['sectionTitleEnglish'];?></td>
-                    <td><?php echo $data['sectionDescription'];?></td>
-                    <td><?php echo $data['USER_ID'];?></td>
-                    <td><?php echo $data['createdAt'];?></td>
-                    <td><?php echo $data['updatedAt'];?></td>
-                    <td><?php echo $data['dataStatusId'];?></td>
+                  <!-- <tr>
+                    <td><?//php echo $data['sectionNumber'];?></td>
+                    <td><?//php echo $data['sectionTitleMalay'];?></td>
+                    <td><?//php echo $data['sectionTitleEnglish'];?></td>
+                    <td><?//php echo $data['sectionDescription'];?></td>
+                    <td><?//php echo $data['USER_ID'];?></td>
+                    <td><?//php echo $data['createdAt'];?></td>
+                    <td><?//php echo $data['updatedAt'];?></td>
+                    <td><?//php echo $data['dataStatusId'];?></td>
                     <td style="text-align: center;">
-                    <form action="editsection.php?sectionNumber=<?= $data['sectionNumber']; ?>" method="post">
-                      <!-- <a href="editsection.php"><button type="button" class="f"><i class="fas fa-edit" title="Edit section"></i></button></a> -->
-                      <button type="submit" name="edit" class="f"><i class="fas fa-edit" title="Edit section"></i></button>
-                    </form>
-                      <!-- <a href="viewsection.php"><button type="button" class="f"><i class="fas fa-eye" title="View section"></i></button></a> -->
-                    <form action="viewsection.php?sectionNumber=<?= $data['sectionNumber']; ?>" method="post">
-                      <button type="submit" name="view" class="f"><i class="fas fa-eye" title="View section"></i></button>
-                    </form>
+                      <button type="submit" class="f"><i class="fas fa-edit"></i></button>
+                      <a href="#"><button type="button" class="f"><i class="fas fa-eye"></i></button></a>
                     </td>
-                  </tr>
-                  <?php
-                  }
+                  </tr> -->
+                  <?//php
+                  //}
                   ?>
-                  </tbody>
+                  <!-- </tbody>
                   <tfoot>
                   <tr>
                     <th>Section Number</th>
@@ -373,7 +401,7 @@ include('sconnection.php');
                   </tr>
                   </tfoot>
                 </table>
-              </div>
+              </div> -->
               <!-- /.card-body -->
             </div>
 
