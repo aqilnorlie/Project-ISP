@@ -5,31 +5,7 @@ function nameRoleGreeting($dbh, $userfullname, $roleid)
     echo "Hi, " . $userfullname . "<br />" . "Role: " . getRoleTitles($dbh, $roleid);
 }
 
-function getRoleTitles($dbh, $roleid)
-{
-    
 
-    $data = ["roleid" => $roleid];
-    //$sql = "SELECT roletitle FROM attendancerptdb.roles WHERE roleid = :roleid";
-    $sql = "SELECT roleTitle FROM myra.myraroles r,myra.myraroleassignment m 
-    JOIN classbook_backup_jengka.vw_staff_phg c 
-    ON C.USER_ID = m.USER_ID 
-    WHERE r.roleId = :roleId";
-
-    $stmt = $dbh->prepare($sql);
-    $stmt->execute($data);
-    $rowCount = $stmt->rowCount();
-    if($rowCount > 0)
-    {
-        $d = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        $roletitle = $d['roleTitle'];
-    }
-    else
-        $roletitle = "LECTURER";
-    
-    return $roletitle;
-}
 
 function generateToken($length)
 {
@@ -48,7 +24,7 @@ function generateToken($length)
     return $token;
 }
 
-function password_generate($chars) 
+/*function password_generate($chars) 
 {
     $data = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcefghijklmnopqrstuvwxyz';
     
@@ -67,7 +43,12 @@ function getTimestamp()
     return $timestamp;
 }
 
-function getIPAddress()
+*/
+
+
+
+
+/*function getIPAddress()
 {
     /*if(!empty($_SERVER['HTTP_CLIENT_IP']))
     {
@@ -85,7 +66,7 @@ function getIPAddress()
     }
     
     return $ip;*/
-    $ipAddress = '';
+    /*$ipAddress = '';
     if (!empty($_SERVER['HTTP_CLIENT_IP'])) 
     {
         // to get shared ISP IP address
@@ -424,7 +405,7 @@ function checkResetPassword($dbh, $userid, $email)
     return $found;
 }
 
-function checkPtftLogin($dbh, $dbh3, $userid, $password)
+/*function checkPtftLogin($dbh, $dbh3, $userid, $password)
 {
     $found = false;
     $data = ["userid" => $userid, "password" => $password];
@@ -472,8 +453,9 @@ function checkPtftLogin($dbh, $dbh3, $userid, $password)
     }
     
     return $found;
-}
+} */
 
+/*
 function saveauditemail($dbh, $userid, $receiveremail, $status, $type)
 {
     $timestamp = getTimestamp();
@@ -543,17 +525,15 @@ function changePtftPassword($dbh2, $id, $curpassword, $newpassword)
 
 /////start: permanent staff/ptft functions/////
 
-
+*/
 
 function checkStaffLogin($dbh, $dbh3, $userid)
 {
     $found = false;
     $data = [":userid" => $userid];
     //$sql = "SELECT * FROM classbook_backup_jengka.vw_staff_phg a LEFT JOIN attendancerptdb.user_roles b ON a.USER_ID = b.USER_ID WHERE a.USER_ID = :userid";
-    $sql = "SELECT * FROM myra.myraroleassignment m 
-    JOIN classbook_backup_jengka.vw_staff_phg c 
-    ON C.USER_ID = m.USER_ID 
-    WHERE c.USER_ID = :userid";
+    $sql = "SELECT * FROM myra.myraroleassignment m JOIN classbook_backup_jengka.vw_staff_phg c ON C.USER_ID = m.USER_ID 
+    JOIN myra.myraroles r ON m.roleId = r.roleId WHERE c.USER_ID = :userid";
 
     
     $stmt = $dbh3->prepare($sql);
@@ -563,9 +543,12 @@ function checkStaffLogin($dbh, $dbh3, $userid)
     {
         $d = $stmt->fetch(PDO::FETCH_ASSOC);
         session_start(); 
+        $_SESSION['userRole'] = $d["role_Title"];
         $_SESSION['userislogged'] = 1; // 1 - user is successfully logged
         $_SESSION['userid'] = $userid;
         $_SESSION['userfullname'] = $d['USER_NAME'];
+       
+      
         
         //get role or assign default role
         if(!is_null($d['roleId']))
@@ -603,7 +586,31 @@ function checkStaffLogin($dbh, $dbh3, $userid)
     return $found;
 }
 
-function savemyreport($dbh, $semester, $rptrefno, $user_id, $month, $year, $course, $group, $numstudent, $participation, $assessment, $submission, $action, $remarks, $notify, $kppuserid, $students)
+
+
+//Insert New User in database
+
+function insertNewUSer($db, $statusId, $roleId, $UserID){
+
+   $sql =  'INSERT INTO myraroleassignment(statusId, roleId, USER_ID, Token)
+    VALUES(:statusId, :roleId, :USER_ID, :Token)';
+
+    $token = generateToken(32);
+    $stmt = $db->prepare($sql);
+    $stmt->execute(['statusId' => $statusId, 'roleId' => $roleId, 'USER_ID' =>$UserID, 'Token'=> $token]);
+    
+
+}
+
+
+//Display all User
+
+
+
+
+
+
+/*function savemyreport($dbh, $semester, $rptrefno, $user_id, $month, $year, $course, $group, $numstudent, $participation, $assessment, $submission, $action, $remarks, $notify, $kppuserid, $students)
 {
     $status = false;
     $reporttoken = generateToken(32);
@@ -616,9 +623,9 @@ function savemyreport($dbh, $semester, $rptrefno, $user_id, $month, $year, $cour
         $status = true;
     
     return $status;
-}
+}*/
 
-function updatemyreport($dbh, $rpttoken, $rptrefno, $month, $year, $course, $group, $numstudent, $participation, $assessment, $submission, $action, $remarks, $notify, $kppuserid, $students)
+/*function updatemyreport($dbh, $rpttoken, $rptrefno, $month, $year, $course, $group, $numstudent, $participation, $assessment, $submission, $action, $remarks, $notify, $kppuserid, $students)
 {
     $status = false;
     $timestamp = getTimestamp();
@@ -655,9 +662,9 @@ function saveevidence($dbh, $rptrefno, $filename, $filetype, $filesize)
     
     /*if (!$stmt->execute()) {
         print_r($stmt->errorInfo());
-    }*/
-}
-
+    }
+}*/
+/*
 function getmonths($dbh)
 {
     $sql = "SELECT * FROM attendancerptdb.months ORDER BY monthid";
@@ -1367,9 +1374,9 @@ function listptfts($dbh, $dbh3, $facultyid, $roleid)
         $sql = $sql . " AND U.USER_DEPTCAMPUS = :facultyid"; //new
         $stmt = $dbh->prepare($sql);
         $stmt->execute($data);
-    }    
+    }   */ 
     
-    $rowCount = $stmt->rowCount();
+   /* $rowCount = $stmt->rowCount();
     if($rowCount > 0)
     {
         $count = 0;
@@ -1385,7 +1392,7 @@ function listptfts($dbh, $dbh3, $facultyid, $roleid)
                 echo "<td>".$d['created_at']."</td>";
                 echo "<td><button type='button' name='view' class='btn btn-info' title='View' onclick='window.location=\"viewptft.php?id=".$d['ptfttoken']."\";'><i class='fa fa-eye'></i></button> <button type='button' name='edit' class='btn btn-info' title='Edit' onclick='window.location=\"editptft.php?id=".$d['ptfttoken']."\";'><i class='fas fa-pencil-alt'></i></button></td>";
             echo "</tr>";*/
-            echo "<tr>";
+          /* echo "<tr>";
                 echo "<td>".($count + 1)."</td>";
                 echo "<td>".$d['USER_ID']."</td>";
                 echo "<td>".$d['USER_NAME']."</td>";
@@ -1743,7 +1750,7 @@ function getptftcontactnum($dbh2, $id)
     }
 }*/
 
-function getPtftIsActive($dbh2, $id)
+/*function getPtftIsActive($dbh2, $id)
 {
     $data = ["id" => $id]; 
     $sql = "SELECT * FROM classbook_backup_jengka.user WHERE BINARY USER_ID = :id";
@@ -2400,5 +2407,5 @@ function getSemesterActiveLocalDb($dbh3)
         
         return $d['SEMESTER_ID'];
     }
-}
+}*/
 ?>
