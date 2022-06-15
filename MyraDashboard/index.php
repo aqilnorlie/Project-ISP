@@ -110,7 +110,12 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
         </div>
         <div class="info">
           
-          <a href="#" class="d-block"><?php echo  $_SESSION['userfullname']; //echo getRoleTitles($conn1, $_SESSION["roleid"]) ?></a>
+          <a href="#" class="d-block"><?php echo  $_SESSION['userfullname']; ?> </a>
+          <a href="#" class="d-block"><?php if(isset($_SESSION['userRole'])) {
+          echo "Role : ".$_SESSION['userRole'];
+          } else {
+          echo "No role";
+          } ?></a>
         
         </div>
           

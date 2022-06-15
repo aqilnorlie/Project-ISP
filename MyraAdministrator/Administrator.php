@@ -1,3 +1,14 @@
+<?php
+include("../MyraLogin/connection.php");
+include("../MyraLogin/MyraFunctionLogin.php");
+session_start();
+//$is_page_refreshed = (isset($_SERVER['HTTP_CACHE_CONTROL']) && $_SERVER['HTTP_CACHE_CONTROL'] == 'max-age=0');
+
+if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
+  header("Location: ../MyraLogin/login.php");
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -190,18 +201,52 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form>
+              <form action="Administrator.php" method="post" autocomplete = "on"> 
+                <!-- <input autocomplete = "false" name ="hidden" type="text" style= "display:none" > -->
                 <div class="card-body">
                   <div class="form-group">
+                   
                     <label for="SearchUserID">Search</label>
-                    <input type="search" class="form-control" id="SearchUSerID" placeholder="Search by ID">
+                    <input type="search" class="form-control" name="SearchUserID"id="SearchUSerID" placeholder="Search by ID" required>
                   </div>
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-primary">Search</button>
+
+                  <button type="submit" name="btnSearchUser"class="btn btn-primary">Search</button>
                 </div>
               </form>
+
+              <?php
+                if($_SERVER['REQUEST_METHOD'] == 'POST'){
+
+                  $data = [":id" => $_POST['SearchUserID']];
+                  $sql = "SELECT * FROM classbook_backup_jengka.vw_staff_phg WHERE USER_ID = :id";
+                  $stmt = $conn2->prepare($sql);
+                  $stmt->execute($data);
+                  $rowCount = $stmt->rowCount();
+                  if($rowCount > 0)
+                  $nameUserAdd = "";
+
+                  $idUserAdd = "";
+                  {
+                  $d = $stmt->fetch(PDO::FETCH_ASSOC);
+                  
+                 
+                  $nameUserAdd = $d['USER_NAME'];
+                  $idUserAdd = $d['USER_ID'];
+                 
+                  $_SESSION['idUserAdd'] = $idUserAdd;
+                  $_SESSION['nameUserAdd'] = $nameUserAdd;
+
+
+                }
+               
+              }
+                
+    
+
+              ?>
             </div>
             
             <!-- add User form elements -->
@@ -211,36 +256,85 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              <form>
+
+              <form action="pAdministrator.php" method="post">
                 <div class="card-body">
                   <div class="form-group">
                     <label for="StaffNo">Staff No</label>
-                    <input type="type" class="form-control" id="StaffNo" disabled>
+                    <input type="type" class="form-control" id="StaffNo" value="<?php 
+
+                   
+                    
+                    if(!isset($idUserAdd)){
+
+                      echo"";
+
+                    }else{
+                      echo $idUserAdd;
+                    }
+
+                   
+                
+                    
+                      ?>" disabled >
+
                   </div>
+
                   <div class="form-group">
                     <label for="StaffName">Staff Name</label>
-                    <input type="type" class="form-control" id="StaffName" disabled>
+                    <input type="type" class="form-control" id="StaffName" value="<?php 
+                    
+                    if(!isset($nameUserAdd)){
+                      echo"";
+
+                    }else{
+                      echo $nameUserAdd;
+                   }
+
+                      ?>"disabled>
                   </div>
+
                   <div class="form-group">
                     <label for="RolesStaff">Role</label>
                     <div class="input-group">
                       <div class="custom-file">
-                        <select class="form-control" name="RoleStaff" id="RoleStaff">
-                          <option value="moderator">Moderator</option>
-                          <option value="administrator">Administrator</option>
+
+                      <?php
+                        $sql = "SELECT * From myraroles ";
+                        
+                        $stmt = $conn1->prepare($sql);
+
+                        $stmt->execute();
+                        $data = $stmt->fetchAll();
+
+                      ?>
+                        <select class="form-control" name="RoleStaff" id="RoleStaff" required>
+                           <option value="" disabled selected hidden>--Choose Role--</option> 
+                          
+                          <?php
+                           foreach($data as $d) { ?>
+                          <option value=<?php echo $d["roleId"]; ?>><?php echo $d["role_Title"];?></option>
+                          
+
+
+                          <?php } ?>
+                          
                       </select>
                       </div>
                   </div>
 
                   <div style="padding:20px" class="form-check">
-                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                    <label class="form-check-label" for="exampleCheck1"><b>Allow</b> User to access the system</label>
+                    <input type="radio" name="checkAccess" class="form-check-input" id="exampleCheck1"  value="1" required>
+                    <label class="form-check-label" for="exampleCheck1"><b>Allow</b> User to access the system</label><br>
+
+                    <input type="radio" name="checkAccess"class="form-check-input" id="exampleCheck2" value="0" required>
+                    <label class="form-check-label" for="exampleCheck2"><b>Don't Allow</b> User to access the system</label>
                   </div>
                 </div>
                 <!-- /.card-body --> 
 
                 <div class="card-footer">
-                  <button type="button" class="btn btn-primary">Submit</button>
+                  <button type="submit" name="btnAddUser"class="btn btn-primary">Submit</button>
                 </div>
               </form>
             </div>
@@ -251,34 +345,65 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
+
+              <?php 
+                  $sql = "SELECT M.statusId , R.role_Title, C.USER_ID, C.USER_NAME, M.createdAt, M.updatedAt from myra.myraroleassignment M JOIN 
+                  classbook_backup_jengka.vw_staff_phg C on M.USER_ID = C.USER_ID JOIN 
+                  myra.myraroles R on M.roleId = R.roleId WHERE M.USER_ID = C.USER_ID";
+
+                  $stmt = $conn1->prepare($sql);
+                  $stmt->execute();
+
+                  ?>
                 <table id="example2" class="table table-bordered table-hover">
                   <thead>
                   <tr>
-                    <th>#</th>
+                    <th>No</th>
                     <th>Staff No</th>
                     <th>Name</th>
                     <th>Roles</th>
                     <th>Date</th>
+                    <th>Update</th>
                     <th>Action</th>
                   </tr>
                   </thead>
+                  <?php 
+                  $count = 1;
+                 while($data = $stmt->fetch(PDO::FETCH_ASSOC))
+                  {
+                    
+                    ?>
                   <tbody>
                   <tr>
-                    <td>Other browsers</td>
-                    <td>All others</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>U</td>
-                    <td><button type="button" class="f" style="margin-left:20%"><i class="fas fa-edit"></i></button> <button type="button" class="f"><i class="fas fa-eye"></i></button></td>
+                    <td><?php echo $count++; ?></td>
+                    <td><?php echo $data["USER_ID"]; ?></td>
+                    <td><?php echo $data["USER_NAME"]; ?></td>
+                    <td><?php echo $data["role_Title"]; ?></td>
+                    <td><?php echo $data["createdAt"]; ?></td>
+                    <td>
+                      <?php
+                      if(!isset($data["updatedAt"])){
+                        echo "---";
+                      }else{
+                        echo $data["updatedAt"];
+                      } ?>
+                    </td>
+                    <td><button type="button" class="f" style="margin-left:20%"><i class="fas fa-edit"></i></button> 
+                    <button type="button" class="f"><i class="fas fa-eye"></i></button></td>
                   </tr>
+                  <?php
+                  }
+                  ?>
+                  
                   </tbody>
                   <tfoot>
                   <tr>
-                    <th>Rendering engine</th>
-                    <th>Browser</th>
-                    <th>Platform(s)</th>
-                    <th>Engine version</th>
-                    <th>CSS grade</th>
+                    <th>No</th>
+                    <th>Staff No</th>
+                    <th>Name</th>
+                    <th>Roles</th>
+                    <th>Date</th>
+                    <th>Update</th>
                     <th>Action</th>
                   </tr>
                   </tfoot>
