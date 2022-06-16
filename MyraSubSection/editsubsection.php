@@ -1,19 +1,7 @@
-<?php include('../MyraSection/sconnection.php');
+<?php 
 
-$sql= "SELECT * from myrasection";
-
-try
-{
-    $stmt=$pdo->prepare($sql);
-    $stmt->execute();
-    $results=$stmt->fetchAll();
-}
-
-  catch(Exception $ex)
-
-  {
-    echo($ex -> getMessage());
-  }
+include('sconnection.php'); 
+session_start();
 
 ?>
 
@@ -22,12 +10,12 @@ try
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sub-Section</title>
+  <title>Edit Section</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href=../plugins/fontawesome-free/css/all.min.css>
+  <link rel="stylesheet" href="../plugins/fontawesome-free/css/all.min.css">
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Tempusdominus Bootstrap 4 -->
@@ -145,7 +133,7 @@ try
             </li>
           <li class="nav-item menu-open">
           <li class="nav-item">
-             <a href="../MyraSection/Section.php" class="nav-link">
+             <a href="SubSection.php" class="nav-link">
                <i class="nav-icon fas fa-database"></i>
                <p>Section</p>
              </a>
@@ -153,7 +141,7 @@ try
          </li>
          <li class="nav-item menu-open">
          <li class="nav-item">
-             <a href="Subsection.php" class="nav-link active">
+             <a href="../MyraSubSection/Subsection.php" class="nav-link active">
                <i class="nav-icon fas fa-database"></i>
                <p>Sub Section</p>
              </a>
@@ -186,21 +174,21 @@ try
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <subsection class="content-header">
+    <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Sub-Section</h1>
+            <h1>Edit Sub-Section</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="../MyraDashboard/index.php">Home</a></li>
-              <li class="breadcrumb-item active">Sub-Section</li>
+              <li class="breadcrumb-item active">Edit Section</li>
             </ol>
           </div>
         </div>
       </div><!-- /.container-fluid -->
-    </subsection>
+    </section>
 
     <!-- Main content -->
     <section class="content">
@@ -211,149 +199,210 @@ try
             <!-- general form elements -->
             <div style="width:1250px" class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Add Sub-Section</h3>
+                <h3 class="card-title">Edit Section</h3>
               </div>
               <!-- /.card-header -->
+
               <!-- form start -->
-              <form action="psubsection.php" method="POST">
+
+              <?php
+              if(isset($_GET['subSectionId']))
+              {
+                $subSectionId = $_GET['subSectionId'];
+
+                $query = "SELECT * FROM myrasubsection WHERE token=:subSectionId";
+                $statement = $pdo->prepare($query);
+                $data = [':subSectionId' => $subSectionId];
+                $statement->execute($data);
+
+                $result = $statement->fetch(PDO::FETCH_ASSOC); //PDO::FETCH_ASSOC
+                $_SESSION["sectionNumberNew"]=$result['sectionNumber'];  
+                //  $_SESSION["subSectionTitleMalayNew"]=$result['subSectionTitleMalay'];
+              }
+              ?>
+
+              <form action="peditsection.php" method="POST">
+
+                <!-- <input type="hidden" name="sectionId" value="<? //= $result['sectionId']; ?>"> -->
 
                 <div class="card-body">
                   <div class="form-group">
                     <label for="sectionNumber">Section Number</label>
-                    <div class="input-group">
-                      <div class="custom-file">
-                        <select class="form-control" name="sectionNumber" id="sectionNumber">
-                        <option value="" disabled selected hidden>SELECT SECTION</option>
-                        <?php foreach ($results as $output) {?>
-                          <option value="<?php echo $output["sectionId"];
-                            // The value we usually set is the primary key
-                            ?>"><?php echo $output ["sectionNumber"];?></option>
-                          <?php }?>
+                    <!--(TEST) <input type="text" class="form-control" id="sectionNumber" placeholder="SELECT ONE" nama="sectionNumber"> -->
+                    <!-- <div class="card-body"> amik ni dr roles -->
+                      <!-- <div class="form-group"> -->
+                        <!-- <label for="sectionNumber">Section Title (Malay)</label> -->
 
-                      </select>
-                      </div>
-                    </div>
+                        <!-- <input type="text" class="form-control" id="sectionNumber" name="sectionNumber" value="<? //= $result['sectionNumber']; ?>" maxlength="1"> -->
+
+                        <input type="text" class="form-control" id="sectionNumber" name="sectionNumber" disabled value="<?= $_SESSION["sectionNumberNew"]; ?>">
+
+                        <!-- <select class="form-control" name="sectionNumber" id="sectionNumber">
+                          <option value="" disabled selected hidden>SELECT ONE</option>
+                          <option value="A">A</option>
+                          <option value="B">B</option>
+                          <option value="C">C</option>
+                          <option value="D">D</option>
+                          <option value="E">E</option>
+                          <option value="F">F</option>
+                          <option value="G">G</option>
+                          <option value="H">H</option>
+                        </select> -->
+                      <!-- </div> -->
+                    <!-- </div> -->
                   </div>
                 </div>
-
-                
-                    
-                <!-- <input type="hidden" name="sectionId" value="<?php //$results['sectionNumber'];?>"> -->
-                  
-
                 <div class="card-body">
                   <div class="form-group">
                     <label for="subSectionTitleMalay">Sub-Section Title (Malay)</label>
-                    <input type="text" class="form-control" id="subSectionTitleMalay" name="subSectionTitleMalay">
+                    <input type="text" class="form-control" id="subSectionTitleMalay" name="subSectionTitleMalay" value="<?=  $result["subSectionTitleMalay"]; ?>">
                   </div>
                 </div>
                 <div class="card-body">
                   <div class="form-group">
                     <label for="subSectiontitleEnglish">Sub-Section Title (English)</label>
-                    <input type="text" class="form-control" id="subSectiontitleEnglish" name="subSectionTitleEnglish" >
+                    <input type="text" class="form-control" id="subSectionTitleEnglish" name="subSectionTitleEnglish" value="<?= $result['subSectionTitleEnglish']; ?>">
                   </div>
                 </div>
+                <!-- <div class="card-body">
+                  <div class="form-group">
+                    <label for="sectionHistoryProcess">Edit Process Details</label>
+                    <input type="text" class="form-control" id="sectionHistoryProcess" name="sectionHistoryProcess" >
+                  </div>
+                </div> -->
                 <div class="card-body">
                   <div class="form-group">
-                    <label for="myTextarea">Description</label><br>
-                    <textarea name="subSectionDescription" id="myTextarea"></textarea>
+                    <label for="sectionDescription">Description</label><br>
+                    <textarea name="sectionDescription" id="myTextarea" cols="150" rows="4"><?= $result['sectionDescription']; ?></textarea>
                   </div>
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-primary">Save</button>
-                  <input class="btn btn-primary" type="reset">
+                  <input type="submit" name="submit_update" value="Save Edit" class="btn btn-primary">
+                  <a href="Subsection.php" class="btn btn-primary">Back to Add Sub-Section</a>
+                  <!-- <input type="reset" value="Reset" class="btn btn-primary"> -->
                 </div>
               </form>
             </div>
             
-            <div class="card" style="width:1250px">
+            <!-- add User form elements -->
+            <!-- <div style="width:1250px"class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Data All User</h3>
-              </div>
+                <h3 class="card-title">Sections</h3>
+              </div> -->
               <!-- /.card-header -->
-              <div class="card-body">
+              <!-- form start -->
+              <!--
+              <form>
+                <div class="card-body">
+                  <div class="form-group">
+                    <label for="StaffNo">Staff No</label>
+                    <input type="type" class="form-control" id="StaffNo" disabled>
+                  </div>
+                  <div class="form-group">
+                    <label for="StaffName">Staff Name</label>
+                    <input type="type" class="form-control" id="StaffName" disabled>
+                  </div>
+                  <div class="form-group">
+                    <label for="RolesStaff">Role</label>
+                    <div class="input-group">
+                      <div class="custom-file">
+                        <select class="form-control" name="RoleStaff" id="RoleStaff">
+                          <option value="moderator">Moderator</option>
+                          <option value="administrator">Administrator</option>
+                      </select>
+                      </div>
+                  </div>
+
+                  <div style="padding:20px" class="form-check">
+                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                    <label class="form-check-label" for="exampleCheck1"><b>Allow</b> User to access the system</label>
+                  </div>
+                </div>
+                -->
+                <!-- /.card-body --> 
+                
+              <!--
+                <div class="card-footer">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+                </form>
+              </div> 
+                -->
+                
+            <!-- utk display data dlm table -->
+            <?php
+            //database connect
+            // $host = 'localhost';
+            // $dbname1 = 'myra';
+            // $username = 'root';
+            // $password = '';
+
+            // $dsn = "mysql:host=$host;dbname=$dbname1;";
+
+            // $pdo = new PDO($dsn, $username, $password);
+            // $sql = "SELECT * FROM myrasection";
+            // $d = $pdo->query($sql);               
+            // ?>
+            <!-- end display data table -->
+
+            <!-- <div class="card" style="width:1250px">
+              <div class="card-header">
+                <h3 class="card-title">All Section Details</h3>
+              </div> -->
+              <!-- /.card-header -->
+              <!-- <div class="card-body">
                 <table id="example2" class="table table-bordered table-hover">
                   <thead>
                   <tr>
                     <th>Section Number</th>
-                    <th>Sub-Section Title (Malay)</th>
-                    <th>Sub-Section Title (English)</th>
-                    <!-- <th>Section Description</th> -->
-                    <!-- <th>USER_ID</th> -->
-                    <th>Created At</th>
-                    <th>Updated At</th>
-                    <th>Data Status</th>
+                    <th>Section Title (Malay)</th>
+                    <th>Section Title (English)</th>
+                    <th>Section Description</th>
+                    <th>USER_ID</th>
+                    <th>createdAt</th>
+                    <th>updatedAt</th>
+                    <th>dataStatusId</th>
                     <th>Action</th>
                   </tr>
                   </thead>
-                  <tbody>
-                    
-                  <?php
-                      //database connect
-                   // $host = 'localhost';
-                  // $dbname1 = 'myra';
-                   // $username = 'root';
-                  // $password = '';
-
-               // $dsn = "mysql:host=$host;dbname=$dbname1;";
-
-               // $pdo = new PDO($dsn, $username, $password);
-                 $sql = "SELECT * FROM myra.myrasubsection ss 
-                 JOIN myra.datastatus d 
-                 ON ss.dataStatusId = d.dataStatusId JOIN myra.myrasection t ON t.sectionId = ss.sectionId
-                 JOIN classbook_backup_jengka.vw_staff_phg c 
-                 ON c.USER_ID = ss.USER_ID";
-
-                  $stmt = $pdo->prepare($sql);
-                  $stmt->execute();
-                            // $d = $pdo->query($sql);               
-                        ?>
-                  <?php while($data = $stmt->fetch(PDO::FETCH_ASSOC)) 
-                  {
+                  <tbody> -->
+                  <?//php foreach($d as $data)                   
+                  //{
                   ?>
-                  
-                  <tr>
-                    <td><?php echo $data['sectionNumber'];?></td>
-                    <td><?php echo $data['subSectionTitleMalay'];?></td>
-                    <td><?php echo $data['subSectionTitleEnglish'];?></td>
-                    <!-- <td><?php //echo $data['subSectionDescription'];?></td> -->
-                    <!-- <td><?php //echo $data['USER_ID'];?></td> -->
-                    <td><?php echo $data['createdAt'];?></td>
-                    <td><?php echo $data['updatedAt'];?></td>
-                    <td><?php echo $data['dataStatusId'];?></td>
+                  <!-- <tr>
+                    <td><?//php echo $data['sectionNumber'];?></td>
+                    <td><?//php echo $data['sectionTitleMalay'];?></td>
+                    <td><?//php echo $data['sectionTitleEnglish'];?></td>
+                    <td><?//php echo $data['sectionDescription'];?></td>
+                    <td><?//php echo $data['USER_ID'];?></td>
+                    <td><?//php echo $data['createdAt'];?></td>
+                    <td><?//php echo $data['updatedAt'];?></td>
+                    <td><?//php echo $data['dataStatusId'];?></td>
                     <td style="text-align: center;">
-                    
-                    <form action="editsubsection.php?subSectionId=<?= $data['token']; ?>" method="post">
-                      <!-- <a href="editsection.php"><button type="button" class="f"><i class="fas fa-edit" title="Edit section"></i></button></a> -->
-                      <button type="submit" name="edit" class="f"><i class="fas fa-edit" title="Edit section"></i></button>
-                    </form>
-                      <!-- <a href="viewsubsection.php"><button type="button" class="f"><i class="fas fa-eye" title="View sub section"></i></button></a> -->
-                    <form action="viewsubsection.php?subSectionId=<?= $data['token']; ?>" method="post">
-                      <button type="submit" name="view" class="f"><i class="fas fa-eye" title="View section"></i></button>
-                    </form>
+                      <button type="submit" class="f"><i class="fas fa-edit"></i></button>
+                      <a href="#"><button type="button" class="f"><i class="fas fa-eye"></i></button></a>
                     </td>
-                  </tr>
-                  <?php
-                  }
+                  </tr> -->
+                  <?//php
+                  //}
                   ?>
-
-                  </tbody>
+                  <!-- </tbody>
                   <tfoot>
                   <tr>
-                  <th>Section Number</th>
-                    <th>Sub-Section Title (Malay)</th>
-                    <th>Sub-Section Title (English)</th>
-                    <!-- <th>Section Description</th> -->
-                    <!-- <th>USER_ID</th> -->
-                    <th>Created At</th>
-                    <th>Updated At</th>
-                    <th>Data Status</th>
+                    <th>Section Number</th>
+                    <th>Section Title (Malay)</th>
+                    <th>Section Title (English)</th>
+                    <th>Section Description</th>
+                    <th>USER_ID</th>
+                    <th>createdAt</th>
+                    <th>updatedAt</th>
+                    <th>dataStatusId</th>
                     <th>Action</th>
                   </tr>
                   </tfoot>
                 </table>
-              </div>
+              </div> -->
               <!-- /.card-body -->
             </div>
 
@@ -468,5 +517,6 @@ tinymce.init({
     height: 200,
 });
 </script>
+
 </body>
 </html>
