@@ -206,20 +206,41 @@ session_start();
               <!-- form start -->
 
               <?php
-              if(isset($_GET['subSectionId']))
-              {
-                $subSectionId = $_GET['subSectionId'];
+              // if(isset($_GET['subSectionId']))
+              // {
+                // echo "hi";
+                // $subSectionId = $_GET['subSectionId'];
 
-                $query = "SELECT * FROM myrasubsection WHERE token=:subSectionId";
+                // $query = "SELECT * FROM myrasubsection m
+                // JOIN myrasection s ON m.sectionId = s.sectionId  WHERE token=:subSectionId";
+                // $statement = $pdo->prepare($query);
+                // $data = [':subSectionId' => $subSectionId];
+                // $statement->execute($data);
+
+
+              //   $result = $statement->fetch(PDO::FETCH_ASSOC); //PDO::FETCH_ASSOC
+              //   $_SESSION["sectionNumberNew"]=$result['sectionNumber'];  
+              //   //  $_SESSION["subSectionTitleMalayNew"]=$result['subSectionTitleMalay'];
+              // }else{
+              //   echo "no";
+              // }
+              // ?>
+
+              <?php
+              if(isset($_GET['sectionNumber']))
+              {
+                $sectionNumber = $_GET['sectionNumber'];
+
+                $query = "SELECT * FROM myrasubsection WHERE sectionNumber=:sectionNumber LIMIT 1";
                 $statement = $pdo->prepare($query);
-                $data = [':subSectionId' => $subSectionId];
+                $data = [':sectionNumber' => $sectionNumber];
                 $statement->execute($data);
 
                 $result = $statement->fetch(PDO::FETCH_ASSOC); //PDO::FETCH_ASSOC
-                $_SESSION["sectionNumberNew"]=$result['sectionNumber'];  
-                //  $_SESSION["subSectionTitleMalayNew"]=$result['subSectionTitleMalay'];
+                $_SESSION["sectionNumberNew"]=$result['sectionNumber'];
               }
               ?>
+              
 
               <form action="peditsection.php" method="POST">
 
