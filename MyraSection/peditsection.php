@@ -33,40 +33,88 @@ if(isset($_POST['submit_update']))
     $sectionDescription = $_POST['sectionDescription'];
     
     try{
-        $query = "UPDATE myrasection 
-        SET 
-            sectionTitleMalay=:sectionTitleMalay, 
-            sectionTitleEnglish=:sectionTitleEnglish, 
-            sectionDescription=:sectionDescription 
-        WHERE 
-            sectionNumber=:sectionNumber LIMIT 1";
-
-        $statement = $pdo->prepare($query);
-
-        $data = [
-            ':sectionTitleMalay' => $sectionTitleMalay,
-            ':sectionTitleEnglish' => $sectionTitleEnglish,
-            ':sectionDescription' => $sectionDescription,
-            // ':sectionId' => $sectionid,
-            ':sectionNumber' => $sectionNumber
-        ];
-
-        $query_execute = $statement->execute($data);
-
-        if($query_execute)
+        if($_POST['dataStatus'] == 0)
         {
-            $_SESSION['message'] = "Section HAS been updated.";
-            header('Location: section.php');
-            exit(0);
-            // echo 'Section HAS been updated.';
+            $query = "UPDATE myrasection 
+            SET 
+                sectionTitleMalay=:sectionTitleMalay, 
+                sectionTitleEnglish=:sectionTitleEnglish, 
+                sectionDescription=:sectionDescription,
+                updatedAt=now(),
+                dataStatusId=:dataStatusId
+            WHERE 
+                sectionNumber=:sectionNumber LIMIT 1";
+
+            $statement = $pdo->prepare($query);
+
+            $data = [
+                ':sectionTitleMalay' => $sectionTitleMalay,
+                ':sectionTitleEnglish' => $sectionTitleEnglish,
+                ':sectionDescription' => $sectionDescription,
+                // ':sectionId' => $sectionid,
+                ':sectionNumber' => $sectionNumber,
+                ':dataStatusId' => 0
+            ];
+
+            $query_execute = $statement->execute($data);
+
+            if($query_execute)
+            {
+                $_SESSION['message'] = "Section HAS been updated.";
+                header('Location: section.php');
+                exit(0);
+                // echo 'Section HAS been updated.';
+            }
+            else
+            {
+                $_SESSION['message'] = "Section has NOT been updated.";
+                header('Location: section.php');
+                exit(0);
+                // echo 'Section has NOT been updated.';
+            }
         }
-        else
+
+        else if($_POST['dataStatus'] == 1)
         {
-            $_SESSION['message'] = "Section has NOT been updated.";
-            header('Location: section.php');
-            exit(0);
-            // echo 'Section has NOT been updated.';
+            $query = "UPDATE myrasection 
+            SET 
+                sectionTitleMalay=:sectionTitleMalay, 
+                sectionTitleEnglish=:sectionTitleEnglish, 
+                sectionDescription=:sectionDescription,
+                updatedAt=now(),
+                dataStatusId=:dataStatusId
+            WHERE 
+                sectionNumber=:sectionNumber LIMIT 1";
+
+            $statement = $pdo->prepare($query);
+
+            $data = [
+                ':sectionTitleMalay' => $sectionTitleMalay,
+                ':sectionTitleEnglish' => $sectionTitleEnglish,
+                ':sectionDescription' => $sectionDescription,
+                // ':sectionId' => $sectionid,
+                ':sectionNumber' => $sectionNumber,
+                ':dataStatusId' => 1
+            ];
+
+            $query_execute = $statement->execute($data);
+
+            if($query_execute)
+            {
+                $_SESSION['message'] = "Section HAS been updated.";
+                header('Location: section.php');
+                exit(0);
+                // echo 'Section HAS been updated.';
+            }
+            else
+            {
+                $_SESSION['message'] = "Section has NOT been updated.";
+                header('Location: section.php');
+                exit(0);
+                // echo 'Section has NOT been updated.';
+            }
         }
+        
     }
 
     catch (PDOException $e) {

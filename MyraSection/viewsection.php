@@ -40,6 +40,16 @@ session_start();
   <link rel="stylesheet" href="../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 
   <link rel="stylesheet" href="../Mystyle.css">
+
+  <style>
+    .card-body{
+      padding-bottom: 0.1em;
+    }
+
+    .form-group{
+      margin-bottom: 0.5em;
+    }
+  </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -210,18 +220,42 @@ session_start();
               {
                 $sectionNumber = $_GET['sectionNumber'];
 
-                $query = "SELECT * FROM myrasection WHERE sectionNumber=:sectionNumber LIMIT 1";
+                $query = "SELECT * FROM myrasection m 
+                JOIN datastatus d 
+                ON d.dataStatusId = m.dataStatusId 
+                WHERE token=:sectionNumber";
+
+                $sql_username = "SELECT * FROM myra.myrasection m 
+                JOIN classbook_backup_jengka.vw_staff_phg c 
+                ON c.USER_ID = m.USER_ID";
+
+                // $sql_dataStatus = "SELECT * FROM datastatus";
+
                 $statement = $pdo->prepare($query);
+                $stmt_username = $pdo->prepare($sql_username);
+                // $stmt_dataStatus = $pdo->prepare($sql_dataStatus);
+                
                 $data = [':sectionNumber' => $sectionNumber];
+                
                 $statement->execute($data);
+                $stmt_username->execute();
+                // $stmt_dataStatus->execute();  
 
                 $result = $statement->fetch(PDO::FETCH_ASSOC); //PDO::FETCH_ASSOC
+                $result_username = $stmt_username->fetch(PDO::FETCH_ASSOC);
+                // $result_dataStatus = $stmt_dataStatus->fetch(PDO::FETCH_ASSOC);
+                
                 $_SESSION["sectionNumberNew"]=$result['sectionNumber'];
+                $_SESSION["dataStatus"]=$result['dataStatusTitle'];
+                $_SESSION["createdAt"]=$result['createdAt'];
+                $_SESSION["updatedAt"]=$result['updatedAt'];
+                $_SESSION["userName"]=$result_username['USER_NAME'];
+                // $_SESSION["dataStatus"]=$result_dataStatus['dataStatus'];
               }
               ?>
 
               <!-- <form action="peditsection.php" method="POST"> -->
-              <form>
+              <form action="peditsection.php" method="POST">
 
                 <!-- <input type="hidden" name="sectionId" value="<? //= $result['sectionId']; ?>"> -->
 
@@ -278,9 +312,60 @@ session_start();
                     </textarea>
                   </div>
                 </div>
+
+                <div class="card-body">
+                  <div class="form-group">
+                    <label for="USER_ID">User Name</label>
+                    <input type="text" class="form-control" id="USER_ID" name="USER_ID" disabled value="<?= $_SESSION["userName"]; ?>">
+                  </div>
+                </div>
+
+                <div class="card-body">
+                  <div class="form-group">
+                    <label for="dataStatus">Data Status</label>
+                    <input type="text" class="form-control" id="dataStatus" name="dataStatus" disabled value="<?= $_SESSION["dataStatus"]; ?>">
+                  </div>
+                </div>
+
+                <div class="card-body">
+                  <div class="form-group">
+                    <label for="createdAt">Created At</label>
+                    <input type="text" class="form-control" id="createdAt" name="createdAt" disabled value="<?= $_SESSION["createdAt"]; ?>">
+                  </div>
+                </div>
+
+                <div class="card-body" style="padding-bottom:1em">
+                  <div class="form-group">
+                    <label for="updatedAt">Updated At</label>
+                    <input type="text" class="form-control" id="updatedAt" name="updatedAt" disabled value="<?php 
+                      if($_SESSION["updatedAt"] != NULL) 
+                        { echo $_SESSION["updatedAt"]; } 
+                      else
+                      { echo "---"; } ?> ">
+                      <?php //$_SESSION["updatedAt"]; ?>
+                  </div>
+                </div>
+          
+                <?php
+              // if(isset($_GET['sectionNumber']))
+              // {
+              //   $sectionNumber = $_GET['sectionNumber'];
+
+              //   $query = "SELECT * FROM myrasection WHERE token=:sectionNumber LIMIT 1";
+              //   $statement = $pdo->prepare($query);
+              //   $data = [':sectionNumber' => $sectionNumber];
+              //   $statement->execute($data);
+
+              //   $result = $statement->fetch(PDO::FETCH_ASSOC); //PDO::FETCH_ASSOC
+              //   $_SESSION["sectionNumberNew"]=$result['sectionNumber'];
+              //   $_SESSION["dataStatusId"]=$result['dataStatusId'];
+              // }
+              // ?>
+
                 <!-- /.card-body -->
                 <div class="card-footer">
-                  <a href="section.php" class="btn btn-primary">Back to Add Section</a>
+                  <a href="section.php" class="btn btn-primary">Back</a>
+                  <a href="editsection.php?sectionNumber=<?= $result['token'];?>" class="btn btn-primary">Edit</a>
                   <!-- <input type="submit" name="submit_update" value="Save Edit" class="btn btn-primary"> -->
                   <!-- <input type="reset" value="Reset" class="btn btn-primary"> -->
                 </div>
@@ -510,8 +595,14 @@ session_start();
 
 <script>
     tinymce.init({
-    selector: '#myTextarea'
+    selector: "#myTextarea",
+    readonly: true    
 });
+
+// tinyMCE.init({
+//   theme : "advanced",
+//   readonly : 1
+// });
 
 // tinymce.init({
 //     selector: '#myTextarea',

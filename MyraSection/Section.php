@@ -1,6 +1,8 @@
 <?php 
 
 include('sconnection.php'); 
+include('../MyraLogin/connection.php');
+session_start();
 
 ?>
 
@@ -11,6 +13,8 @@ include('sconnection.php');
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Add Section</title>
 
+  <!-- amik drpd video YT -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
@@ -209,7 +213,7 @@ include('sconnection.php');
                     <!--(TEST) <input type="text" class="form-control" id="sectionNumber" placeholder="SELECT ONE" nama="sectionNumber"> -->
                     <div class="input-group"> <!-- amik ni dr roles -->
                       <div class="custom-file">
-                        <select class="form-control" name="sectionNumber" id="sectionNumber">
+                        <select class="form-control" name="sectionNumber" id="sectionNumber" required>
                           <option value="" disabled selected hidden>SELECT ONE</option>
                           <option value="A">A</option>
                           <option value="B">B</option>
@@ -227,13 +231,13 @@ include('sconnection.php');
                 <div class="card-body">
                   <div class="form-group">
                     <label for="sectionTitleMalay">Section Title (Malay)</label>
-                    <input type="text" class="form-control" id="sectionTitleMalay" name="sectionTitleMalay">
+                    <input type="text" class="form-control" id="sectionTitleMalay" name="sectionTitleMalay" required>
                   </div>
                 </div>
                 <div class="card-body">
                   <div class="form-group">
                     <label for="sectiontitleEnglish">Section Title (English)</label>
-                    <input type="text" class="form-control" id="sectionTitleEnglish" name="sectionTitleEnglish" >
+                    <input type="text" class="form-control" id="sectionTitleEnglish" name="sectionTitleEnglish" required >
                   </div>
                 </div>
                 <div class="card-body">
@@ -306,8 +310,21 @@ include('sconnection.php');
             // $dsn = "mysql:host=$host;dbname=$dbname1;";
 
             // $pdo = new PDO($dsn, $username, $password);
-            $sql = "SELECT * FROM myrasection";
-            $d = $pdo->query($sql);               
+            //$sql = "SELECT * FROM myrasection";
+            // $sql = "SELECT * FROM myra.myrasection m 
+            // JOIN classbook_backup_jengka.vw_staff_phg c 
+            // ON c.USER_ID = m.USER_ID";
+
+            $sql = "SELECT * FROM myra.myrasection m 
+            JOIN myra.datastatus d 
+            ON m.dataStatusId = d.dataStatusId 
+            JOIN classbook_backup_jengka.vw_staff_phg c 
+            ON c.USER_ID = m.USER_ID";
+            
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute();      
+            //$username = $conn2->query($sql_username);
+            
             ?>
             <!-- end display data table -->
 
@@ -323,40 +340,60 @@ include('sconnection.php');
                     <th>Section Number</th>
                     <th>Section Title (Malay)</th>
                     <th>Section Title (English)</th>
-                    <th>Section Description</th>
-                    <th>USER_ID</th>
-                    <th>createdAt</th>
-                    <th>updatedAt</th>
-                    <th>dataStatusId</th>
+                    <!-- <th>Section Description</th> -->
+                    <!-- <th>User Name</th> -->
+                    <th>Created At</th>
+                    <th>Updated At</th>
+                    <th>Data Status</th>
                     <th>Action</th>
                   </tr>
                   </thead>
                   <tbody>
-                  <?php foreach($d as $data)                   
-                  {
+                  <?php while($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                       
                   ?>
                   <tr>
                     <td><?php echo $data['sectionNumber'];?></td>
                     <td><?php echo $data['sectionTitleMalay'];?></td>
                     <td><?php echo $data['sectionTitleEnglish'];?></td>
-                    <td><?php echo $data['sectionDescription'];?></td>
-                    <td><?php echo $data['USER_ID'];?></td>
+                    <!-- <td><?php //echo $data['sectionDescription'];?></td> -->
+                    <!-- <td><?php //echo $data['USER_NAME'];?></td> -->
                     <td><?php echo $data['createdAt'];?></td>
-                    <td><?php echo $data['updatedAt'];?></td>
-                    <td><?php echo $data['dataStatusId'];?></td>
+                    <td>
+                      <?php 
+                      if($data['updatedAt'] != NULL) 
+                        { echo $data['updatedAt']; } 
+                      else
+                      { echo "<b><center>---</center></b>"; }
+                      ?>
+                    </td>
+                    <td>
+                      <?php echo $data['dataStatusTitle'];/* 
+                      if($data['dataStatusId'] == 1)
+                        { echo "Active"; }
+                      else
+                        { echo "Hidden"; } 
+                      */?>
+                    </td>
                     <td style="text-align: center;">
-                    <form action="editsection.php?sectionNumber=<?= $data['sectionNumber']; ?>" method="post">
+                    <form action="editsection.php?sectionNumber=<?= $data['token']; ?>" method="post" style="margin-block-end: 0.3em;">
                       <!-- <a href="editsection.php"><button type="button" class="f"><i class="fas fa-edit" title="Edit section"></i></button></a> -->
                       <button type="submit" name="edit" class="f"><i class="fas fa-edit" title="Edit section"></i></button>
                     </form>
                       <!-- <a href="viewsection.php"><button type="button" class="f"><i class="fas fa-eye" title="View section"></i></button></a> -->
-                    <form action="viewsection.php?sectionNumber=<?= $data['sectionNumber']; ?>" method="post">
+                    <form action="viewsection.php?sectionNumber=<?= $data['token']; ?>" method="post" style="margin-block-end: 0.3em;">
                       <button type="submit" name="view" class="f"><i class="fas fa-eye" title="View section"></i></button>
+                    </form>
+                    <!-- delete button -->
+                    <form action="deletesection.php" method="post" style="margin-block-end: 0.3em;">
+                      <button type="submit" value="<?= $data['token']; ?>" name="delete_section" class="delete"><i class="fas fa-trash" title="Delete section"></i></button>
                     </form>
                     </td>
                   </tr>
                   <?php
-                  }
+                  
+                    }
+                  
                   ?>
                   </tbody>
                   <tfoot>
@@ -364,11 +401,11 @@ include('sconnection.php');
                     <th>Section Number</th>
                     <th>Section Title (Malay)</th>
                     <th>Section Title (English)</th>
-                    <th>Section Description</th>
-                    <th>USER_ID</th>
-                    <th>createdAt</th>
-                    <th>updatedAt</th>
-                    <th>dataStatusId</th>
+                    <!-- <th>Section Description</th> -->
+                    <!-- <th>User Name</th> -->
+                    <th>Created At</th>
+                    <th>Updated At</th>
+                    <th>Data Status</th>
                     <th>Action</th>
                   </tr>
                   </tfoot>
@@ -480,6 +517,11 @@ include('sconnection.php');
 <script>
     tinymce.init({
     selector: '#myTextarea'
+    // setup: function (editor) {
+    //     editor.on('change', function () {
+    //         tinymce.triggerSave();
+    //     });
+    // }
 });
 
 tinymce.init({
@@ -487,6 +529,16 @@ tinymce.init({
     width: 600,
     height: 200,
 });
+
+// init_instance_callback : function(editor) {
+//         let editorH = editor.editorContainer.offsetHeight;
+//         $('#formTranslation_trad')
+//             .css({
+//                 'position':'absolute',
+//                 'height':editorH
+//             })
+//             .show();
+//     },
 </script>
 
 </body>

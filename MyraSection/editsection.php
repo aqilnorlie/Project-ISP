@@ -210,13 +210,15 @@ session_start();
               {
                 $sectionNumber = $_GET['sectionNumber'];
 
-                $query = "SELECT * FROM myrasection WHERE sectionNumber=:sectionNumber LIMIT 1";
+                $query = "SELECT * FROM myrasection WHERE token=:sectionNumber LIMIT 1";
                 $statement = $pdo->prepare($query);
-                $data = [':sectionNumber' => $sectionNumber];
+                $data = 
+                [':sectionNumber' => $sectionNumber];
                 $statement->execute($data);
 
                 $result = $statement->fetch(PDO::FETCH_ASSOC); //PDO::FETCH_ASSOC
                 $_SESSION["sectionNumberNew"]=$result['sectionNumber'];
+                $_SESSION["dataStatusId"]=$result['dataStatusId'];
               }
               ?>
 
@@ -224,7 +226,9 @@ session_start();
 
                 <!-- <input type="hidden" name="sectionId" value="<? //= $result['sectionId']; ?>"> -->
 
-                <div class="card-body">
+
+
+                <div class="card-body" style="padding-top: 1em">
                   <div class="form-group">
                     <label for="sectionNumber">Section Number</label>
                     <!--(TEST) <input type="text" class="form-control" id="sectionNumber" placeholder="SELECT ONE" nama="sectionNumber"> -->
@@ -254,7 +258,7 @@ session_start();
                 <div class="card-body">
                   <div class="form-group">
                     <label for="sectionTitleMalay">Section Title (Malay)</label>
-                    <input type="text" class="form-control" id="sectionTitleMalay" name="sectionTitleMalay" value="<?= $result['sectionTitleMalay']; ?>">
+                    <input type="text" class="form-control" id="sectionTitleMalay" name="sectionTitleMalay" value="<?= $result['sectionTitleMalay']; ?>" required>
                   </div>
                 </div>
                 <div class="card-body">
@@ -263,6 +267,7 @@ session_start();
                     <input type="text" class="form-control" id="sectionTitleEnglish" name="sectionTitleEnglish" value="<?= $result['sectionTitleEnglish']; ?>">
                   </div>
                 </div>
+
                 <!-- <div class="card-body">
                   <div class="form-group">
                     <label for="sectionHistoryProcess">Edit Process Details</label>
@@ -275,10 +280,17 @@ session_start();
                     <textarea name="sectionDescription" id="myTextarea" cols="150" rows="4"><?= $result['sectionDescription']; ?></textarea>
                   </div>
                 </div>
+
+
+                <div style="padding-left:30px; padding-top:20px; padding-bottom:20px; font-size:20px;" class="form-check">
+                    <input type="hidden" name="dataStatus" value="1" />
+                    <input type="checkbox" id="dataStatus" name="dataStatus" value="0" <?php if($_SESSION["dataStatusId"] == 0) echo "checked='checked'"; ?> style="width: 15px; height: 15px;">
+                    <label class="form-check-label" for="dataStatus" style="padding-left:5px">Check this box to <b>HIDE</b> the data; Uncheck to <b>UNHIDE</b> the data.</label> 
+                </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                  <input type="submit" name="submit_update" value="Save Edit" class="btn btn-primary">
-                  <a href="section.php" class="btn btn-primary">Back to Add Section</a>
+                  <input type="submit" name="submit_update" value="Save" class="btn btn-primary">
+                  <a href="section.php" class="btn btn-primary">Back</a>
                   <!-- <input type="reset" value="Reset" class="btn btn-primary"> -->
                 </div>
               </form>
