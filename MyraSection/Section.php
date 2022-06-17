@@ -376,18 +376,22 @@ session_start();
                       */?>
                     </td>
                     <td style="text-align: center;">
+
                     <form action="editsection.php?sectionNumber=<?= $data['token']; ?>" method="post" style="margin-block-end: 0.3em;">
                       <!-- <a href="editsection.php"><button type="button" class="f"><i class="fas fa-edit" title="Edit section"></i></button></a> -->
                       <button type="submit" name="edit" class="f"><i class="fas fa-edit" title="Edit section"></i></button>
                     </form>
+
                       <!-- <a href="viewsection.php"><button type="button" class="f"><i class="fas fa-eye" title="View section"></i></button></a> -->
                     <form action="viewsection.php?sectionNumber=<?= $data['token']; ?>" method="post" style="margin-block-end: 0.3em;">
                       <button type="submit" name="view" class="f"><i class="fas fa-eye" title="View section"></i></button>
                     </form>
+
                     <!-- delete button -->
                     <form action="deletesection.php" method="post" style="margin-block-end: 0.3em;">
                       <button type="submit" value="<?= $data['token']; ?>" name="delete_section" class="delete"><i class="fas fa-trash" title="Delete section"></i></button>
                     </form>
+                    
                     </td>
                   </tr>
                   <?php

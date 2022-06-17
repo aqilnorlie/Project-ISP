@@ -313,7 +313,7 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
                           
                           <?php
                            foreach($data as $d) { ?>
-                          <option value=<?php echo $d["roleId"]; ?>><?php echo $d["role_Title"];?></option>
+                          <option value=<?php echo $d["roleId"]; ?>><?php echo $d["roleTitle"];?></option>
                           
 
 
@@ -340,7 +340,7 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
             </div>
 
               <?php 
-                  $sql = "SELECT M.statusId , R.role_Title, C.USER_ID, C.USER_NAME, M.createdAt, M.updatedAt, M.token from myra.myraroleassignment M JOIN 
+                  $sql = "SELECT M.statusId , R.roleTitle, C.USER_ID, C.USER_NAME, M.createdAt, M.updatedAt, M.token from myra.myraroleassignment M JOIN 
                   classbook_backup_jengka.vw_staff_phg C on M.USER_ID = C.USER_ID JOIN 
                   myra.myraroles R on M.roleId = R.roleId WHERE M.USER_ID = C.USER_ID";
 
@@ -377,7 +377,7 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
                     <td><?php echo $count++; ?></td>
                     <td><?php echo $data["USER_ID"]; ?></td>
                     <td><?php echo $data["USER_NAME"]; ?></td>
-                    <td><?php echo $data["role_Title"]; ?></td>
+                    <td><?php echo $data["roleTitle"]; ?></td>
                     <td><?php echo $data["createdAt"]; ?></td>
                     <td>
                       <?php
@@ -389,17 +389,17 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
                     </td>
                     <td style="text-align:center;">
 
-                    <form action="AdministratorEdit.php?assignId=<?= $data['token']; ?>"  method="post">
+                    <form action="AdministratorEdit.php?assignId=<?= $data['token']; ?>"  method="post" style="margin-block-end: 0.3em;">
                       <button type="submit" name="edit" class="f"><i class="fas fa-edit" title="Edit User"></i></button>
                     </form>
 
                     
-                    <form action="AdministratorView.php?assignId=<?=$data['token'];?>" method="post">
+                    <form action="AdministratorView.php?assignId=<?=$data['token'];?>" method="post" style="margin-block-end: 0.3em;">
                       <button type="submit" name="view" class="f"><i class="fas fa-eye" title="View User"></i></button>
                     </form>
 
-                    <form action="AdministratorDelete.php?assignId=<?=$data['token'];?>" method="post">
-                      <button type="submit" name="Delete" class="f"><i class="fas fa-trash" title="View User"></i></button>
+                    <form action="AdministratorDelete.php?assignId=<?=$data['token'];?>" method="post" style="margin-block-end: 0.3em;">
+                      <button type="submit" name="Delete" class="delete"><i class="fas fa-trash" title="View User"></i></button>
                     </form>
                     </td>
                   </tr>

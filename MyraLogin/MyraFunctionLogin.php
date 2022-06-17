@@ -543,7 +543,7 @@ function checkStaffLogin($dbh, $dbh3, $userid)
     {
         $d = $stmt->fetch(PDO::FETCH_ASSOC);
         session_start(); 
-        $_SESSION['userRole'] = $d["role_Title"];
+        $_SESSION['userRole'] = $d["roleTitle"];
         $_SESSION['userislogged'] = 1; // 1 - user is successfully logged
         $_SESSION['userid'] = $userid;
         $_SESSION['userfullname'] = $d['USER_NAME'];

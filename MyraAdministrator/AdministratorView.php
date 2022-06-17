@@ -212,7 +212,7 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
                 $data = [':assignId' => $assignId];
               
                 $sql = "SELECT * from  myra.myraroleassignment m Join classbook_backup_jengka.vw_staff_phg C ON 
-                m.USER_ID = C.USER_ID Join myra.myraroles r ON m.roleId = r.roleId where m.Token = :assignId limit 1";
+                m.USER_ID = C.USER_ID Join myra.myraroles r ON m.roleId = r.roleId where m.token = :assignId limit 1";
 
                 $stmt = $conn1 -> prepare($sql);
                 $stmt->execute($data);
@@ -240,7 +240,7 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
                   <div class="form-group">
                     
                     <label for="StaffName">Staff Role</label>
-                    <input type="type" class="form-control" id="StaffName" value="<?php echo $result["role_Title"]?>" disabled>
+                    <input type="type" class="form-control" id="StaffName" value="<?php echo $result["roleTitle"]?>" disabled>
                   </div>
 
                   <div class="form-group">
@@ -261,7 +261,7 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
                     <!-- /.card-body --> 
 
                     <div class="card-footer">
-                        <a href="AdministratorEdit.php?assignId=<?=$result['Token'];?>" class="btn btn-primary">Edit USer</a>
+                        <a href="AdministratorEdit.php?assignId=<?=$result['token'];?>" class="btn btn-primary">Edit USer</a>
                         <a href="Administrator.php" class="btn btn-primary">Back</a>
                     </div>
               </form>
