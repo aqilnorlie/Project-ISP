@@ -364,8 +364,8 @@ session_start();
 
                 <!-- /.card-body -->
                 <div class="card-footer">
-                  <a href="section.php" class="btn btn-primary">Back</a>
                   <a href="editsection.php?sectionNumber=<?= $result['token'];?>" class="btn btn-primary">Edit</a>
+                  <a href="section.php" class="btn btn-primary">Back to Add Section</a>
                   <!-- <input type="submit" name="submit_update" value="Save Edit" class="btn btn-primary"> -->
                   <!-- <input type="reset" value="Reset" class="btn btn-primary"> -->
                 </div>

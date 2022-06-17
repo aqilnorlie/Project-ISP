@@ -11,7 +11,7 @@ session_start();
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Add Section</title>
+  <title>Section</title>
 
   <!-- amik drpd video YT -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -181,7 +181,7 @@ session_start();
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Add Section</h1>
+            <h1>Section</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">

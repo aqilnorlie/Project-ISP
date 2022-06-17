@@ -289,8 +289,8 @@ session_start();
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                  <input type="submit" name="submit_update" value="Save" class="btn btn-primary">
-                  <a href="section.php" class="btn btn-primary">Back</a>
+                  <input type="submit" name="submit_update" value="Save Edit" class="btn btn-primary">
+                  <a href="section.php" class="btn btn-primary">Back to Add Section</a>
                   <!-- <input type="reset" value="Reset" class="btn btn-primary"> -->
                 </div>
               </form>
