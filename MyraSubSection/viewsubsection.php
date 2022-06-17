@@ -206,17 +206,36 @@ session_start();
               <!-- form start -->
 
               <?php
-              if(isset($_GET['subSectionId']))
+              if(isset($_GET['subSectionIdToken']))
               {
-                $subSectionId = $_GET['subSectionId'];
+                $subSectionIdToken = $_GET['subSectionIdToken'];
+                $data = [':subSectionIdToken' => $subSectionIdToken];
 
-                $query = "SELECT * FROM myrasubsection WHERE token=:subSectionId";
+                $query = "SELECT s.sectionNumber, ss.subSectionTitleMalay, ss.subSectionTitleEnglish, ss.subSectionDescription, d.dataStatusTitle, ss.createdAt, ss.updatedAt, c.USER_NAME, ss.token FROM myrasubsection ss
+                JOIN myrasection s ON ss.sectionId = s.sectionId
+                JOIN dataStatus d ON d.dataStatusId = ss.dataStatusId
+                JOIN classbook_backup_jengka.vw_staff_phg c ON c.USER_ID = ss.USER_ID
+                WHERE ss.token=:subSectionIdToken LIMIT 1";
+
+                // $sql_username = "SELECT * FROM myra.myrasubsection ss 
+                // JOIN classbook_backup_jengka.vw_staff_phg c 
+                // ON c.USER_ID = ss.USER_ID";
+
                 $statement = $pdo->prepare($query);
-                $data = [':subSectionId' => $subSectionId];
+                // $stmt_username = $pdo->prepare($sql_username);
+                
                 $statement->execute($data);
+                // $stmt_username->execute();
 
                 $result = $statement->fetch(PDO::FETCH_ASSOC); //PDO::FETCH_ASSOC
+                // $result_username = $stmt_username->fetch(PDO::FETCH_ASSOC);
+
                 // $_SESSION["sectionNumberNew"]=$result['sectionNumber'];
+                // $_SESSION["dataStatus"]=$result['dataStatusTitle'];
+                // $_SESSION["createdAt"]=$result['createdAt'];
+                // $_SESSION["updatedAt"]=$result['updatedAt'];
+                // $_SESSION["userName"]=$result['USER_NAME'];
+
               }
               ?>
 
@@ -235,7 +254,7 @@ session_start();
 
                         <!-- <input type="text" class="form-control" id="sectionNumber" name="sectionNumber" value="<? //= $result['sectionNumber']; ?>" maxlength="1"> -->
 
-                        <input type="text" class="form-control" id="sectionNumber" name="sectionNumber" disabled value="<?= $_SESSION["sectionNumberNew"]; ?>">
+                        <input type="text" class="form-control" id="sectionNumber" name="sectionNumber" disabled value="<?= $result["sectionNumber"]; ?>">
 
                         <!-- <select class="form-control" name="sectionNumber" id="sectionNumber">
                           <option value="" disabled selected hidden>SELECT ONE</option>
@@ -274,12 +293,47 @@ session_start();
                   <div class="form-group">
                     <label for="sectionDescription">Description</label><br>
                     <textarea name="sectionDescription" id="myTextarea" cols="150" rows="4">
-                      <?= $result['sectionDescription']; ?>
+                      <?= $result['subSectionDescription']; ?>
                     </textarea>
                   </div>
                 </div>
+
+                <div class="card-body">
+                  <div class="form-group">
+                    <label for="USER_ID">User Name</label>
+                    <input type="text" class="form-control" id="USER_ID" name="USER_ID" disabled value="<?= $result["USER_NAME"]; ?>">
+                  </div>
+                </div>
+
+                <div class="card-body">
+                  <div class="form-group">
+                    <label for="dataStatus">Data Status</label>
+                    <input type="text" class="form-control" id="dataStatus" name="dataStatus" disabled value="<?= $result["dataStatusTitle"]; ?>">
+                  </div>
+                </div>
+
+                <div class="card-body">
+                  <div class="form-group">
+                    <label for="createdAt">Created At</label>
+                    <input type="text" class="form-control" id="createdAt" name="createdAt" disabled value="<?= $result["createdAt"]; ?>">
+                  </div>
+                </div>
+
+                <div class="card-body" style="padding-bottom:1em">
+                  <div class="form-group">
+                    <label for="updatedAt">Updated At</label>
+                    <input type="text" class="form-control" id="updatedAt" name="updatedAt" disabled value="<?php 
+                      if($result["updatedAt"] != NULL) 
+                        { echo $result["updatedAt"]; } 
+                      else
+                      { echo "---"; } ?> ">
+                      <?php //$_SESSION["updatedAt"]; ?>
+                  </div>
+                </div>
+
                 <!-- /.card-body -->
                 <div class="card-footer">
+                  <a href="editsubsection.php?subSectionIdToken=<?= $result['token'];?>" class="btn btn-primary">Edit</a>
                   <a href="Subsection.php" class="btn btn-primary">Back to Add Sub-Section</a>
                   <!-- <input type="submit" name="submit_update" value="Save Edit" class="btn btn-primary"> -->
                   <!-- <input type="reset" value="Reset" class="btn btn-primary"> -->
@@ -510,7 +564,8 @@ session_start();
 
 <script>
     tinymce.init({
-    selector: '#myTextarea'
+    selector: "#myTextarea",
+    readonly: true    
 });
 
 // tinymce.init({

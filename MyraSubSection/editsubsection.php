@@ -227,22 +227,29 @@ session_start();
               // ?>
 
               <?php
-              if(isset($_GET['sectionNumber']))
+              if(isset($_GET['subSectionIdToken']))
               {
-                $sectionNumber = $_GET['sectionNumber'];
+                $subSectionIdToken = $_GET['subSectionIdToken'];
+                $data = [':subSectionIdToken' => $subSectionIdToken];
+                // echo $subSectionId;
 
-                $query = "SELECT * FROM myrasubsection WHERE sectionNumber=:sectionNumber LIMIT 1";
+                $query = "SELECT ss.token, s.sectionNumber, ss.subSectionTitleMalay, ss.subSectionTitleEnglish, ss.subSectionDescription, ss.dataStatusId FROM myrasubsection ss
+                JOIN myrasection s ON ss.sectionId = s.sectionId
+                WHERE ss.token=:subSectionIdToken LIMIT 1";
+
                 $statement = $pdo->prepare($query);
-                $data = [':sectionNumber' => $sectionNumber];
+                
                 $statement->execute($data);
 
                 $result = $statement->fetch(PDO::FETCH_ASSOC); //PDO::FETCH_ASSOC
-                $_SESSION["sectionNumberNew"]=$result['sectionNumber'];
+                // $_SESSION["sectionNumberNew"]=$result['sectionNumber'];
+                $_SESSION["subSectionToken"] = $subSectionIdToken;
+                $_SESSION["dataStatusId"]=$result['dataStatusId'];
               }
               ?>
               
 
-              <form action="peditsection.php" method="POST">
+              <form action="peditsubsection.php" method="POST">
 
                 <!-- <input type="hidden" name="sectionId" value="<? //= $result['sectionId']; ?>"> -->
 
@@ -256,7 +263,7 @@ session_start();
 
                         <!-- <input type="text" class="form-control" id="sectionNumber" name="sectionNumber" value="<? //= $result['sectionNumber']; ?>" maxlength="1"> -->
 
-                        <input type="text" class="form-control" id="sectionNumber" name="sectionNumber" disabled value="<?= $_SESSION["sectionNumberNew"]; ?>">
+                        <input type="text" class="form-control" id="sectionNumber" name="sectionNumber" disabled value="<?= $result["sectionNumber"]; ?>">
 
                         <!-- <select class="form-control" name="sectionNumber" id="sectionNumber">
                           <option value="" disabled selected hidden>SELECT ONE</option>
@@ -293,13 +300,20 @@ session_start();
                 </div> -->
                 <div class="card-body">
                   <div class="form-group">
-                    <label for="sectionDescription">Description</label><br>
-                    <textarea name="sectionDescription" id="myTextarea" cols="150" rows="4"><?= $result['sectionDescription']; ?></textarea>
+                    <label for="subSectionDescription">Description</label><br>
+                    <textarea name="subSectionDescription" id="myTextarea" cols="150" rows="4"><?= $result['subSectionDescription']; ?></textarea>
                   </div>
                 </div>
+
+                <div style="padding-left:30px; padding-top:20px; padding-bottom:20px; font-size:20px;" class="form-check">
+                    <input type="hidden" name="dataStatus" value="1" />
+                    <input type="checkbox" id="dataStatus" name="dataStatus" value="0" <?php if($_SESSION["dataStatusId"] == 0) echo "checked='checked'"; ?> style="width: 15px; height: 15px;">
+                    <label class="form-check-label" for="dataStatus" style="padding-left:5px">Check this box to <b>HIDE</b> the data; Uncheck to <b>UNHIDE</b> the data.</label> 
+                </div>
+
                 <!-- /.card-body -->
                 <div class="card-footer">
-                  <input type="submit" name="submit_update" value="Save Edit" class="btn btn-primary">
+                  <input type="submit" name="submit_updatess" value="Save Edit" class="btn btn-primary">
                   <a href="Subsection.php" class="btn btn-primary">Back to Add Sub-Section</a>
                   <!-- <input type="reset" value="Reset" class="btn btn-primary"> -->
                 </div>

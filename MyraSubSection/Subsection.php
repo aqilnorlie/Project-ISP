@@ -1,6 +1,7 @@
 <?php include('../MyraSection/sconnection.php');
 
-$sql= "SELECT * from myrasection";
+$sql= "SELECT * from myrasection
+ORDER BY sectionNumber";
 
 try
 {
@@ -186,7 +187,7 @@ try
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <subsection class="content-header">
+    <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
@@ -200,7 +201,7 @@ try
           </div>
         </div>
       </div><!-- /.container-fluid -->
-    </subsection>
+    </section>
 
     <!-- Main content -->
     <section class="content">
@@ -223,7 +224,7 @@ try
                     <div class="input-group">
                       <div class="custom-file">
                         <select class="form-control" name="sectionNumber" id="sectionNumber">
-                        <option value="" disabled selected hidden>SELECT SECTION</option>
+                        <option value="" disabled selected hidden>SELECT SECTION NUMBER</option>
                         <?php foreach ($results as $output) {?>
                           <option value="<?php echo $output["sectionId"];
                             // The value we usually set is the primary key
@@ -269,7 +270,7 @@ try
             
             <div class="card" style="width:1250px">
               <div class="card-header">
-                <h3 class="card-title">Data All User</h3>
+                <h3 class="card-title">All Sub-Section Details</h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -299,9 +300,10 @@ try
                // $dsn = "mysql:host=$host;dbname=$dbname1;";
 
                // $pdo = new PDO($dsn, $username, $password);
-                 $sql = "SELECT * FROM myra.myrasubsection ss 
+                 $sql = "SELECT t.sectionNumber, ss.subSectionTitleMalay, ss.subSectionTitleEnglish, ss.createdAt, ss.updatedAt, d.dataStatusId, ss.token, d.dataStatusTitle FROM myra.myrasubsection ss 
                  JOIN myra.datastatus d 
-                 ON ss.dataStatusId = d.dataStatusId JOIN myra.myrasection t ON t.sectionId = ss.sectionId
+                 ON ss.dataStatusId = d.dataStatusId 
+                 JOIN myra.myrasection t ON t.sectionId = ss.sectionId
                  JOIN classbook_backup_jengka.vw_staff_phg c 
                  ON c.USER_ID = ss.USER_ID";
 
@@ -320,17 +322,30 @@ try
                     <!-- <td><?php //echo $data['subSectionDescription'];?></td> -->
                     <!-- <td><?php //echo $data['USER_ID'];?></td> -->
                     <td><?php echo $data['createdAt'];?></td>
-                    <td><?php echo $data['updatedAt'];?></td>
-                    <td><?php echo $data['dataStatusId'];?></td>
+                    <td>
+                      <?php 
+                      if($data['updatedAt'] != NULL) 
+                      { echo $data['updatedAt']; } 
+                      else
+                      { echo "<b><center>---</center></b>"; }
+                      ?>
+                    </td>
+                    <td>
+                      <?php echo $data['dataStatusTitle'];?>
+                    </td>
                     <td style="text-align: center;">
                     
-                    <form action="editsubsection.php?subSectionId=<?= $data['token']; ?>" method="post">
+                    <form action="editsubsection.php?subSectionIdToken=<?= $data['token']; ?>" method="post" style="margin-block-end: 0.3em;">
                       <!-- <a href="editsection.php"><button type="button" class="f"><i class="fas fa-edit" title="Edit section"></i></button></a> -->
-                      <button type="submit" name="edit" class="f"><i class="fas fa-edit" title="Edit section"></i></button>
+                      <button type="submit" name="edit" class="f"><i class="fas fa-edit" title="Edit sub-section"></i></button>
                     </form>
                       <!-- <a href="viewsubsection.php"><button type="button" class="f"><i class="fas fa-eye" title="View sub section"></i></button></a> -->
-                    <form action="viewsubsection.php?subSectionId=<?= $data['token']; ?>" method="post">
-                      <button type="submit" name="view" class="f"><i class="fas fa-eye" title="View section"></i></button>
+                    <form action="viewsubsection.php?subSectionIdToken=<?= $data['token']; ?>" method="post" style="margin-block-end: 0.3em;">
+                      <button type="submit" name="view" class="f"><i class="fas fa-eye" title="View sub-section"></i></button>
+                    </form>
+                    <!-- delete button -->
+                    <form action="deletesubsection.php" method="post" style="margin-block-end: 0.3em;">
+                      <button type="submit" value="<?= $data['token']; ?>" name="delete_section" class="delete"><i class="fas fa-trash" title="Delete section"></i></button>
                     </form>
                     </td>
                   </tr>

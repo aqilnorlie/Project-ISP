@@ -23,49 +23,97 @@ session_start();
 //     throw new \PDOException($e->getMessage(), (int)$e->getCode());
 // }
 
-if(isset($_POST['submit_update']))
+if(isset($_POST['submit_updatess']))
 {
     // $sectionid = $_POST['sectionId'];
-    $sectionNumber = $_SESSION["sectionNumberNew"];
+    // $sectionId = amik sub section punya token sebenarnya 
+    $sectionId = $_SESSION["subSectionToken"];
     // $_POST['sectionNumber'];
-    $sectionTitleMalay = $_POST['subSectionTitleMalay'];
-    $sectionTitleEnglish = $_POST['subSectionTitleEnglish'];
-    $sectionDescription = $_POST['subSectionDescription'];
+    $subSectionTitleMalay = $_POST['subSectionTitleMalay'];
+    $subSectionTitleEnglish = $_POST['subSectionTitleEnglish'];
+    $subSectionDescription = $_POST['subSectionDescription'];
     
     try{
-        $query = "UPDATE myraSubsection 
-        SET 
-            sectionTitleMalay=:sectionTitleMalay, 
-            sectionTitleEnglish=:sectionTitleEnglish, 
-            sectionDescription=:sectionDescription 
-        WHERE 
-            sectionNumber=:sectionNumber LIMIT 1";
-
-        $statement = $pdo->prepare($query);
-
-        $data = [
-            ':subSectionTitleMalay' => $sectionTitleMalay,
-            ':subSectionTitleEnglish' => $sectionTitleEnglish,
-            ':subSectionDescription' => $sectionDescription,
-            // ':sectionId' => $sectionid,
-            ':sectionNumber' => $sectionNumber
-        ];
-
-        $query_execute = $statement->execute($data);
-
-        if($query_execute)
+        if($_POST['dataStatus'] == 0)
         {
-            $_SESSION['message'] = "Section HAS been updated.";
-            header('Location: section.php');
-            exit(0);
-            // echo 'Section HAS been updated.';
+            $query = "UPDATE myrasubsection 
+            SET 
+                subSectionTitleMalay=:subSectionTitleMalay, 
+                subSectionTitleEnglish=:subSectionTitleEnglish, 
+                subSectionDescription=:subSectionDescription,
+                updatedAt=now(),
+                dataStatusId=:dataStatusId
+            WHERE 
+                token=:sectionId LIMIT 1";
+
+            $statement = $pdo->prepare($query);
+
+            $data = [
+                ':subSectionTitleMalay' => $subSectionTitleMalay,
+                ':subSectionTitleEnglish' => $subSectionTitleEnglish,
+                ':subSectionDescription' => $subSectionDescription,
+                // ':sectionId' => $sectionid,
+                ':sectionId' => $sectionId,
+                ':dataStatusId' => 0
+            ];
+
+            $query_execute = $statement->execute($data);
+
+            if($query_execute)
+            {
+                // $_SESSION['message'] = "Section HAS been updated.";
+                header('Location: Subsection.php');
+                exit(0);
+                // echo 'Section HAS been updated.';
+            }
+            else
+            {
+                // $_SESSION['message'] = "Section has NOT been updated.";
+                header('Location: Subsection.php');
+                exit(0);
+                // echo 'Section has NOT been updated.';
+            }
         }
-        else
+
+        else if($_POST['dataStatus'] == 1)
         {
-            $_SESSION['message'] = "Section has NOT been updated.";
-            header('Location: section.php');
-            exit(0);
-            // echo 'Section has NOT been updated.';
+            $query = "UPDATE myrasubsection 
+            SET 
+                subSectionTitleMalay=:subSectionTitleMalay, 
+                subSectionTitleEnglish=:subSectionTitleEnglish, 
+                subSectionDescription=:subSectionDescription,
+                updatedAt=now(),
+                dataStatusId=:dataStatusId
+            WHERE 
+                token=:sectionId LIMIT 1";
+
+            $statement = $pdo->prepare($query);
+
+            $data = [
+                ':subSectionTitleMalay' => $subSectionTitleMalay,
+                ':subSectionTitleEnglish' => $subSectionTitleEnglish,
+                ':subSectionDescription' => $subSectionDescription,
+                // ':sectionId' => $sectionid,
+                ':sectionId' => $sectionId,
+                ':dataStatusId' => 1
+            ];
+
+            $query_execute = $statement->execute($data);
+
+            if($query_execute)
+            {
+                // $_SESSION['message'] = "Section HAS been updated.";
+                header('Location: Subsection.php');
+                exit(0);
+                // echo 'Section HAS been updated.';
+            }
+            else
+            {
+                // $_SESSION['message'] = "Section has NOT been updated.";
+                header('Location: Subsection.php');
+                exit(0);
+                // echo 'Section has NOT been updated.';
+            }
         }
     }
 
