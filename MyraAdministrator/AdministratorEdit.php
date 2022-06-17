@@ -252,11 +252,11 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
 
                       ?>
                         <select class="form-control" name="RoleStaff" id="RoleStaff" required>
-                           <option value="" disabled selected hidden><?php echo $result["role_Title"] ?></option> 
+                           <option value="" disabled selected hidden><?php echo $result["roleTitle"] ?></option> 
                           
                           <?php
                            foreach($data as $d) { ?>
-                          <option value=<?php echo $d["roleId"]; ?>><?php echo $d["role_Title"];?></option>
+                          <option value=<?php echo $d["roleId"]; ?>><?php echo $d["roleTitle"];?></option>
                           
 
 
