@@ -176,7 +176,7 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Add User</h1>
+            <h1>Edit User</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -194,104 +194,47 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
         <div class="row">
           <!-- left column -->
           <div class="col-md-15">
-            <!-- general form elements -->
-            <div class="card card-primary col-sm-15">
-              <div class="card-header">
-                <h3 class="card-title">Search Lecturer</h3>
-              </div>
-              <!-- /.card-header -->
-              <!-- form start -->
-              <form action="Administrator.php" method="post" autocomplete = "on"> 
-                <!-- <input autocomplete = "false" name ="hidden" type="text" style= "display:none" > -->
-                <div class="card-body">
-                  <div class="form-group">
-                   
-                    <label for="SearchUserID">Search</label>
-                    <input type="search" class="form-control" name="SearchUserID"id="SearchUSerID" placeholder="Search by ID" required>
-                  </div>
-                </div>
-                <!-- /.card-body -->
-                <div class="card-footer">
-
-                  <button type="submit" name="btnSearchUser"class="btn btn-primary">Search</button>
-                </div>
-              </form>
-
-              <?php
-                if($_SERVER['REQUEST_METHOD'] == 'POST'){
-
-                  $data = [":id" => $_POST['SearchUserID']];
-                  $sql = "SELECT * FROM classbook_backup_jengka.vw_staff_phg WHERE USER_ID = :id";
-                  $stmt = $conn2->prepare($sql);
-                  $stmt->execute($data);
-                  $rowCount = $stmt->rowCount();
-                  if($rowCount > 0)
-                  $nameUserAdd = "";
-
-                  $idUserAdd = "";
-                  {
-                  $d = $stmt->fetch(PDO::FETCH_ASSOC);
-                  
-                 
-                  $nameUserAdd = $d['USER_NAME'];
-                  $idUserAdd = $d['USER_ID'];
-                 
-                  $_SESSION['idUserAdd'] = $idUserAdd;
-                  $_SESSION['nameUserAdd'] = $nameUserAdd;
-
-
-                }
-               
-              }
-                
-    
-
-              ?>
-            </div>
+            
             
             <!-- add User form elements -->
             <div style="width:1250px"class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Add User</h3>
+                <h3 class="card-title">Edit User</h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
 
-              <form action="pAdministrator.php" method="post">
+              <?php
+
+              if(isset($_GET['assignId'])){
+
+                $assignId = $_GET['assignId'];
+                $data = [':assignId' => $assignId];
+              
+                $sql = "SELECT * from  myra.myraroleassignment m Join classbook_backup_jengka.vw_staff_phg C ON 
+                m.USER_ID = C.USER_ID Join myra.myraroles r ON m.roleId = r.roleId where m.Token = :assignId limit 1";
+
+                $stmt = $conn1 -> prepare($sql);
+                $stmt->execute($data);
+                $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                $_SESSION['assignIdNew'] = $result["assignId"];
+               
+                
+              }
+
+              ?>
+
+              <form action="pAdministratorEdit.php" method="post">
                 <div class="card-body">
                   <div class="form-group">
                     <label for="StaffNo">Staff No</label>
-                    <input type="type" class="form-control" id="StaffNo" value="<?php 
-
-                   
-                    
-                    if(!isset($idUserAdd)){
-
-                      echo"";
-
-                    }else{
-                      echo $idUserAdd;
-                    }
-
-                   
-                
-                    
-                      ?>" disabled >
+                    <input type="type" class="form-control" id="StaffNo" value=" <?php echo $result["USER_ID"] ?>" disabled >
 
                   </div>
 
                   <div class="form-group">
                     <label for="StaffName">Staff Name</label>
-                    <input type="type" class="form-control" id="StaffName" value="<?php 
-                    
-                    if(!isset($nameUserAdd)){
-                      echo"";
-
-                    }else{
-                      echo $nameUserAdd;
-                   }
-
-                      ?>"disabled>
+                    <input type="type" class="form-control" id="StaffName" value="<?php echo $result["USER_NAME"]?>" disabled>
                   </div>
 
                   <div class="form-group">
@@ -309,7 +252,7 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
 
                       ?>
                         <select class="form-control" name="RoleStaff" id="RoleStaff" required>
-                           <option value="" disabled selected hidden>--Choose Role--</option> 
+                           <option value="" disabled selected hidden><?php echo $result["role_Title"] ?></option> 
                           
                           <?php
                            foreach($data as $d) { ?>
@@ -324,104 +267,20 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
                   </div>
 
                   <div style="padding:20px" class="form-check">
-                    <input type="radio" name="checkAccess" class="form-check-input" id="exampleCheck1"  value="1" required>
+                    <input type="radio" name="checkAccess" class="form-check-input" id="exampleCheck1"  value="1" <?php if($result["statusId"] ==1)  echo "checked='checked'";?>>
                     <label class="form-check-label" for="exampleCheck1"><b>Allow</b> User to access the system</label><br>
 
-                    <input type="radio" name="checkAccess"class="form-check-input" id="exampleCheck2" value="0" required>
+                    <input type="radio" name="checkAccess"class="form-check-input" id="exampleCheck2" value="0" <?php if($result["statusId"] == 0)echo "checked='checked'"; ?> >
                     <label class="form-check-label" for="exampleCheck2"><b>Don't Allow</b> User to access the system</label>
                   </div>
                 </div>
-                <!-- /.card-body --> 
+                    <!-- /.card-body --> 
 
-                <div class="card-footer">
-                  <button type="submit" name="btnAddUser"class="btn btn-primary">Submit</button>
-                </div>
+                    <div class="card-footer">
+                        <button type="submit" name="btnEditUser"class="btn btn-primary">Edit</button>
+                        <a href="Administrator.php" class="btn btn-primary">Back</a>
+                    </div>
               </form>
-            </div>
-
-              <?php 
-                  $sql = "SELECT M.statusId , R.role_Title, C.USER_ID, C.USER_NAME, M.createdAt, M.updatedAt, M.token from myra.myraroleassignment M JOIN 
-                  classbook_backup_jengka.vw_staff_phg C on M.USER_ID = C.USER_ID JOIN 
-                  myra.myraroles R on M.roleId = R.roleId WHERE M.USER_ID = C.USER_ID";
-
-                  $d = $conn1->query($sql);
-                  
-                  ?>
-            <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">Data All User</h3>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body">
-
-                <table id="example2" class="table table-bordered table-hover">
-                  <thead>
-                  <tr>
-                    <th>No</th>
-                    <th>Staff No</th>
-                    <th>Name</th>
-                    <th>Roles</th>
-                    <th>Date</th>
-                    <th>Update</th>
-                    <th>Action</th>
-                  </tr>
-                  </thead>
-                  <?php 
-                   $count = 1;
-                   foreach($d as $data)
-                   {
-                    
-                    ?>
-                   <tbody>
-                    <tr>
-                    <td><?php echo $count++; ?></td>
-                    <td><?php echo $data["USER_ID"]; ?></td>
-                    <td><?php echo $data["USER_NAME"]; ?></td>
-                    <td><?php echo $data["role_Title"]; ?></td>
-                    <td><?php echo $data["createdAt"]; ?></td>
-                    <td>
-                      <?php
-                      if(!isset($data["updatedAt"])){
-                        echo "---";
-                      }else{
-                        echo $data["updatedAt"];
-                      } ?>
-                    </td>
-                    <td style="text-align:center;">
-
-                    <form action="AdministratorEdit.php?assignId=<?= $data['token']; ?>"  method="post">
-                      <button type="submit" name="edit" class="f"><i class="fas fa-edit" title="Edit User"></i></button>
-                    </form>
-
-                    
-                    <form action="AdministratorView.php?assignId=<?=$data['token'];?>" method="post">
-                      <button type="submit" name="view" class="f"><i class="fas fa-eye" title="View User"></i></button>
-                    </form>
-
-                    <form action="AdministratorDelete.php?assignId=<?=$data['token'];?>" method="post">
-                      <button type="submit" name="Delete" class="f"><i class="fas fa-trash" title="View User"></i></button>
-                    </form>
-                    </td>
-                  </tr>
-                  <?php
-                  }
-                  ?>
-                  
-                  </tbody>
-                  <tfoot>
-                  <tr>
-                    <th>No</th>
-                    <th>Staff No</th>
-                    <th>Name</th>
-                    <th>Roles</th>
-                    <th>Date</th>
-                    <th>Update</th>
-                    <th>Action</th>
-                  </tr>
-                  </tfoot>
-                </table>
-              </div>
-              <!-- /.card-body -->
             </div>
 
           </div>

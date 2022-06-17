@@ -33,8 +33,8 @@ session_start();
     $userID = $_SESSION["idUserAdd"];
 
     insertNewUSer($conn1,$acess, $role,$userID);
-    echo  $_SESSION['idUserAdd'];
-    //header("Location: Administrator.php");
+    //echo  $_SESSION['idUserAdd'];
+    header("Location: Administrator.php");
   
 
   }
