@@ -40,7 +40,8 @@
     font-size: 17px;
     padding: 6px 10px 6px 10px;
     text-decoration: none;
-    height: 43px;
+    width: 40px;
+    height: 40px;
   }
   
   .f:hover {
@@ -68,8 +69,8 @@
     font-size: 17px;
     padding: 6px 10px 6px 10px;
     text-decoration: none;
-    width: 43px;
-    height: 43px;
+    width: 40px;
+    height: 40px;
   }
 
   .delete:hover {
@@ -89,4 +90,19 @@
   .form-group{
     margin-bottom: 0.5em;
   }
+
+  td:nth-child(6){
+    text-align: center;
+  }
+
+  td:nth-child(7){
+    display: flex;
+    /* width: 50px;
+    height: 50px; */
+    /* margin: 0 5px; */
+    gap: 5px;
+    align-items: center;
+    justify-content: center;
+  }
+
 
