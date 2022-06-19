@@ -9,10 +9,11 @@ $token = generateToken(32);
 
 // validate required fields
 $errors = [];
-foreach (['sectionNumber', 'subSectionTitleMalay', 'subSectionTitleEnglish', 'subSectionDescription'] as $field) {
+foreach (['termTitleMalay', 'termTitleEnglish', 'termDescription'] as $field) {
     if (empty($data[$field])) {
         $errors[] = sprintf('The %s is a required field.', $field);
-        header("Location: Subsection.php");
+        // echo "123 <br>";
+        // header("Location: Terms.php");
     }
 }
 if (!empty($errors)) {
@@ -30,21 +31,28 @@ if (!empty($errors)) {
 // }
 
 //insert new data
+// echo "1";
 $statement = $pdo->prepare(
-    'INSERT INTO myrasubsection ( subSectionTitleMalay, subSectionTitleEnglish, subSectionDescription, sectionId, USER_ID, token) VALUES (:subSectionTitleMalay, :subSectionTitleEnglish, :subSectionDescription, :sectionNumber, :USER_ID, :token)'
+    "INSERT INTO myraterm ( termTitleMalay, termTitleEnglish, termDescription, subSectionId, USER_ID, token) VALUES (:termTitleMalay, :termTitleEnglish, :termDescription, :subSectionId, :USER_ID, :token)"
 );
+// echo "2";
 $statement->execute([
     
-    'subSectionTitleMalay' => $data['subSectionTitleMalay'],
-    'subSectionTitleEnglish' => $data['subSectionTitleEnglish'],
-    'subSectionDescription' => $data['subSectionDescription'],
-    'sectionNumber'=> $data['sectionNumber'],
-     'USER_ID' => $_SESSION['userid'],
+    
+    'termTitleMalay' => $data['termTitleMalay'],
+    'termTitleEnglish' => $data['termTitleEnglish'],
+    'termDescription' => $data['termDescription'],
+    'subSectionId'=> $data['subSectionId'],
+    'USER_ID' => $_SESSION['userid'],
     'token'=> $token
+
     //'USER_ID' => $_SESSION['userid']
 ]);
 
-//echo 'The new section has been successfully inserted into database.';
 
-header('Location: Subsection.php');
+
+// echo 'The new section has been successfully inserted into database.';
+
+header('Location: Terms.php');
+
 ?>
