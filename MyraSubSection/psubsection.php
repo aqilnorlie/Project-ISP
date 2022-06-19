@@ -47,5 +47,4 @@ $statement->execute([
 //echo 'The new section has been successfully inserted into database.';
 
 header('Location: Subsection.php');
-
 ?>
