@@ -25,7 +25,7 @@
   <div class="card">
     
     <div class="card-body login-card-body">
-      <p class="login-box-msg">Sign in to start your session [Password: n0r4sH1k1n}>0390]</p>
+      <p class="login-box-msg">Sign in to start your session <br> n0r4sH1k1n}>0390</p>
 
       <form action="plogin.php" method="post">
         <div class="input-group mb-3">

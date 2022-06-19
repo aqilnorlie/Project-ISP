@@ -99,7 +99,7 @@ table.dataTable tr.dt-hasChild td.dt-control:before {
 table.dataTable {
   clear: both;
   margin-top: 6px !important;
-  margin-bottom: 6px !important;
+  margin-bottom: 6px;
   max-width: none !important;
   border-collapse: separate !important;
   border-spacing: 0;

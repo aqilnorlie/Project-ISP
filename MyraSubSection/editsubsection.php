@@ -10,7 +10,7 @@ session_start();
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Edit Section</title>
+  <title>Edit Sub-Section</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -183,7 +183,7 @@ session_start();
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="../MyraDashboard/index.php">Home</a></li>
-              <li class="breadcrumb-item active">Edit Section</li>
+              <li class="breadcrumb-item active">Edit Sub-Section</li>
             </ol>
           </div>
         </div>
@@ -199,7 +199,7 @@ session_start();
             <!-- general form elements -->
             <div style="width:1250px" class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Edit Section</h3>
+                <h3 class="card-title">Edit Sub-Section</h3>
               </div>
               <!-- /.card-header -->
 

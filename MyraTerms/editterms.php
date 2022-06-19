@@ -183,7 +183,7 @@ session_start();
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="../MyraDashboard/index.php">Home</a></li>
-              <li class="breadcrumb-item active">Edit Section</li>
+              <li class="breadcrumb-item active">Edit Term</li>
             </ol>
           </div>
         </div>
