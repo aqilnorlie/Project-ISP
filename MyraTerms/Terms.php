@@ -182,6 +182,14 @@ try
                 </a>
               </li>
             </li>
+            <li class="nav-item menu-open">
+            <li class="nav-item">
+             <a href="../MyraSearch/SearchHome.php" class="nav-link">
+               <i class="nav-icon fas fa-database"></i>
+               <p>MyRA Search</p>
+             </a>
+           </li>
+         </li>     
           <li class="nav-item menu-open">
           <li class="nav-item">
              <a href="../Myrasection/section.php" class="nav-link">
@@ -229,12 +237,12 @@ try
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Terms</h1>
+            <h1>Term</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="../MyraDashboard/index.php">Home</a></li>
-              <li class="breadcrumb-item active">Terms</li>
+              <li class="breadcrumb-item active">Term</li>
             </ol>
           </div>
         </div>
@@ -330,7 +338,7 @@ try
 
             <div style="width:1250px"class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Add Terms</h3>
+                <h3 class="card-title">Add Term</h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
@@ -392,8 +400,8 @@ try
                 <h3 class="card-title">All Terms Detail</h3>
               </div>
               <!-- /.card-header -->
-              <div class="card-body" style="padding-bottom: 1em">
-                <table id="example2" class="table table-bordered table-hover" style="margin-bottom: 1em !important">
+              <div class="card-body table1">
+                <table id="example2" class="table table-bordered table-hover table2">
                   <thead>
                   <tr>
                     <th>Section Number</th>

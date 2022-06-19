@@ -25,6 +25,9 @@ try
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Sub-Section</title>
 
+  <link rel=”stylesheet” href=”https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css” />
+  <script type=”text/javascript” src=”https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js”></script>
+
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
@@ -144,6 +147,14 @@ try
                 </a>
               </li>
             </li>
+            <li class="nav-item menu-open">
+            <li class="nav-item">
+             <a href="../MyraSearch/SearchHome.php" class="nav-link">
+               <i class="nav-icon fas fa-database"></i>
+               <p>MyRA Search</p>
+             </a>
+           </li>
+         </li>     
           <li class="nav-item menu-open">
           <li class="nav-item">
              <a href="../MyraSection/Section.php" class="nav-link">
@@ -273,8 +284,8 @@ try
                 <h3 class="card-title">All Sub-Section Details</h3>
               </div>
               <!-- /.card-header -->
-              <div class="card-body">
-                <table id="example2" class="table table-bordered table-hover">
+              <div class="card-body table1">
+                <table id="example2" class="table table-bordered table-hover table2">
                   <thead>
                   <tr>
                     <th>Section Number</th>
@@ -455,7 +466,7 @@ try
 <script src='../plugins/tinymce_6.0.2/tinymce/js/tinymce/tinymce.min.js'> </script>
 
 <script>
-  $(function () {
+$(function () {
     $("#example1").DataTable({
       "responsive": true, "lengthChange": false, "autoWidth": false,
       "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
@@ -468,6 +479,11 @@ try
       "info": true,
       "autoWidth": false,
       "responsive": true,
+      "bJQueryUI":true,
+      "bSort":true,
+      "bPaginate":true,
+      "sPaginationType":"full_numbers",
+       "iDisplayLength": 5
     });
   });
 </script>

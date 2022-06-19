@@ -13,6 +13,10 @@ session_start();
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Section</title>
 
+  <link rel=”stylesheet” href=”https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css” />
+  <script type=”text/javascript” src=”https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js”></script>
+  <!-- <script src="../Myscript.js"></script> -->
+
   <!-- amik drpd video YT -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Google Font: Source Sans Pro -->
@@ -135,7 +139,15 @@ session_start();
               </li>
             </li>
           <li class="nav-item menu-open">
-          <li class="nav-item">
+            <li class="nav-item">
+             <a href="../MyraSearch/SearchHome.php" class="nav-link">
+               <i class="nav-icon fas fa-database"></i>
+               <p>MyRA Search</p>
+             </a>
+           </li>
+         </li>            
+          <li class="nav-item menu-open">
+            <li class="nav-item">
              <a href="Section.php" class="nav-link active">
                <i class="nav-icon fas fa-database"></i>
                <p>Section</p>
@@ -333,8 +345,8 @@ session_start();
                 <h3 class="card-title">All Section Details</h3>
               </div>
               <!-- /.card-header -->
-              <div class="card-body">
-                <table id="example2" class="table table-bordered table-hover">
+              <div class="card-body table1">
+                <table id="example2" class="table table-bordered table-hover table2">
                   <thead>
                   <tr>
                     <th>Section Number</th>
@@ -497,11 +509,12 @@ session_start();
 <script src="../plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 
+
 <!--textArea plugins-->
 <script src='../plugins/tinymce_6.0.2/tinymce/js/tinymce/tinymce.min.js'> </script>
 
 <script>
-  $(function () {
+$(function () {
     $("#example1").DataTable({
       "responsive": true, "lengthChange": false, "autoWidth": false,
       "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
@@ -514,6 +527,11 @@ session_start();
       "info": true,
       "autoWidth": false,
       "responsive": true,
+      "bJQueryUI":true,
+      "bSort":true,
+      "bPaginate":true,
+      "sPaginationType":"full_numbers",
+       "iDisplayLength": 5
     });
   });
 </script>
