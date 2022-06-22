@@ -1,4 +1,10 @@
 <?php include('../MyraSubSection/sconnection.php');
+session_start();
+
+if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
+  header("Location: ../MyraLogin/login.php");
+}
+
 
 $sql_sectionNumber= "SELECT * from myrasection
 ORDER BY sectionNumber";
@@ -157,76 +163,7 @@ try
     </a>
 
     <!-- Sidebar -->
-    <div class="sidebar">
-      <!-- Sidebar user panel (optional) -->
-      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-        <div class="image">
-          <img src="../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
-        </div>
-        <div class="info">
-          <a href="#" class="d-block">Moderator</a>
-        </div>
-      </div>
-
-      <!-- Sidebar Menu -->
-      <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
-          <li class="nav-item menu-open">
-           
-              <li class="nav-item">
-                <a href="../MyraDashboard/index.php" class="nav-link">
-                  <i class="nav-icon fas fa-home"></i></i>
-                  <p>Dashboard</p>
-                </a>
-              </li>
-            </li>
-            <li class="nav-item menu-open">
-            <li class="nav-item">
-             <a href="../MyraSearch/SearchHome.php" class="nav-link">
-               <i class="nav-icon fas fa-database"></i>
-               <p>MyRA Search</p>
-             </a>
-           </li>
-         </li>     
-          <li class="nav-item menu-open">
-          <li class="nav-item">
-             <a href="../Myrasection/section.php" class="nav-link">
-               <i class="nav-icon fas fa-database"></i>
-               <p>Section</p>
-             </a>
-           </li>
-         </li>
-         <li class="nav-item menu-open">
-         <li class="nav-item">
-             <a href="../MyraSubsection/subsection.php" class="nav-link">
-               <i class="nav-icon fas fa-database"></i>
-               <p>Sub Section</p>
-             </a>
-           </li>
-         </li>
-         <li class="nav-item menu-open">
-         <li class="nav-item">
-             <a href="../MyraTerms/Terms.php" class="nav-link active">
-               <i class="nav-icon fas fa-database"></i>
-               <p>Terms</p>
-             </a>
-           </li>
-         </li>
-          <li class="nav-item">
-            <a href="../MyraLogin/login.php" class="nav-link">
-              <i class="nav-icon fas fa-power-off"></i>
-              <p>
-                Log Out
-              </p>
-            </a>
-          </li>
-         
-        </ul>
-      </nav>
-      <!-- /.sidebar-menu -->
-    </div>
+    <?php include("../MyraSidebar/sidebar.php")?>
     <!-- /.sidebar -->
   </aside>
 

@@ -131,6 +131,7 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
       <div class="container-fluid">
         <!-- Small boxes (Stat box) -->
         <div class="row">
+          <?php if($_SESSION['roleid']== "1"){ ?>
           <div class="col-lg-3 col-6">
             <!-- small box -->
             <?php 
@@ -271,17 +272,8 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
              
             </div>
           </div>
-
-
-          <!-- ./col -->
-         </div>
           
-        <!-- /.row -->
-        <!-- Main row -->
-        <div class="row">
-          
-            <!-- BAR CHART -->
-            <div class="card card-success">
+          <div class="card card-success">
               <div class="card-header">
                 <h3 class="card-title">Bar Chart</h3>
 
@@ -301,9 +293,105 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
               </div>
               <!-- /.card-body -->
             </div>
+
+
+
+
+            <!-- ./col -->
+         </div>
+
+         <?php } else{?>
+
+          <div class="col-lg-3 col-6">
+
+            <?php 
+              $sql = "SELECT count(sectionId) as total from myrasection;";
+
+              $stmt = $conn1->prepare($sql);
+              $stmt->execute();
+              $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+              $sectionCount = $data["total"];
+              
+
+              ?>
+
+              <!-- small box -->
+              
+              <div class="small-box bg-success">
+                <div class="inner">
+                  <h3><?php echo $sectionCount;?></h3>
+
+                  <p>Total Section</p>
+                </div>
+                <div class="icon">
+                  <i class="ion ion-stats-bars"></i>
+                </div>
+              
+              </div>
+            </div>
+         
+          <div class="col-lg-3 col-6">
+
+          <?php 
+            $sql = "SELECT count(subSectionId) as total from myrasubsection;";
+
+            $stmt = $conn1->prepare($sql);
+            $stmt->execute();
+            $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            $subCount = $data["total"];
+            
+
+            ?>
+
+            <!-- small box -->
+            <div class="small-box bg-yellow">
+              <div class="inner">
+                <h3> <?php echo $subCount; ?></h3>
+
+                <p>Total Sub-Section</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-stats-bars"></i>
+              </div>
+             
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+
+            <?php 
+            $sql = "SELECT count(termId) as total from myraterm;";
+
+            $stmt = $conn1->prepare($sql);
+            $stmt->execute();
+            $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            $termCount = $data["total"];
+            
+
+            ?>
+
+            <div class="small-box bg-red">
+              <div class="inner">
+                <h3><?php echo $termCount;?></h3>
+
+                <p>Total Terms</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-stats-bars"></i>
+              </div>
+             
+            </div>
+          </div>
+
+          <?php } ?>
+
           
-          <!-- right col -->
-        </div>
+        <!-- /.row -->
+   
         <!-- /.row (main row) -->
       </div><!-- /.container-fluid -->
     </section>
