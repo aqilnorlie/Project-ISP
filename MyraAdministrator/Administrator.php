@@ -110,62 +110,7 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
     </a>
 
     <!-- Sidebar -->
-    <div class="sidebar">
-      <!-- Sidebar user panel (optional) -->
-      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-        <div class="image">
-          <img src="../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
-        </div>
-        <div class="info">
-          <a href="#" class="d-block">Administrator</a>
-        </div>
-      </div>
-
-      
-
-      <!-- Sidebar Menu -->
-      <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
-          <li class="nav-item menu-open">
-           
-              <li class="nav-item">
-                <a href="../MyraDashboard/index.php" class="nav-link">
-                  <i class="nav-icon fas fa-home"></i></i>
-                  <p>Dashboard</p>
-                </a>
-              </li>
-            </li>
-          <li class="nav-item menu-open">
-          <li class="nav-item">
-             <a href="Administrator.php" class="nav-link active">
-               <i class="nav-icon fas fa-user-graduate"></i>
-               <p>User</p>
-             </a>
-           </li>
-         </li>
-         <li class="nav-item menu-open">
-         <li class="nav-item">
-             <a href="../MyraReport/report.php" class="nav-link">
-               <i class="nav-icon fas fa-chart-line"></i>
-               <p>Report</p>
-             </a>
-           </li>
-         </li>
-          <li class="nav-item">
-            <a href="../MyraLogin/login.php" class="nav-link">
-              <i class="nav-icon fas fa-power-off"></i>
-              <p>
-                Log Out
-              </p>
-            </a>
-          </li>
-         
-        </ul>
-      </nav>
-      <!-- /.sidebar-menu -->
-    </div>
+   <?php include("../MyraSidebar/sidebar.php")?>
     <!-- /.sidebar -->
   </aside>
 
@@ -231,14 +176,24 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
                   $idUserAdd = "";
                   {
                   $d = $stmt->fetch(PDO::FETCH_ASSOC);
-                  
-                 
-                  $nameUserAdd = $d['USER_NAME'];
-                  $idUserAdd = $d['USER_ID'];
-                 
-                  $_SESSION['idUserAdd'] = $idUserAdd;
-                  $_SESSION['nameUserAdd'] = $nameUserAdd;
 
+                  if(isset($d['USER_ID']))
+                  {
+                    $nameUserAdd = $d['USER_NAME'];
+                    $idUserAdd = $d['USER_ID'];
+
+                    $_SESSION['idUserAdd'] = $idUserAdd;
+                    $_SESSION['nameUserAdd'] = $nameUserAdd;;
+                  }
+                  else
+                  { ?>
+                    <script>
+                      alert("User does not exist.");
+                      window.location.href='Administrator.php';
+                    </script>
+                  <?php 
+                  } 
+                  
 
                 }
                
