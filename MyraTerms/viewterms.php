@@ -42,6 +42,34 @@ session_start();
   <link rel="stylesheet" href="../Mystyle.css">
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
+
+<?php
+
+// kalau url token ditukar (token yg takde dlm database)
+// if(isset($_GET['id'])            && checkReportToken($dbh, $_SESSION['userid'], $_GET['id']) == false)
+
+if(isset($_GET['termIdToken']) && checkReportToken($pdo, $_SESSION['userid'], $_GET['termIdToken']) == false) 
+{
+    header("Location: terms.php?warning");
+} 
+
+function checkReportToken($pdo, $userid, $token)
+{
+    $found = false;
+    $data = [":userid" => $userid, ":token" => $token];
+    $sql = "SELECT token FROM myraterm WHERE USER_ID = :userid AND BINARY token = :token";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($data);
+    $rowCount = $stmt->rowCount();
+    if($rowCount > 0)
+    {
+        $found = true;    
+    }
+    
+    return $found;
+}
+?>
+
 <div class="wrapper">
 
   <!-- Preloader -->
@@ -213,7 +241,7 @@ session_start();
 
                 // $query = "SELECT * FROM myraterm WHERE token=:termId";
 
-                $query = "SELECT ss.subSectionTitleMalay, t.termTitleMalay, t.termTitleEnglish, t.termDescription, t.createdAt, t.updatedAt, c.USER_NAME, t.token, s.sectionNumber, d.dataStatusTitle FROM myraterm t
+                $query = "SELECT ss.subSectionTitleMalay, ss.subSectionTitleEnglish, t.termTitleMalay, t.termTitleEnglish, t.termDescription, t.createdAt, t.updatedAt, c.USER_NAME, t.token, s.sectionNumber, s.sectionTitleMalay, s.sectionTitleEnglish, d.dataStatusTitle FROM myraterm t
                 JOIN myrasubsection ss ON t.subSectionId = ss.subSectionId
                 JOIN dataStatus d ON d.dataStatusId = t.dataStatusId
                 JOIN classbook_backup_jengka.vw_staff_phg c ON c.USER_ID = t.USER_ID
@@ -233,14 +261,14 @@ session_start();
                     <div class="card-body">
                       <div class="form-group">
                         <label for="subSectionTitleMalay">Section Number</label>
-                        <input type="text" class="form-control" id="sectionNumber" name="sectionNumber" disabled value="<?= $result["sectionNumber"]; ?>">
+                        <input type="text" class="form-control" id="sectionNumber" name="sectionNumber" disabled value="<?= $result["sectionNumber"] . " - " . $result["sectionTitleMalay"] . " / " . $result["sectionTitleEnglish"]; ?>">
                       </div>
                     </div>
 
                     <div class="card-body">
                       <div class="form-group">
-                        <label for="subSectionTitleMalay">Sub-Section Title Malay</label>
-                        <input type="text" class="form-control" id="subSectionTitleMalay" name="subSectionTitleMalay" disabled value="<?= $result["subSectionTitleMalay"]; ?>">
+                        <label for="subSectionTitleMalay">Sub-Section Title</label>
+                        <input type="text" class="form-control" id="subSectionTitleMalay" name="subSectionTitleMalay" disabled value="<?= $result["subSectionTitleMalay"] . " / " . $result["subSectionTitleEnglish"]; ?>">
                       </div>
                     </div>
 
@@ -280,36 +308,41 @@ session_start();
                   <div class="form-group">
                     <label for="termDescription">Term Description</label><br>
                     <textarea name="termDescription" id="myTextarea" cols="150" rows="4">
-                      <?= $result['termDescription']; ?>
+                      <?php 
+                      if($result['termDescription'] != NULL) 
+                      { echo $result['termDescription']; } 
+                    else
+                    { echo "---"; } ?>
                     </textarea>
                   </div>
                 </div>
 
-                <div class="card-body">
-                  <div class="form-group">
-                    <label for="USER_ID">User Name</label>
-                    <input type="text" class="form-control" id="USER_ID" name="USER_ID" disabled value="<?= $result["USER_NAME"]; ?>">
+              <div class="card-body">
+                <div class="row paddingBottomForInputBahagianBwh">
+                  <div class="form-group col-xs-6 paddingRightForInputBahagianBwh padding-left">
+                    <label for="USER_ID">Added By</label>
+                    <input type="text" class="form-control userName" id="USER_ID" name="USER_ID" disabled value="<?= $result["USER_NAME"]; ?>">
                   </div>
-                </div>
+                <!-- </div> -->
 
-                <div class="card-body">
-                  <div class="form-group">
+                <!-- <div class="card-body"> -->
+                  <div class="form-group col-xs-6 paddingRightForInputBahagianBwh">
                     <label for="dataStatus">Data Status</label>
-                    <input type="text" class="form-control" id="dataStatus" name="dataStatus" disabled value="<?= $result["dataStatusTitle"]; ?>">
+                    <input type="text" class="form-control dataStatus" id="dataStatus" name="dataStatus" disabled value="<?= $result["dataStatusTitle"]; ?>">
                   </div>
-                </div>
+                <!-- </div> -->
 
-                <div class="card-body">
-                  <div class="form-group">
+                <!-- <div class="card-body"> -->
+                  <div class="form-group col-xs-6 paddingRightForInputBahagianBwh">
                     <label for="createdAt">Created At</label>
-                    <input type="text" class="form-control" id="createdAt" name="createdAt" disabled value="<?= $result["createdAt"]; ?>">
+                    <input type="text" class="form-control timestamp" id="createdAt" name="createdAt" disabled value="<?= $result["createdAt"]; ?>">
                   </div>
-                </div>
+                <!-- </div> -->
 
-                <div class="card-body" style="padding-bottom:1em">
-                  <div class="form-group">
+                <!-- <div class="card-body" style="padding-bottom:1em"> -->
+                  <div class="form-group col-xs-6">
                     <label for="updatedAt">Updated At</label>
-                    <input type="text" class="form-control" id="updatedAt" name="updatedAt" disabled value="<?php 
+                    <input type="text" class="form-control timestamp" id="updatedAt" name="updatedAt" disabled value="<?php 
                       if($result["updatedAt"] != NULL) 
                         { echo $result["updatedAt"]; } 
                       else
@@ -317,6 +350,7 @@ session_start();
                       <?php //$_SESSION["updatedAt"]; ?>
                   </div>
                 </div>
+              </div>
 
                 <!-- /.card-body -->
                 <div class="card-footer">
@@ -552,7 +586,8 @@ session_start();
 <script>
     tinymce.init({
     selector: "#myTextarea",
-    readonly: true   
+    readonly: true,
+    height: "500"   
 });
 
 // tinymce.init({

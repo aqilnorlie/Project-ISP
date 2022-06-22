@@ -62,6 +62,27 @@ if(isset($_POST['submit_update']))
 
             $query_execute = $statement->execute($data);
 
+            $sqlHistory = "INSERT INTO myratermhistory (termHistoryProcess, USER_ID) VALUES (:termHistoryProcess, :USER_ID)";
+            $stmtHistory = $pdo->prepare($sqlHistory);
+            $data = [
+                ':termHistoryProcess' => "EDITED",
+                // ':sectionId' => $_SESSION['sectionNumber'],
+                ':USER_ID' => $_SESSION['userid']
+                // ':sectionId' => $sectionid,
+            ];
+            $stmtHistory->execute($data);
+
+            $querySecId = 
+            "UPDATE 
+                myratermhistory ss, 
+                myraterm s
+            SET 
+                ss.termId = s.termId
+            WHERE 
+                ss.createdAt = s.updatedAt";
+            $stmtSectionId = $pdo->prepare($querySecId);
+            $stmtSectionId->execute();
+
             if($query_execute)
             {
                 // $_SESSION['message'] = "Section HAS been updated.";
@@ -102,6 +123,27 @@ if(isset($_POST['submit_update']))
             ];
 
             $query_execute = $statement->execute($data);
+
+            $sqlHistory = "INSERT INTO myratermhistory (termHistoryProcess, USER_ID) VALUES (:termHistoryProcess, :USER_ID)";
+            $stmtHistory = $pdo->prepare($sqlHistory);
+            $data = [
+                ':termHistoryProcess' => "EDITED",
+                // ':sectionId' => $_SESSION['sectionNumber'],
+                ':USER_ID' => $_SESSION['userid']
+                // ':sectionId' => $sectionid,
+            ];
+            $stmtHistory->execute($data);
+
+            $querySecId = 
+            "UPDATE 
+                myratermhistory ss, 
+                myraterm s
+            SET 
+                ss.termId = s.termId
+            WHERE 
+                ss.createdAt = s.updatedAt";
+            $stmtSectionId = $pdo->prepare($querySecId);
+            $stmtSectionId->execute();
 
             if($query_execute)
             {

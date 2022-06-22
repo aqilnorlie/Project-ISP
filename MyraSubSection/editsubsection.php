@@ -42,6 +42,33 @@ session_start();
   <link rel="stylesheet" href="../Mystyle.css">
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
+<?php
+
+// kalau url token ditukar (token yg takde dlm database)
+// if(isset($_GET['id'])            && checkReportToken($dbh, $_SESSION['userid'], $_GET['id']) == false)
+
+if(isset($_GET['subSectionIdToken']) && checkReportToken($pdo, $_SESSION['userid'], $_GET['subSectionIdToken']) == false) 
+{
+    header("Location: subsection.php?warning");
+} 
+
+function checkReportToken($pdo, $userid, $token)
+{
+    $found = false;
+    $data = [":userid" => $userid, ":token" => $token];
+    $sql = "SELECT token FROM myrasubsection WHERE USER_ID = :userid AND BINARY token = :token";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($data);
+    $rowCount = $stmt->rowCount();
+    if($rowCount > 0)
+    {
+        $found = true;    
+    }
+    
+    return $found;
+}
+?>
+
 <div class="wrapper">
 
   <!-- Preloader -->
@@ -233,7 +260,7 @@ session_start();
                 $data = [':subSectionIdToken' => $subSectionIdToken];
                 // echo $subSectionId;
 
-                $query = "SELECT ss.token, s.sectionNumber, ss.subSectionTitleMalay, ss.subSectionTitleEnglish, ss.subSectionDescription, ss.dataStatusId FROM myrasubsection ss
+                $query = "SELECT ss.token, s.sectionNumber, s.sectionTitleMalay, s.sectionTitleEnglish, ss.subSectionTitleMalay, ss.subSectionTitleEnglish, ss.subSectionDescription, ss.dataStatusId FROM myrasubsection ss
                 JOIN myrasection s ON ss.sectionId = s.sectionId
                 WHERE ss.token=:subSectionIdToken LIMIT 1";
 
@@ -263,7 +290,7 @@ session_start();
 
                         <!-- <input type="text" class="form-control" id="sectionNumber" name="sectionNumber" value="<? //= $result['sectionNumber']; ?>" maxlength="1"> -->
 
-                        <input type="text" class="form-control" id="sectionNumber" name="sectionNumber" disabled value="<?= $result["sectionNumber"]; ?>">
+                        <input type="text" class="form-control" id="sectionNumber" name="sectionNumber" disabled value="<?= $result["sectionNumber"] . " - " . $result["sectionTitleMalay"] . " / " . $result["sectionTitleEnglish"]; ?>">
 
                         <!-- <select class="form-control" name="sectionNumber" id="sectionNumber">
                           <option value="" disabled selected hidden>SELECT ONE</option>
@@ -301,7 +328,13 @@ session_start();
                 <div class="card-body">
                   <div class="form-group">
                     <label for="subSectionDescription">Description</label><br>
-                    <textarea name="subSectionDescription" id="myTextarea" cols="150" rows="4"><?= $result['subSectionDescription']; ?></textarea>
+                    <textarea name="subSectionDescription" id="myTextarea" cols="150" rows="4">
+                      <?php
+                      if($result['subSectionDescription'] != NULL) 
+                      { echo $result['subSectionDescription']; } 
+                    else
+                    { echo "---"; } ?>
+                      </textarea>
                   </div>
                 </div>
 
@@ -542,15 +575,20 @@ session_start();
 </script>
 
 <script>
-    tinymce.init({
-    selector: '#myTextarea'
+tinymce.init({
+  selector: '#myTextarea',
+  plugins: 'lists image save wordcount table',
+  // plugins: 'image',
+  // menubar: 'file edit view insert format',
+  toolbar: 'undo redo styleselect bold italic alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table tabledelete | tableprops tablerowprops tablecellprops | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol',
+  height: "350"
 });
 
-tinymce.init({
-    selector: '#myTextarea',
-    width: 600,
-    height: 200,
-});
+// tinymce.init({
+//     selector: '#myTextarea',
+//     width: 600,
+//     height: 200,
+// });
 </script>
 
 </body>

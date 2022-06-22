@@ -230,16 +230,16 @@ try
               <form action="psubsection.php" method="POST">
 
                 <div class="card-body">
-                  <div class="form-group">
+                  <div class="form-group required">
                     <label for="sectionNumber">Section Number</label>
                     <div class="input-group">
                       <div class="custom-file">
-                        <select class="form-control" name="sectionNumber" id="sectionNumber">
+                        <select class="form-control" name="sectionNumber" id="sectionNumber" required>
                         <option value="" disabled selected hidden>SELECT SECTION NUMBER</option>
                         <?php foreach ($results as $output) {?>
                           <option value="<?php echo $output["sectionId"];
                             // The value we usually set is the primary key
-                            ?>"><?php echo $output ["sectionNumber"];?></option>
+                            ?>"><?php echo $output ["sectionNumber"] . " - " . $output ["sectionTitleMalay"] . " / " . $output ["sectionTitleEnglish"];?></option>
                           <?php }?>
 
                       </select>
@@ -254,15 +254,15 @@ try
                   
 
                 <div class="card-body">
-                  <div class="form-group">
+                  <div class="form-group required">
                     <label for="subSectionTitleMalay">Sub-Section Title (Malay)</label>
-                    <input type="text" class="form-control" id="subSectionTitleMalay" name="subSectionTitleMalay">
+                    <input type="text" class="form-control" id="subSectionTitleMalay" name="subSectionTitleMalay" required>
                   </div>
                 </div>
                 <div class="card-body">
-                  <div class="form-group">
+                  <div class="form-group required">
                     <label for="subSectiontitleEnglish">Sub-Section Title (English)</label>
-                    <input type="text" class="form-control" id="subSectiontitleEnglish" name="subSectionTitleEnglish" >
+                    <input type="text" class="form-control" id="subSectiontitleEnglish" name="subSectionTitleEnglish" required>
                   </div>
                 </div>
                 <div class="card-body">
@@ -311,7 +311,7 @@ try
                // $dsn = "mysql:host=$host;dbname=$dbname1;";
 
                // $pdo = new PDO($dsn, $username, $password);
-                 $sql = "SELECT t.sectionNumber, ss.subSectionTitleMalay, ss.subSectionTitleEnglish, ss.createdAt, ss.updatedAt, d.dataStatusId, ss.token, d.dataStatusTitle FROM myra.myrasubsection ss 
+                 $sql = "SELECT t.sectionNumber, t.sectionTitleMalay, t.sectionTitleEnglish, ss.subSectionTitleMalay, ss.subSectionTitleEnglish, ss.createdAt, ss.updatedAt, d.dataStatusId, ss.token, d.dataStatusTitle FROM myra.myrasubsection ss 
                  JOIN myra.datastatus d 
                  ON ss.dataStatusId = d.dataStatusId 
                  JOIN myra.myrasection t ON t.sectionId = ss.sectionId
@@ -327,7 +327,7 @@ try
                   ?>
                   
                   <tr>
-                    <td><?php echo $data['sectionNumber'];?></td>
+                    <td><?php echo $data['sectionNumber'] . " - " . $data["sectionTitleMalay"] . " / " . $data["sectionTitleEnglish"];?></td>
                     <td><?php echo $data['subSectionTitleMalay'];?></td>
                     <td><?php echo $data['subSectionTitleEnglish'];?></td>
                     <!-- <td><?php //echo $data['subSectionDescription'];?></td> -->
@@ -395,6 +395,59 @@ try
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
+
+<!-- START: bootstrap modal -->
+
+<!-- START: modal if token url diubah (token tak wujuk dlm database) -->
+<div class="modal fade" id="modal-warning">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Warning</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Unauthorized report access!</p>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
+  <!-- END: modal if token url diubah (token tak wujuk dlm database) -->
+
+  <!-- START: modal if inserted ss already exists -->
+
+  <div class="modal fade" id="modal-warning2">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Warning</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <p>Inserted sub-section already exists. Please insert a new sub-section.</p>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
+  <!-- END: modal if inserted ss already exists -->
+
+  <!-- END: bootstrap modal -->
+
   <footer class="main-footer">
     <strong>MYRA Copyright &copy; 2022-2025.</strong>
     All rights reserved.
@@ -489,15 +542,43 @@ $(function () {
 </script>
 
 <script>
-    tinymce.init({
-    selector: '#myTextarea'
+tinymce.init({
+  selector: '#myTextarea',
+  plugins: 'lists image save wordcount table',
+  // plugins: 'image',
+  // menubar: 'file edit view insert format',
+  toolbar: 'undo redo styleselect bold italic alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table tabledelete | tableprops tablerowprops tablecellprops | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol',
+  height: "350"
 });
 
-tinymce.init({
-    selector: '#myTextarea',
-    width: 600,
-    height: 200,
-});
+// tinymce.init({
+//     selector: '#myTextarea',
+//     width: 600,
+//     height: 200,
+//     plugins: 'lists',
+//     toolbar: 'numlist bullist'
+// });
 </script>
+
+<!-- START: script for warning modal -->
+<?php if (isset($_GET['warning'])){ ?>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $("#modal-warning").modal("show");
+    });
+    </script>
+<?php } ?>
+<!-- END: script for warning modal -->
+
+<!-- START: warning2 modal -->
+<?php if (isset($_GET['warning2'])){ ?>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $("#modal-warning2").modal("show");
+    });
+    </script>
+<?php } ?>
+<!-- END: warning2 modal -->
+
 </body>
 </html>

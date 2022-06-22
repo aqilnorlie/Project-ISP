@@ -16,6 +16,9 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Admin</title>
 
+  <link rel=”stylesheet” href=”https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css” />
+  <script type=”text/javascript” src=”https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js”></script>
+
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
@@ -307,9 +310,9 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
                 <h3 class="card-title">Data All User</h3>
               </div>
               <!-- /.card-header -->
-              <div class="card-body">
+              <div class="card-body table1">
 
-                <table id="example2" class="table table-bordered table-hover">
+                <table id="example2" class="table table-bordered table-hover table2">
                   <thead>
                   <tr>
                     <th>No</th>
@@ -321,13 +324,14 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
                     <th>Action</th>
                   </tr>
                   </thead>
+                  <tbody>
                   <?php 
                    $count = 1;
                    foreach($d as $data)
                    {
                     
                     ?>
-                   <tbody>
+                   
                     <tr>
                     <td><?php echo $count++; ?></td>
                     <td><?php echo $data["USER_ID"]; ?></td>
@@ -459,21 +463,27 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
 <script src="../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 
 <script>
-  $(function () {
-    $("#example1").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
-    });
+$(function () {
+  $("#example1").DataTable({
+    "responsive": true, "lengthChange": false, "autoWidth": false,
+    "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+  }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+  $('#example2').DataTable({
+    "paging": true,
+    "lengthChange": false,
+    "searching": false,
+    "ordering": true,
+    "info": true,
+    "autoWidth": false,
+    "responsive": true,
+    "bJQueryUI":true,
+    "bSort":true,
+    "bSortable": true,
+    "bPaginate":true,
+    "sPaginationType":"full_numbers",
+      "iDisplayLength": 5
   });
+});
 </script>
 
 </body>

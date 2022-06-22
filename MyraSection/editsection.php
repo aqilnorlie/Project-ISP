@@ -42,6 +42,32 @@ session_start();
   <link rel="stylesheet" href="../Mystyle.css">
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
+<?php
+
+// kalau url token ditukar (token yg takde dlm database)
+// if(isset($_GET['id'])            && checkReportToken($dbh, $_SESSION['userid'], $_GET['id']) == false)
+
+if(isset($_GET['sectionNumber']) && checkReportToken($pdo, $_SESSION['userid'], $_GET['sectionNumber']) == false) 
+{
+    header("Location: Section.php?warning");
+} 
+
+function checkReportToken($pdo, $userid, $token)
+{
+    $found = false;
+    $data = [":userid" => $userid, ":token" => $token];
+    $sql = "SELECT token FROM myrasection WHERE USER_ID = :userid AND BINARY token = :token";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($data);
+    $rowCount = $stmt->rowCount();
+    if($rowCount > 0)
+    {
+        $found = true;    
+    }
+    
+    return $found;
+}
+?>
 <div class="wrapper">
 
   <!-- Preloader -->
@@ -205,6 +231,8 @@ session_start();
 
               <!-- form start -->
 
+
+
               <?php
               if(isset($_GET['sectionNumber']))
               {
@@ -277,7 +305,13 @@ session_start();
                 <div class="card-body">
                   <div class="form-group">
                     <label for="sectionDescription">Description</label><br>
-                    <textarea name="sectionDescription" id="myTextarea" cols="150" rows="4"><?= $result['sectionDescription']; ?></textarea>
+                    <textarea name="sectionDescription" id="myTextarea" cols="150" rows="4">
+                      <?php 
+                      if($result['sectionDescription'] != NULL) 
+                        { echo $result['sectionDescription']; } 
+                      else
+                      { echo "---"; } ?>
+                    </textarea>
                   </div>
                 </div>
 
@@ -518,15 +552,20 @@ session_start();
 </script>
 
 <script>
-    tinymce.init({
-    selector: '#myTextarea'
+tinymce.init({
+  selector: '#myTextarea',
+  plugins: 'lists image save wordcount table',
+  // plugins: 'image',
+  // menubar: 'file edit view insert format',
+  toolbar: 'undo redo styleselect bold italic alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table tabledelete | tableprops tablerowprops tablecellprops | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol',
+  height: "350"
 });
 
-tinymce.init({
-    selector: '#myTextarea',
-    width: 600,
-    height: 200,
-});
+// tinymce.init({
+//     selector: '#myTextarea',
+//     width: 600,
+//     height: 200,
+// });
 </script>
 
 </body>

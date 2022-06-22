@@ -52,6 +52,32 @@ session_start();
   </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
+<?php
+
+// kalau url token ditukar (token yg takde dlm database)
+// if(isset($_GET['id'])            && checkReportToken($dbh, $_SESSION['userid'], $_GET['id']) == false)
+
+if(isset($_GET['sectionNumber']) && checkReportToken($pdo, $_SESSION['userid'], $_GET['sectionNumber']) == false) 
+{
+    header("Location: Section.php?warning");
+} 
+
+function checkReportToken($pdo, $userid, $token)
+{
+    $found = false;
+    $data = [":userid" => $userid, ":token" => $token];
+    $sql = "SELECT token FROM myrasection WHERE USER_ID = :userid AND BINARY token = :token";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($data);
+    $rowCount = $stmt->rowCount();
+    if($rowCount > 0)
+    {
+        $found = true;    
+    }
+    
+    return $found;
+}
+?>
 <div class="wrapper">
 
   <!-- Preloader -->
@@ -246,6 +272,7 @@ session_start();
                 // $result_dataStatus = $stmt_dataStatus->fetch(PDO::FETCH_ASSOC);
                 
                 $_SESSION["sectionNumberNew"]=$result['sectionNumber'];
+                $_SESSION["sectionDescription"]=$result['sectionDescription'];
                 $_SESSION["dataStatus"]=$result['dataStatusTitle'];
                 $_SESSION["createdAt"]=$result['createdAt'];
                 $_SESSION["updatedAt"]=$result['updatedAt'];
@@ -308,43 +335,56 @@ session_start();
                   <div class="form-group">
                     <label for="sectionDescription">Description</label><br>
                     <textarea name="sectionDescription" id="myTextarea" cols="150" rows="4">
-                      <?= $result['sectionDescription']; ?>
+                    <?php 
+                      if($_SESSION["sectionDescription"] != NULL) 
+                        { echo $_SESSION["sectionDescription"]; } 
+                      else
+                      { echo "---"; } ?>
+                      <?//= $result['sectionDescription']; ?>
                     </textarea>
                   </div>
                 </div>
 
-                <div class="card-body">
-                  <div class="form-group">
-                    <label for="USER_ID">User Name</label>
-                    <input type="text" class="form-control" id="USER_ID" name="USER_ID" disabled value="<?= $_SESSION["userName"]; ?>">
+              <div class="card-body">
+                <div class="row paddingBottomForInputBahagianBwh">
+                  <div class="form-group col-xs-6 paddingRightForInputBahagianBwh padding-left">
+                    <label for="USER_ID">Added By</label>
+                    <input type="text" class="form-control userName" id="USER_ID" name="USER_ID" disabled value="<?= $_SESSION["userName"]; ?>">
                   </div>
-                </div>
+                   <!-- </div> -->
 
-                <div class="card-body">
-                  <div class="form-group">
+                <!-- <div class="card-body"> -->
+                  <div class="form-group col-xs-6 paddingRightForInputBahagianBwh">
                     <label for="dataStatus">Data Status</label>
-                    <input type="text" class="form-control" id="dataStatus" name="dataStatus" disabled value="<?= $_SESSION["dataStatus"]; ?>">
+                    <input type="text" class="form-control dataStatus" id="dataStatus" name="dataStatus" disabled value="<?= $_SESSION["dataStatus"]; ?>">
                   </div>
-                </div>
+                <!-- </div> -->
 
-                <div class="card-body">
-                  <div class="form-group">
+                <!-- <div class="card-body"> -->
+                <div class="form-group col-xs-6 paddingRightForInputBahagianBwh">
                     <label for="createdAt">Created At</label>
-                    <input type="text" class="form-control" id="createdAt" name="createdAt" disabled value="<?= $_SESSION["createdAt"]; ?>">
+                    <input type="text" class="form-control timestamp" id="createdAt" name="createdAt" disabled value="<?= $_SESSION["createdAt"]; ?>">
                   </div>
-                </div>
+                <!-- </div> -->
 
-                <div class="card-body" style="padding-bottom:1em">
-                  <div class="form-group">
+                  <!-- <div class="card-body" style="padding-bottom:1em"> -->
+                  <div class="form-group col-xs-6">
                     <label for="updatedAt">Updated At</label>
-                    <input type="text" class="form-control" id="updatedAt" name="updatedAt" disabled value="<?php 
+                    <input type="text" class="form-control timestamp" id="updatedAt" name="updatedAt" disabled value="<?php 
                       if($_SESSION["updatedAt"] != NULL) 
                         { echo $_SESSION["updatedAt"]; } 
                       else
                       { echo "---"; } ?> ">
                       <?php //$_SESSION["updatedAt"]; ?>
                   </div>
+                <!-- </div> -->
+
                 </div>
+             </div>
+
+                
+
+                
           
                 <?php
               // if(isset($_GET['sectionNumber']))
@@ -596,7 +636,8 @@ session_start();
 <script>
     tinymce.init({
     selector: "#myTextarea",
-    readonly: true    
+    readonly: true,
+    height: "500"   
 });
 
 // tinyMCE.init({
