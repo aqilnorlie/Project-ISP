@@ -4,25 +4,12 @@ include("../Myralogin/MyraFunctionLogin.php");
 
 session_start();
 
-/*if(isset($_POST['btnSearchUser'])){
-
-      // check existing section number
-      $statement = $conn1->prepare('SELECT * FROM myra.myraroleassignment WHERE USER_ID = :USER_ID');
-      $statement->execute(['USER_ID' => $_POST['SearchUserID']]);
-  
-      if (!empty($statement->fetch())) {
-          echo 'Inserted section number already exists.';
-          exit;
-      }
-
-   
-}*/
-
   // check existing section number
   if(isset( $_POST["btnAddUser"]) ){
   $statement = $conn1->prepare('SELECT * FROM myra.myraroleassignment WHERE USER_ID = :USER_ID');
   $statement->execute(['USER_ID' =>  $_SESSION['idUserAdd'] ]);
 
+  //validation
   if (!empty($statement->fetch())) {
       echo 'Inserted section number already exists.';
       echo  $_SESSION['idUserAdd'] ;
