@@ -113,4 +113,36 @@
     margin-bottom: 1em !important;
   }
 
+  .userName {
+    width:26em;
+  }
 
+  .dataStatus {
+    width:10.7em;
+  }
+
+  .timestamp {
+    width:18em;
+  }
+
+  .paddingRightForInputBahagianBwh {
+    padding-right: 1em;
+  }
+
+  .padding-left {
+    padding-left: 6px;
+  }
+
+  .paddingBottomForInputBahagianBwh {
+    padding-bottom:1em
+  }
+
+  /* .required:after { 
+    content:" *";
+  } */
+
+  .required label:after {
+    color: #e32;
+    content: ' *';
+    display:inline;
+}

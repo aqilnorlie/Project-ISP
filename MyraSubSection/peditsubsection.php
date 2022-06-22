@@ -59,6 +59,31 @@ if(isset($_POST['submit_updatess']))
 
             $query_execute = $statement->execute($data);
 
+            // START: SS HISTORY
+            
+            $sqlHistory = "INSERT INTO myrasubsectionhistory (subSectionHistoryProcess, USER_ID) VALUES (:subSectionHistoryProcess, :USER_ID)";
+            $stmtHistory = $pdo->prepare($sqlHistory);
+            $data = [
+                ':subSectionHistoryProcess' => "EDITED",
+                // ':sectionId' => $_SESSION['sectionNumber'],
+                ':USER_ID' => $_SESSION['userid']
+                // ':sectionId' => $sectionid,
+            ];
+            $stmtHistory->execute($data);
+
+            $querySecId = 
+            "UPDATE 
+                myrasubsectionhistory ss, 
+                myrasubsection s
+            SET 
+                ss.subSectionId = s.subSectionId
+            WHERE 
+                ss.createdAt = s.updatedAt";
+            $stmtSectionId = $pdo->prepare($querySecId);
+            $stmtSectionId->execute();
+
+            // END: SS HISTORY
+
             if($query_execute)
             {
                 // $_SESSION['message'] = "Section HAS been updated.";
@@ -99,6 +124,31 @@ if(isset($_POST['submit_updatess']))
             ];
 
             $query_execute = $statement->execute($data);
+
+            // START: SS HISTORY
+            
+            $sqlHistory = "INSERT INTO myrasubsectionhistory (subSectionHistoryProcess, USER_ID) VALUES (:subSectionHistoryProcess, :USER_ID)";
+            $stmtHistory = $pdo->prepare($sqlHistory);
+            $data = [
+                ':subSectionHistoryProcess' => "EDITED",
+                // ':sectionId' => $_SESSION['sectionNumber'],
+                ':USER_ID' => $_SESSION['userid']
+                // ':sectionId' => $sectionid,
+            ];
+            $stmtHistory->execute($data);
+
+            $querySecId = 
+            "UPDATE 
+                myrasubsectionhistory ss, 
+                myrasubsection s
+            SET 
+                ss.subSectionId = s.subSectionId
+            WHERE 
+                ss.createdAt = s.updatedAt";
+            $stmtSectionId = $pdo->prepare($querySecId);
+            $stmtSectionId->execute();
+
+            // END: SS HISTORY
 
             if($query_execute)
             {

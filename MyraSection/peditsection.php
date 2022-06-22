@@ -23,6 +23,29 @@ session_start();
 //     throw new \PDOException($e->getMessage(), (int)$e->getCode());
 // }
 
+// function checkReportToken($pdo, $userid, $token)
+// {
+//     $found = false;
+//     $data = ["userid" => $userid, "token" => $token];
+//     $sql = "SELECT token FROM myrasection WHERE USER_ID = :userid AND BINARY token = :token";
+//     $stmt = $pdo->prepare($sql);
+//     $stmt->execute($data);
+//     $rowCount = $stmt->rowCount();
+//     if($rowCount > 0)
+//     {
+//         $found = true;    
+//     }
+    
+//     return $found;
+// }
+
+// // kalau url token ditukar (token yg takde dlm database)
+// if(isset($_POST['submit_update']) && checkReportToken($pdo, $_SESSION['userid'], $_POST['submit_update']==false)) 
+// {
+//     header("Location: section.php");
+// }
+
+
 if(isset($_POST['submit_update']))
 {
     // $sectionid = $_POST['sectionId'];
@@ -57,6 +80,31 @@ if(isset($_POST['submit_update']))
             ];
 
             $query_execute = $statement->execute($data);
+
+            // START: SECTION HISTORY
+
+            $sqlHistory = "INSERT INTO myrasectionhistory (sectionHistoryProcess, USER_ID) VALUES (:sectionHistoryProcess, :USER_ID)";
+            $stmtHistory = $pdo->prepare($sqlHistory);
+            $data = [
+                ':sectionHistoryProcess' => "EDITED",
+                // ':sectionId' => $_SESSION['sectionNumber'],
+                ':USER_ID' => $_SESSION['userid']
+                // ':sectionId' => $sectionid,
+            ];
+            $stmtHistory->execute($data);
+
+            $querySecId = 
+            "UPDATE 
+                myrasectionhistory ss, 
+                myrasection s
+            SET 
+                ss.sectionId = s.sectionId
+            WHERE 
+                ss.createdAt = s.updatedAt";
+            $stmtSectionId = $pdo->prepare($querySecId);
+            $stmtSectionId->execute();
+
+            // END: SECTION HISTORY
 
             if($query_execute)
             {
@@ -98,6 +146,27 @@ if(isset($_POST['submit_update']))
             ];
 
             $query_execute = $statement->execute($data);
+
+            $sqlHistory = "INSERT INTO myrasectionhistory (sectionHistoryProcess, USER_ID) VALUES (:sectionHistoryProcess, :USER_ID)";
+            $stmtHistory = $pdo->prepare($sqlHistory);
+            $data = [
+                ':sectionHistoryProcess' => "EDITED",
+                // ':sectionId' => $_SESSION['sectionNumber'],
+                ':USER_ID' => $_SESSION['userid']
+                // ':sectionId' => $sectionid,
+            ];
+            $stmtHistory->execute($data);
+
+            $querySecId = 
+            "UPDATE 
+                myrasectionhistory ss, 
+                myrasection s
+            SET 
+                ss.sectionId = s.sectionId
+            WHERE 
+                ss.createdAt = s.updatedAt";
+            $stmtSectionId = $pdo->prepare($querySecId);
+            $stmtSectionId->execute();
 
             if($query_execute)
             {

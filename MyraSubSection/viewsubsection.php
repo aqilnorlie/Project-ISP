@@ -42,6 +42,34 @@ session_start();
   <link rel="stylesheet" href="../Mystyle.css">
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
+
+<?php
+
+// kalau url token ditukar (token yg takde dlm database)
+// if(isset($_GET['id'])            && checkReportToken($dbh, $_SESSION['userid'], $_GET['id']) == false)
+
+if(isset($_GET['subSectionIdToken']) && checkReportToken($pdo, $_SESSION['userid'], $_GET['subSectionIdToken']) == false) 
+{
+    header("Location: subsection.php?warning");
+} 
+
+function checkReportToken($pdo, $userid, $token)
+{
+    $found = false;
+    $data = [":userid" => $userid, ":token" => $token];
+    $sql = "SELECT token FROM myrasubsection WHERE USER_ID = :userid AND BINARY token = :token";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($data);
+    $rowCount = $stmt->rowCount();
+    if($rowCount > 0)
+    {
+        $found = true;    
+    }
+    
+    return $found;
+}
+?>
+
 <div class="wrapper">
 
   <!-- Preloader -->
@@ -211,7 +239,7 @@ session_start();
                 $subSectionIdToken = $_GET['subSectionIdToken'];
                 $data = [':subSectionIdToken' => $subSectionIdToken];
 
-                $query = "SELECT s.sectionNumber, ss.subSectionTitleMalay, ss.subSectionTitleEnglish, ss.subSectionDescription, d.dataStatusTitle, ss.createdAt, ss.updatedAt, c.USER_NAME, ss.token FROM myrasubsection ss
+                $query = "SELECT s.sectionNumber, s.sectionTitleMalay, s.sectionTitleEnglish, ss.subSectionTitleMalay, ss.subSectionTitleEnglish, ss.subSectionDescription, d.dataStatusTitle, ss.createdAt, ss.updatedAt, c.USER_NAME, ss.token FROM myrasubsection ss
                 JOIN myrasection s ON ss.sectionId = s.sectionId
                 JOIN dataStatus d ON d.dataStatusId = ss.dataStatusId
                 JOIN classbook_backup_jengka.vw_staff_phg c ON c.USER_ID = ss.USER_ID
@@ -254,7 +282,7 @@ session_start();
 
                         <!-- <input type="text" class="form-control" id="sectionNumber" name="sectionNumber" value="<? //= $result['sectionNumber']; ?>" maxlength="1"> -->
 
-                        <input type="text" class="form-control" id="sectionNumber" name="sectionNumber" disabled value="<?= $result["sectionNumber"]; ?>">
+                        <input type="text" class="form-control" id="sectionNumber" name="sectionNumber" disabled value="<?= $result["sectionNumber"] . " - " . $result["sectionTitleMalay"] . " / " . $result["sectionTitleEnglish"]; ?>">
 
                         <!-- <select class="form-control" name="sectionNumber" id="sectionNumber">
                           <option value="" disabled selected hidden>SELECT ONE</option>
@@ -293,36 +321,41 @@ session_start();
                   <div class="form-group">
                     <label for="sectionDescription">Description</label><br>
                     <textarea name="sectionDescription" id="myTextarea" cols="150" rows="4">
-                      <?= $result['subSectionDescription']; ?>
+                      <?php
+                      if($result['subSectionDescription'] != NULL) 
+                        { echo $result['subSectionDescription']; } 
+                      else
+                      { echo "---"; } ?> 
                     </textarea>
                   </div>
                 </div>
 
-                <div class="card-body">
-                  <div class="form-group">
-                    <label for="USER_ID">User Name</label>
-                    <input type="text" class="form-control" id="USER_ID" name="USER_ID" disabled value="<?= $result["USER_NAME"]; ?>">
+              <div class="card-body">
+                <div class="row paddingBottomForInputBahagianBwh">
+                  <div class="form-group col-xs-6 paddingRightForInputBahagianBwh padding-left">
+                    <label for="USER_ID">Added By</label>
+                    <input type="text" class="form-control userName" id="USER_ID" name="USER_ID" disabled value="<?= $result["USER_NAME"]; ?>">
                   </div>
-                </div>
+                <!-- </div> -->
 
-                <div class="card-body">
-                  <div class="form-group">
+                <!-- <div class="card-body"> -->
+                  <div class="form-group col-xs-6 paddingRightForInputBahagianBwh">
                     <label for="dataStatus">Data Status</label>
-                    <input type="text" class="form-control" id="dataStatus" name="dataStatus" disabled value="<?= $result["dataStatusTitle"]; ?>">
+                    <input type="text" class="form-control dataStatus" id="dataStatus" name="dataStatus" disabled value="<?= $result["dataStatusTitle"]; ?>">
                   </div>
-                </div>
+                <!-- </div> -->
 
-                <div class="card-body">
-                  <div class="form-group">
+                <!-- <div class="card-body"> -->
+                  <div class="form-group col-xs-6 paddingRightForInputBahagianBwh">
                     <label for="createdAt">Created At</label>
-                    <input type="text" class="form-control" id="createdAt" name="createdAt" disabled value="<?= $result["createdAt"]; ?>">
+                    <input type="text" class="form-control timestamp" id="createdAt" name="createdAt" disabled value="<?= $result["createdAt"]; ?>">
                   </div>
-                </div>
+                <!-- </div> -->
 
-                <div class="card-body" style="padding-bottom:1em">
-                  <div class="form-group">
+                <!-- <div class="card-body" style="padding-bottom:1em"> -->
+                  <div class="form-group col-xs-6">
                     <label for="updatedAt">Updated At</label>
-                    <input type="text" class="form-control" id="updatedAt" name="updatedAt" disabled value="<?php 
+                    <input type="text" class="form-control timestamp" id="updatedAt" name="updatedAt" disabled value="<?php 
                       if($result["updatedAt"] != NULL) 
                         { echo $result["updatedAt"]; } 
                       else
@@ -330,6 +363,7 @@ session_start();
                       <?php //$_SESSION["updatedAt"]; ?>
                   </div>
                 </div>
+              </div>
 
                 <!-- /.card-body -->
                 <div class="card-footer">
@@ -565,7 +599,8 @@ session_start();
 <script>
     tinymce.init({
     selector: "#myTextarea",
-    readonly: true    
+    readonly: true,
+    height: "500"    
 });
 
 // tinymce.init({

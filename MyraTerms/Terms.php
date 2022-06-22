@@ -260,7 +260,7 @@ try
 
             <!-- start search section number -->
             <div class="card-header">
-                <h3 class="card-title">Search Section Number</h3>
+                <h3 class="card-title">[1] Select Section Number</h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
@@ -274,17 +274,17 @@ try
                           </div>
                         </div> -->
                         
-                          <div class="form-group">
+                          <div class="form-group required">
                             <label for="sectionNumber">Section Number</label>
                             <div class="input-group">
                               <div class="custom-file">
-                                <select class="form-control" name="sectionNumber" id="sectionNumber">
+                                <select class="form-control" name="sectionNumber" id="sectionNumber" required>
                                 <option value="" disabled selected hidden>SELECT A SECTION FOR THE TERM TO BE INSERTED INTO</option>
                                 
                                 <?php foreach ($secNum as $output) {?>
                                   <option value="<?php echo $output["sectionId"];
                                     //The value we usually set is the primary key
-                                    ?>"><?php echo $output ["sectionNumber"];?></option>
+                                    ?>"><?php echo $output ["sectionNumber"] . " - " . $output["sectionTitleMalay"] . " / " . $output["sectionTitleEnglish"];?></option>
                                   <?php }?>
 
                               </select>
@@ -318,7 +318,7 @@ try
                   // if($rowCount > 0)
                   // $nameUserAdd = "";
 
-                  $sql_SecNumDisabled="SELECT sectionNumber FROM myrasection WHERE sectionId = :sectionNumber";
+                  $sql_SecNumDisabled="SELECT * FROM myrasection WHERE sectionId = :sectionNumber";
                   $secId = [":sectionNumber" =>  $sectionNumberDisabled];
                   $stmtSecNumDisabled = $pdo->prepare($sql_SecNumDisabled);
                   $stmtSecNumDisabled->execute($secId);
@@ -338,7 +338,7 @@ try
 
             <div style="width:1250px"class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Add Term</h3>
+                <h3 class="card-title">[2] Add Term Based on Section Number</h3>
               </div>
               <!-- /.card-header -->
               <!-- form start -->
@@ -347,19 +347,19 @@ try
               <div class="card-body">
                   <div class="form-group">
                     <label for="termTitleMalay">Section Number</label>
-                    <input type="text" class="form-control" id="sectionNumber" name="sectionNumber" value="<?php if(!isset($secNumDisabled['sectionNumber'])){ echo"---"; }else{echo $secNumDisabled['sectionNumber'];} ?>" disabled>
+                    <input type="text" class="form-control" id="sectionNumber" name="sectionNumber" value="<?php if(!isset($secNumDisabled['sectionNumber'])){ echo"---"; }else{echo $secNumDisabled['sectionNumber'] . " - " . $secNumDisabled["sectionTitleMalay"] . " / " . $secNumDisabled["sectionTitleEnglish"];} ?>" disabled>
                   </div>
                 </div>
 
                 <div class="card-body">
-                  <div class="form-group">
-                    <label for="subSectionTitleMalay">Sub-Section Title Malay</label>
+                  <div class="form-group required">
+                    <label for="subSectionTitleMalay">Sub-Section Title</label>
                     <div class="input-group">
                       <div class="custom-file">
-                        <select class="form-control" name="subSectionId" id="subSectionTitleMalay">
-                        <option value="" disabled selected hidden>SELECT SUB SECTION TITLE (MALAY)</option>
+                        <select class="form-control" name="subSectionId" id="subSectionTitleMalay" required>
+                        <option value="" disabled selected hidden>SELECT SUB SECTION TITLE</option>
                         <?php foreach ($sectionNumber as $output1) {?>
-                          <option value="<?php echo $output1["subSectionId"]; ?>"><?php echo $output1["subSectionTitleMalay"];?></option>
+                          <option value="<?php echo $output1["subSectionId"]; ?>"><?php echo $output1["subSectionTitleMalay"] . " / " . $output1["subSectionTitleEnglish"];?></option>
                             <!-- // The value we usually set is the primary key -->
                           <?php }?>
 
@@ -369,15 +369,15 @@ try
                   </div>
                 </div>
                 <div class="card-body">
-                  <div class="form-group">
+                  <div class="form-group required">
                     <label for="termTitleMalay">Term Title (Malay)</label>
-                    <input type="text" class="form-control" id="termTitleMalay" name="termTitleMalay">
+                    <input type="text" class="form-control" id="termTitleMalay" name="termTitleMalay" required>
                   </div>
                 </div>
                 <div class="card-body">
-                  <div class="form-group">
+                  <div class="form-group required">
                     <label for="termTitleEnglish">Term Title (English)</label>
-                    <input type="text" class="form-control" id="termTitleEnglish" name="termTitleEnglish" >
+                    <input type="text" class="form-control" id="termTitleEnglish" name="termTitleEnglish" required>
                   </div>
                 </div>
                 <div class="card-body">
@@ -405,7 +405,7 @@ try
                   <thead>
                   <tr>
                     <th>Section Number</th>
-                    <th>Sub-Section Title (Malay)</th>
+                    <th>Sub-Section Title</th>
                     <th>Term Title (Malay)</th>
                     <th>Term Title (English)</th>
                     <!-- <th>Section Description</th> -->
@@ -420,7 +420,7 @@ try
                   </thead>
                   <tbody>
                   <?php
-                  $sql = "SELECT s.sectionId, t.termTitleMalay, t.termTitleEnglish, t.createdAt, t.updatedAt, d.dataStatusId, d.dataStatusTitle, t.token, s.sectionNumber, ss.subSectionTitleMalay FROM myra.myraterm t 
+                  $sql = "SELECT s.sectionId, s.sectionTitleMalay, s.sectionTitleEnglish, t.termTitleMalay, t.termTitleEnglish, t.createdAt, t.updatedAt, d.dataStatusId, d.dataStatusTitle, t.token, s.sectionNumber, ss.subSectionTitleMalay, ss.subSectionTitleEnglish FROM myra.myraterm t 
                   JOIN myra.datastatus d ON t.dataStatusId = d.dataStatusId 
                   JOIN myra.myrasubsection ss ON ss.subSectionId = t.subSectionId 
                   JOIN myra.myrasection s ON s.sectionId = ss.sectionId 
@@ -436,8 +436,8 @@ try
                   ?>
                   
                   <tr>
-                    <td><?php echo $data['sectionNumber'];?></td>
-                    <td><?php echo $data['subSectionTitleMalay'];?></td>
+                    <td><?php echo $data['sectionNumber'] . " - " . $data["sectionTitleMalay"] . " / " . $data["sectionTitleEnglish"];?></td>
+                    <td><?php echo $data['subSectionTitleMalay'] . " / " . $data["subSectionTitleEnglish"];?></td>
                     <td><?php echo $data['termTitleMalay'];?></td>
                     <td><?php echo $data['termTitleEnglish'];?></td>
                     <td><?php echo $data['createdAt'];?></td>
@@ -467,7 +467,7 @@ try
                   <tfoot>
                   <tr>
                     <th>Section Number</th>
-                    <th>Sub-Section Title (Malay)</th>
+                    <th>Sub-Section Title</th>
                     <th>Term Title (Malay)</th>
                     <th>Term Title (English)</th>
                     <!-- <th>Section Description</th> -->
@@ -496,6 +496,59 @@ try
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
+
+<!-- START: bootstrap modal -->
+
+<!-- START: modal if token url diubah (token tak wujuk dlm database) -->
+<div class="modal fade" id="modal-warning">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Warning</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Unauthorized report access!</p>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
+  <!-- END: modal if token url diubah (token tak wujuk dlm database) -->
+
+  <!-- START: modal if inserted term already exists -->
+
+  <div class="modal fade" id="modal-warning2">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Warning</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <p>Inserted term already exists. Please insert a new term.</p>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
+  <!-- END: modal if inserted term already exists -->
+
+  <!-- END: bootstrap modal -->
+
   <footer class="main-footer">
     <strong>MYRA Copyright &copy; 2022-2025.</strong>
     All rights reserved.
@@ -590,18 +643,43 @@ try
 </script>
 
 <script>
-    tinymce.init({
-    selector: '#myTextarea'
+tinymce.init({
+  selector: '#myTextarea',
+  plugins: 'lists image save wordcount table',
+  // plugins: 'image',
+  // menubar: 'file edit view insert format',
+  toolbar: 'undo redo styleselect bold italic alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table tabledelete | tableprops tablerowprops tablecellprops | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol',
+  height: "350"
 });
 
-tinymce.init({
-    selector: '#myTextarea',
-    width: 600,
-    height: 200,
-});
+// tinymce.init({
+//     selector: '#myTextarea',
+//     width: 600,
+//     height: 200,
+// });
 </script>
 
 <script type=”text/javascript” src=”https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js”></script>
+
+<!-- START: script for warning modal -->
+<?php if (isset($_GET['warning'])){ ?>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $("#modal-warning").modal("show");
+    });
+    </script>
+<?php } ?>
+<!-- END: script for warning modal -->
+
+<!-- START: warning2 modal -->
+<?php if (isset($_GET['warning2'])){ ?>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $("#modal-warning2").modal("show");
+    });
+    </script>
+<?php } ?>
+<!-- END: warning2 modal -->
 
 </body>
 </html>

@@ -42,6 +42,34 @@ session_start();
   <link rel="stylesheet" href="../Mystyle.css">
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
+
+<?php
+
+// kalau url token ditukar (token yg takde dlm database)
+// if(isset($_GET['id'])            && checkReportToken($dbh, $_SESSION['userid'], $_GET['id']) == false)
+
+if(isset($_GET['termIdToken']) && checkReportToken($pdo, $_SESSION['userid'], $_GET['termIdToken']) == false) 
+{
+    header("Location: terms.php?warning");
+} 
+
+function checkReportToken($pdo, $userid, $token)
+{
+    $found = false;
+    $data = [":userid" => $userid, ":token" => $token];
+    $sql = "SELECT token FROM myraterm WHERE USER_ID = :userid AND BINARY token = :token";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($data);
+    $rowCount = $stmt->rowCount();
+    if($rowCount > 0)
+    {
+        $found = true;    
+    }
+    
+    return $found;
+}
+?>
+
 <div class="wrapper">
 
   <!-- Preloader -->
@@ -210,7 +238,7 @@ session_start();
               {
                 $termIdToken = $_GET['termIdToken'];
 
-                $query = "SELECT ss.subSectionTitleMalay, s.sectionNumber, t.termTitleMalay, t.termTitleEnglish, t.termDescription, t.dataStatusId, t.token FROM myraterm t
+                $query = "SELECT ss.subSectionTitleMalay, ss.subSectionTitleEnglish, s.sectionNumber, s.sectionTitleMalay, s.sectionTitleEnglish, t.termTitleMalay, t.termTitleEnglish, t.termDescription, t.dataStatusId, t.token FROM myraterm t
                 JOIN myrasubsection ss ON ss.subSectionId = t.subSectionId
                 JOIN myrasection s ON s.sectionId = ss.sectionId
                 WHERE t.token=:termIdToken";
@@ -234,13 +262,13 @@ session_start();
                 <div class="card-body">
                   <div class="form-group">
                     <label for="sectionNumber">Section Number</label>
-                    <input type="text" class="form-control" id="sectionNumber" name="sectionNumber" value="<?=  $result["sectionNumber"]; ?>" disabled>
+                    <input type="text" class="form-control" id="sectionNumber" name="sectionNumber" value="<?=  $result["sectionNumber"] . " - " . $result["sectionTitleMalay"] . " / " . $result["sectionTitleEnglish"]; ?>" disabled>
                   </div>
                 </div>
 
                 <div class="card-body">
                   <div class="form-group">
-                    <label for="subSectionTitleMalay">Sub-Section Title (Malay)</label>
+                    <label for="subSectionTitleMalay">Sub-Section Title</label>
                     <!--(TEST) <input type="text" class="form-control" id="sectionNumber" placeholder="SELECT ONE" nama="sectionNumber"> -->
                     <!-- <div class="card-body"> amik ni dr roles -->
                       <!-- <div class="form-group"> -->
@@ -248,7 +276,7 @@ session_start();
 
                         <!-- <input type="text" class="form-control" id="sectionNumber" name="sectionNumber" value="<? //= $result['sectionNumber']; ?>" maxlength="1"> -->
 
-                        <input type="text" class="form-control" id="subSectionTitleMalay" name="subSectionTitleMalay" disabled value="<?= $result["subSectionTitleMalay"]; ?>">
+                        <input type="text" class="form-control" id="subSectionTitleMalay" name="subSectionTitleMalay" disabled value="<?= $result["subSectionTitleMalay"] . " / " . $result["subSectionTitleEnglish"]; ?>">
 
                         <!-- <select class="form-control" name="sectionNumber" id="sectionNumber">
                           <option value="" disabled selected hidden>SELECT ONE</option>
@@ -286,7 +314,13 @@ session_start();
                 <div class="card-body">
                   <div class="form-group">
                     <label for="termDescription">Description</label><br>
-                    <textarea name="termDescription" id="myTextarea" cols="150" rows="4"><?= $result['termDescription']; ?></textarea>
+                    <textarea name="termDescription" id="myTextarea" cols="150" rows="4">
+                      <?php 
+                      if($result['termDescription'] != NULL) 
+                      { echo $result['termDescription']; } 
+                    else
+                    { echo "---"; } ?>
+                      </textarea>
                   </div>
                 </div>
 
@@ -527,15 +561,20 @@ session_start();
 </script>
 
 <script>
-    tinymce.init({
-    selector: '#myTextarea'
+tinymce.init({
+  selector: '#myTextarea',
+  plugins: 'lists image save wordcount table',
+  // plugins: 'image',
+  // menubar: 'file edit view insert format',
+  toolbar: 'undo redo styleselect bold italic alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table tabledelete | tableprops tablerowprops tablecellprops | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol',
+  height: "350"
 });
 
-tinymce.init({
-    selector: '#myTextarea',
-    width: 600,
-    height: 200,
-});
+// tinymce.init({
+//     selector: '#myTextarea',
+//     width: 600,
+//     height: 200,
+// });
 </script>
 
 </body>

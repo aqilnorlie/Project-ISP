@@ -8,27 +8,42 @@ $token = generateToken(32);
 
 
 // validate required fields
-$errors = [];
-foreach (['termTitleMalay', 'termTitleEnglish', 'termDescription'] as $field) {
-    if (empty($data[$field])) {
-        $errors[] = sprintf('The %s is a required field.', $field);
-        // echo "123 <br>";
-        // header("Location: Terms.php");
-    }
-}
-if (!empty($errors)) {
-    echo implode('<br />', $errors);
-    exit;
-}
-
-// check existing section number
-// $statement = $pdo->prepare('SELECT * FROM myra.myrasection WHERE sectionNumber = :sectionNumber');
-// $statement->execute(['sectionNumber' => $data['sectionNumber']]);
-
-// if (!empty($statement->fetch())) {
-//     echo 'Inserted section number already exists.';
+// $errors = [];
+// foreach (['termTitleMalay', 'termTitleEnglish', 'termDescription'] as $field) {
+//     if (empty($data[$field])) {
+//         $errors[] = sprintf('The %s is a required field.', $field);
+//         // echo "123 <br>";
+//         // header("Location: Terms.php");
+//     }
+// }
+// if (!empty($errors)) {
+//     echo implode('<br />', $errors);
 //     exit;
 // }
+
+// check existing term
+$queryCheck = 'SELECT * FROM myraterm 
+WHERE subSectionId = :subSectionId
+AND termTitleMalay = :termTitleMalay
+OR termTitleEnglish = :termTitleEnglish';
+
+$dataCheck = [
+    ':subSectionId' => $data['subSectionId'],
+    ':termTitleMalay' => $data['termTitleMalay'],
+    ':termTitleEnglish' => $data['termTitleEnglish']
+];
+
+$statementCheck = $pdo->prepare($queryCheck);
+$statementCheck->execute($dataCheck);
+
+if (!empty($statementCheck->fetch())) { 
+    // echo 'Inserted section number already exists.'; ?>
+    <script>
+        // alert("Inserted sub-section number already exists.");
+        window.location.href='Terms.php?warning2';
+    </script>
+    <?php exit;
+}
 
 //insert new data
 // echo "1";
@@ -49,7 +64,26 @@ $statement->execute([
     //'USER_ID' => $_SESSION['userid']
 ]);
 
+$sqlHistory = "INSERT INTO myratermhistory (termHistoryProcess, USER_ID) VALUES (:termHistoryProcess, :USER_ID)";
+$stmtHistory = $pdo->prepare($sqlHistory);
+$data = [
+    ':termHistoryProcess' => "ADDED",
+    // ':sectionId' => $_SESSION['sectionNumber'],
+    ':USER_ID' => $_SESSION['userid']
+    // ':sectionId' => $sectionid,
+];
+$stmtHistory->execute($data);
 
+$querySecId = 
+"UPDATE 
+    myratermhistory ss, 
+    myraterm s
+SET 
+    ss.termId = s.termId
+WHERE 
+    ss.createdAt = s.createdAt";
+$stmtSectionId = $pdo->prepare($querySecId);
+$stmtSectionId->execute();
 
 // echo 'The new section has been successfully inserted into database.';
 

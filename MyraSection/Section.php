@@ -216,40 +216,69 @@ session_start();
               <div class="card-header">
                 <h3 class="card-title">Add Section</h3>
               </div>
+              <?php
+              function getsectionorderslist($pdo)
+              {
+                  // default all letters
+                  $array_letters = range('A', 'H');
+
+                  // get letters used from database
+                  $array_letters_used = array();
+                  $index = 0;
+                  $sql = "SELECT sectionNumber FROM myra.myrasection ORDER BY sectionNumber ASC";
+                  $stmt = $pdo->prepare($sql);
+                  $stmt->execute();
+                  while($d = $stmt->fetch(PDO::FETCH_ASSOC))
+                  {
+                      $array_letters_used[$index] = $d['sectionNumber'];
+                      $index++;
+                  }
+
+                  // check both arrays
+                  $result = array_diff($array_letters, $array_letters_used);
+
+                  // show on screen
+                  foreach($result as $key => $val)
+                  {       //<option value="    A   ">    A   </option>
+                      echo "<option value='".$val."'>".$val."</option>";
+                  }
+              } ?>
+
               <!-- /.card-header -->
               <!-- form start -->
               <form action="psection.php" method="POST">
                 <div class="card-body">
-                  <div class="form-group">
+                  <div class="form-group required">
                     <label for="sectionNumber">Section Number</label>
                     <!--(TEST) <input type="text" class="form-control" id="sectionNumber" placeholder="SELECT ONE" nama="sectionNumber"> -->
                     <div class="input-group"> <!-- amik ni dr roles -->
                       <div class="custom-file">
                         <select class="form-control" name="sectionNumber" id="sectionNumber" required>
                           <option value="" disabled selected hidden>SELECT ONE</option>
-                          <option value="A">A</option>
+                          <?php getsectionorderslist($pdo); //getsectionlist($dbh); ?>
+                          <!-- <option value="A">A</option>
                           <option value="B">B</option>
                           <option value="C">C</option>
                           <option value="D">D</option>
                           <option value="E">E</option>
                           <option value="F">F</option>
                           <option value="G">G</option>
-                          <option value="H">H</option>
+                          <option value="H">H</option> -->
                         </select>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="card-body">
-                  <div class="form-group">
+                  <div class="form-group required">
                     <label for="sectionTitleMalay">Section Title (Malay)</label>
                     <input type="text" class="form-control" id="sectionTitleMalay" name="sectionTitleMalay" required>
                   </div>
                 </div>
                 <div class="card-body">
-                  <div class="form-group">
+                  <div class="form-group required">
                     <label for="sectiontitleEnglish">Section Title (English)</label>
-                    <input type="text" class="form-control" id="sectionTitleEnglish" name="sectionTitleEnglish" required >
+                    <input type="text" class="form-control" id="sectionTitleEnglish" name="sectionTitleEnglish" required>
                   </div>
                 </div>
                 <div class="card-body">
@@ -334,7 +363,7 @@ session_start();
             ON c.USER_ID = m.USER_ID";
             
             $stmt = $pdo->prepare($sql);
-            $stmt->execute();      
+            $stmt->execute();
             //$username = $conn2->query($sql_username);
             
             ?>
@@ -365,6 +394,7 @@ session_start();
                        
                   ?>
                   <tr>
+                    
                     <td><?php echo $data['sectionNumber'];?></td>
                     <td><?php echo $data['sectionTitleMalay'];?></td>
                     <td><?php echo $data['sectionTitleEnglish'];?></td>
@@ -389,12 +419,15 @@ session_start();
                     </td>
                     <td style="text-align: center;">
 
+                    <!-- edit button -->
                     <form action="editsection.php?sectionNumber=<?= $data['token']; ?>" method="post" style="margin-block-end: 0.3em;">
                       <!-- <a href="editsection.php"><button type="button" class="f"><i class="fas fa-edit" title="Edit section"></i></button></a> -->
                       <button type="submit" name="edit" class="f"><i class="fas fa-edit" title="Edit section"></i></button>
                     </form>
 
                       <!-- <a href="viewsection.php"><button type="button" class="f"><i class="fas fa-eye" title="View section"></i></button></a> -->
+                      
+                    <!-- view button -->
                     <form action="viewsection.php?sectionNumber=<?= $data['token']; ?>" method="post" style="margin-block-end: 0.3em;">
                       <button type="submit" name="view" class="f"><i class="fas fa-eye" title="View section"></i></button>
                     </form>
@@ -442,6 +475,79 @@ session_start();
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
+
+<!-- START: bootstrap modal -->
+
+<!-- START: modal if token url diubah (token tak wujuk dlm database) -->
+<div class="modal fade" id="modal-warning">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Warning</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Unauthorized report access!</p>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
+  <!-- END: modal if token url diubah (token tak wujuk dlm database) -->
+
+  <div class="modal fade" id="confirm-edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content bg-warning">
+            
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Confirm Delete</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>                    
+                </div>
+            
+                <div class="modal-body">
+                    <p>You are about to delete this report.</p>
+                    <p>Do you want to proceed?</p>
+                    <!--<p class="debug-url"></p>-->
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-danger btn-ok">Yes</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-delete">
+    <div class="modal-dialog">
+      <div class="modal-content bg-success">
+        <div class="modal-header">
+          <h4 class="modal-title">Success</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <p>Your report has been successfully deleted.</p>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
+  <!-- END: bootstrap modal -->
+
+
   <footer class="main-footer">
     <strong>MYRA Copyright &copy; 2022-2025.</strong>
     All rights reserved.
@@ -515,42 +621,42 @@ session_start();
 
 <script>
 $(function () {
-    $("#example1").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
-      "bJQueryUI":true,
-      "bSort":true,
-      "bPaginate":true,
-      "sPaginationType":"full_numbers",
-       "iDisplayLength": 5
-    });
+  $("#example1").DataTable({
+    "responsive": true, "lengthChange": false, "autoWidth": false,
+    "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+  }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+  $('#example2').DataTable({
+    "paging": true,
+    "lengthChange": false,
+    "searching": false,
+    "ordering": true,
+    "info": true,
+    "autoWidth": false,
+    "responsive": true,
+    "bJQueryUI":true,
+    "bSort":true,
+    "bPaginate":true,
+    "sPaginationType":"full_numbers",
+      "iDisplayLength": 5
   });
+});
 </script>
 
 <script>
-    tinymce.init({
-    selector: '#myTextarea'
-    // setup: function (editor) {
-    //     editor.on('change', function () {
-    //         tinymce.triggerSave();
-    //     });
-    // }
+tinymce.init({
+  selector: '#myTextarea',
+  plugins: 'lists image save wordcount table',
+  // plugins: 'image',
+  // menubar: 'file edit view insert format',
+  toolbar: 'undo redo styleselect bold italic alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table tabledelete | tableprops tablerowprops tablecellprops | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol',
+  height: "350"
 });
 
-tinymce.init({
-    selector: '#myTextarea',
-    width: 600,
-    height: 200,
-});
+// tinymce.init({
+//     selector: '#myTextarea',
+//     width: 600,
+//     height: 200,
+// });
 
 // init_instance_callback : function(editor) {
 //         let editorH = editor.editorContainer.offsetHeight;
@@ -561,6 +667,90 @@ tinymce.init({
 //             })
 //             .show();
 //     },
+</script>
+
+<!-- START try bootstrap modal delete validation (https://youtu.be/mh4MVFiMZTM) ################################################################ -->
+
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script> -->
+
+<!-- DELETE POP UP FORM (Bootstrap MODAL) -->
+<div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"> Delete Section Data </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <form action="deletesection.php" method="POST">
+
+                <div class="modal-body">
+
+                    <input type="hidden"  name="sectionNumber" id="sectionNumber">
+
+                    <h4> Do you want to Delete this Data?</h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"> No </button>
+                    <button type="submit" name="delete_section" class="btn btn-primary"> Yes </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<script>
+$(document).ready(function () {
+
+    $('.deletebtn').on('click', function () {
+
+        $('#deletemodal').modal('show');
+
+        $tr = $(this).closest('tr');
+
+        var data = $tr.children("td").map(function () {
+            return $(this).text();
+        }).get();
+
+        console.log(data);
+
+        $('sectionNumber').val(data[0]);
+
+    });
+});
+</script>
+
+<!-- END try bootstrap modal delete validation (https://youtu.be/mh4MVFiMZTM) ################################################################ -->
+
+<!-- START: script for warning modal -->
+<?php if (isset($_GET['warning'])){ ?>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $("#modal-warning").modal("show");
+    });
+    </script>
+<?php } ?>
+<!-- END: script for warning modal -->
+
+<?php if (isset($_GET['delete'])){ ?>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $("#modal-delete").modal("show");
+    });
+    </script>
+<?php } ?>
+
+<script>
+    $('#confirm-edit').on('show.bs.modal', function(e) {
+        $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+    $('.debug-url').html('Delete URL: <strong>' + $(this).find('.btn-ok').attr('href') + '</strong>');
+        });
 </script>
 
 </body>
