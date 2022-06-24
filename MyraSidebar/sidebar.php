@@ -84,16 +84,8 @@
            </li>
          </li>
 
-         <li class="nav-item menu-open">
-         <li class="nav-item">
-             <a href="../MyraReport/report.php" class="nav-link">
-               <i class="nav-icon fas fa-chart-line"></i>
-               <p>Report</p>
-             </a>
-           </li>
-         </li>
           <li class="nav-item">
-            <a href="../MyraLogin/login.php" class="nav-link">
+            <a href="../MyraLogOut/pLogOut.php" class="nav-link">
               <i class="nav-icon fas fa-power-off"></i>
               <p>
                 Log Out
@@ -106,7 +98,7 @@
 
             <li class="nav-item menu-open">
               <li class="nav-item">
-                <a href="./index.php" class="nav-link ">
+                <a href="../MyraDashboard/index.php" class="nav-link ">
                   <i class="nav-icon fas fa-home"></i></i>
                   <p>Dashboard</p>
                 </a>
@@ -139,7 +131,7 @@
            </li>
          </li>
           <li class="nav-item">
-            <a href="../MyraLogin/login.php" class="nav-link">
+            <a href="../MyraLogOut/pLogOut.php" class="nav-link">
               <i class="nav-icon fas fa-power-off"></i>
               <p>
                 Log Out
