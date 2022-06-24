@@ -40,7 +40,7 @@ if (!empty($statement->fetch())) { //header('Location: section.php');?>
 $statement = $pdo->prepare(
     'INSERT INTO myrasection (sectionNumber, sectionTitleMalay, sectionTitleEnglish, sectionDescription, USER_ID, token) VALUES (:sectionNumber, :sectionTitleMalay, :sectionTitleEnglish, :sectionDescription, :USER_ID, :token)'
 );
-$statement->execute([
+$addsectionsuccess = $statement->execute([
     'sectionNumber' => $data['sectionNumber'],
     'sectionTitleMalay' => $data['sectionTitleMalay'],
     'sectionTitleEnglish' => $data['sectionTitleEnglish'],
@@ -95,6 +95,12 @@ $stmtSectionId->execute();
 
 //echo 'The new section has been successfully inserted into database.';
 
-header('Location: section.php');
-
+if($addsectionsuccess)
+{
+    header('Location: section.php?successadd');
+}
+else
+{
+    
+}
 ?>

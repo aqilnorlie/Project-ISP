@@ -1,5 +1,6 @@
 <?php
 include("../MyraLogin/connection.php");
+//include("../MyraSection/sconnection.php");
 include("../MyraLogin/MyraFunctionLogin.php");
 session_start();
 //$is_page_refreshed = (isset($_SERVER['HTTP_CACHE_CONTROL']) && $_SERVER['HTTP_CACHE_CONTROL'] == 'max-age=0');
@@ -46,6 +47,36 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
 <link rel="stylesheet" href="../Mystyle.css">
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
+
+<?php
+
+if($_GET['assignId'] == null) 
+{
+  header("Location: ../myraerror/myraerror.php");
+}
+
+if(isset($_GET['assignId']) && checkReportToken($conn1, $_GET['assignId']) == false) 
+{
+    header("Location: administrator.php?warning4");
+} 
+
+function checkReportToken($pdo, $token)
+{
+    $found = false;
+    $data = [":token" => $token];
+    $sql = "SELECT token FROM myraroleassignment WHERE BINARY token = :token";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($data);
+    $rowCount = $stmt->rowCount();
+    if($rowCount > 0)
+    {
+        $found = true;    
+    }
+    
+    return $found;
+}
+?>
+
 <div class="wrapper">
 
   <!-- Preloader -->
@@ -251,7 +282,7 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
                         $data = $stmt->fetchAll();
 
                       ?>
-                        <select class="form-control" name="RoleStaff" id="RoleStaff" required>
+                        <select class="form-control" name="RoleStaff" id="RoleStaff">
                            <option value="" disabled selected hidden><?php echo $result["roleTitle"] ?></option> 
                           
                           <?php

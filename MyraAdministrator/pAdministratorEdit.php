@@ -3,6 +3,7 @@ include('../MyraLogin/connection.php');
 session_start();
 
 
+
 if(isset($_POST["btnEditUser"])){
 
     $status =  $_POST["checkAccess"];
@@ -27,11 +28,14 @@ if(isset($_POST["btnEditUser"])){
 
      if($query_execute){
         
-        header("Location: Administrator.php");
+        header("Location: Administrator.php?successedituser");
         exit(0);
-     }else{
-       
-        exit(0);
+     }else
+     {
+        ?>
+        <script>alert("Fail to add user");
+        window.location.href='Administrator.php';</script> 
+        <?php exit(0);
      }
     }catch(PDOExecption $e){
         echo "Error: " . $e->getMessage();

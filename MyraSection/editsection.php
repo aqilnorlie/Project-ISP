@@ -47,16 +47,21 @@ session_start();
 // kalau url token ditukar (token yg takde dlm database)
 // if(isset($_GET['id'])            && checkReportToken($dbh, $_SESSION['userid'], $_GET['id']) == false)
 
-if(isset($_GET['sectionNumber']) && checkReportToken($pdo, $_SESSION['userid'], $_GET['sectionNumber']) == false) 
+if($_GET['sectionNumber'] == null) 
+{
+  header("Location: ../myraerror/myraerror.php");
+}
+
+if(isset($_GET['sectionNumber']) && checkReportToken($pdo, $_GET['sectionNumber']) == false) 
 {
     header("Location: Section.php?warning");
 } 
 
-function checkReportToken($pdo, $userid, $token)
+function checkReportToken($pdo, $token)
 {
     $found = false;
-    $data = [":userid" => $userid, ":token" => $token];
-    $sql = "SELECT token FROM myrasection WHERE USER_ID = :userid AND BINARY token = :token";
+    $data = [":token" => $token];
+    $sql = "SELECT token FROM myrasection WHERE BINARY token = :token";
     $stmt = $pdo->prepare($sql);
     $stmt->execute($data);
     $rowCount = $stmt->rowCount();

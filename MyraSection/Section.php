@@ -141,7 +141,7 @@ session_start();
           <li class="nav-item menu-open">
             <li class="nav-item">
              <a href="../MyraSearch/SearchHome.php" class="nav-link">
-               <i class="nav-icon fas fa-database"></i>
+               <i class="nav-icon fas fa-search"></i>
                <p>MyRA Search</p>
              </a>
            </li>
@@ -395,7 +395,7 @@ session_start();
                   ?>
                   <tr>
                     
-                    <td><?php echo $data['sectionNumber'];?></td>
+                    <td class="sec_Num"><?php echo $data['sectionNumber'];?></td>
                     <td><?php echo $data['sectionTitleMalay'];?></td>
                     <td><?php echo $data['sectionTitleEnglish'];?></td>
                     <!-- <td><?php //echo $data['sectionDescription'];?></td> -->
@@ -433,8 +433,10 @@ session_start();
                     </form>
 
                     <!-- delete button -->
-                    <form action="deletesection.php" method="post" style="margin-block-end: 0.3em;">
-                      <button type="submit" value="<?= $data['token']; ?>" name="delete_section" class="delete"><i class="fas fa-trash" title="Delete section"></i></button>
+                    <form action="section.php" id="deleteButton" method="post" style="margin-block-end: 0.3em;">
+                    <!-- <input type="hidden"  name="token" id="token" value="<?//php echo $data['token']; ?>"> -->
+                      <button type="submit" class="delete-button delete" data-toggle="modal" data-target="#confirm-edit"><i class="fas fa-trash" title="Delete section"></i>
+                    </button>
                     </form>
                     
                     </td>
@@ -491,7 +493,7 @@ session_start();
         <div class="modal-body">
           <p>Unauthorized report access!</p>
         </div>
-        <div class="modal-footer justify-content-between">
+        <div class="modal-footer">
           <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
         </div>
       </div>
@@ -499,34 +501,39 @@ session_start();
     </div>
     <!-- /.modal-dialog -->
   </div>
-
   <!-- END: modal if token url diubah (token tak wujuk dlm database) -->
 
-  <div class="modal fade" id="confirm-edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+  <!-- START: modal ask to confirm delete data -->
+  <div class="modal fade" id="confirmEditData" tabindex="-1" role="dialog" aria-labelledby="confirmEditDataLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content bg-warning">
             
                 <div class="modal-header">
                     <h4 class="modal-title" id="myModalLabel">Confirm Delete</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>                    
                 </div>
-            
-                <div class="modal-body">
-                    <p>You are about to delete this report.</p>
-                    <p>Do you want to proceed?</p>
-                    <!--<p class="debug-url"></p>-->
-                </div>
-                
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-danger btn-ok">Yes</a>
-                </div>
+                <form action="deletesection.php" method="POST">
+                  <div class="modal-body">
+                      <input type="hidden" name="secNum" id="delete_id">
+                      <p>Are you sure you want to delete this section? <br> <b>All available sub-section(s) and term(s) under this section will also be deleted</b>.</p>
+                      <p>Do you want to proceed?</p>
+                      <!--<p class="debug-url"></p>-->
+                  </div>
+                  
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                      <button type="submit" name="delete_data" class="btn btn-danger">Yes</button>
+                      <!-- <a class="btn btn-danger btn-ok" onclick="window.location='deletesection.php'">Yes</a> -->
+                  </div>
+                </form>
             </div>
         </div>
     </div>
+    <!-- END: modal ask to confirm delete data -->
 
+    <!-- START: modal success message delete data -->
     <div class="modal fade" id="modal-delete">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content bg-success">
         <div class="modal-header">
           <h4 class="modal-title">Success</h4>
@@ -534,9 +541,9 @@ session_start();
             <span aria-hidden="true">&times;</span></button>
         </div>
         <div class="modal-body">
-          <p>Your report has been successfully deleted.</p>
+          <p>The section has been successfully deleted.</p>
         </div>
-        <div class="modal-footer justify-content-between">
+        <div class="modal-footer">
           <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
         </div>
       </div>
@@ -544,6 +551,73 @@ session_start();
     </div>
     <!-- /.modal-dialog -->
   </div>
+   <!-- END: modal success message delete data -->
+
+  <!-- START: unsuccessful delete modal -->
+  <div class="modal fade" id="deletemodal">
+      <div class="modal-dialog">
+        <div class="modal-content bg-blue">
+          <div class="modal-header">
+            <h4 class="modal-title">Notice</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span></button>
+          </div>
+          <div class="modal-body">
+            <p>Unsuccessful section deletion.</p>
+          </div>
+          <div class="modal-footer justify-content-between">
+            <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- END: unsuccessful delete modal -->
+
+      <!-- START: successful add section -->
+  <div class="modal fade" id="successaddsec">
+      <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content bg-blue">
+          <div class="modal-header">
+            <h4 class="modal-title">Notice</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span></button>
+          </div>
+          <div class="modal-body">
+            <p>Section has been <b>added</b> successfully.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- END: successful add section -->
+
+  <!-- START: edit section success -->
+  <div class="modal fade" id="successeditsec">
+      <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content bg-blue">
+          <div class="modal-header">
+            <h4 class="modal-title">Notice</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span></button>
+          </div>
+          <div class="modal-body">
+            <p>Section has been <b>edited</b> successfully.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- END: edit section success -->
 
   <!-- END: bootstrap modal -->
 
@@ -637,7 +711,7 @@ $(function () {
     "bSort":true,
     "bPaginate":true,
     "sPaginationType":"full_numbers",
-      "iDisplayLength": 5
+      "iDisplayLength": 10
   });
 });
 </script>
@@ -675,55 +749,35 @@ tinymce.init({
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script> -->
 
-<!-- DELETE POP UP FORM (Bootstrap MODAL) -->
-<div class="modal fade" id="deletemodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel"> Delete Section Data </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-
-            <form action="deletesection.php" method="POST">
-
-                <div class="modal-body">
-
-                    <input type="hidden"  name="sectionNumber" id="sectionNumber">
-
-                    <h4> Do you want to Delete this Data?</h4>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal"> No </button>
-                    <button type="submit" name="delete_section" class="btn btn-primary"> Yes </button>
-                </div>
-            </form>
-
-        </div>
-    </div>
-</div>
-
+<!-- try delete validate (https://youtu.be/4I5tctrbl84) -->
 <script>
 $(document).ready(function () {
 
-    $('.deletebtn').on('click', function () {
+    $('.delete-button').click(function (e) {
+        e.preventDefault();
 
-        $('#deletemodal').modal('show');
-
-        $tr = $(this).closest('tr');
-
-        var data = $tr.children("td").map(function () {
-            return $(this).text();
-        }).get();
-
-        console.log(data);
-
-        $('sectionNumber').val(data[0]);
+        var secNum = $(this).closest('tr').find('.sec_Num').text();
+        // console.log(secNum);
+        $('#delete_id').val(secNum);
+        $('#confirmEditData').modal('show');
 
     });
-});
+  });
+
+//         $('#deletemodal').modal('show');
+
+//         $tr = $(this).closest('tr');
+
+//         var data = $tr.children("td").map(function () {
+//             return $(this).text();
+//         }).get();
+
+//         console.log(data);
+
+//         $('sectionNumber').val(data[0]);
+
+//     });
+// });
 </script>
 
 <!-- END try bootstrap modal delete validation (https://youtu.be/mh4MVFiMZTM) ################################################################ -->
@@ -738,6 +792,7 @@ $(document).ready(function () {
 <?php } ?>
 <!-- END: script for warning modal -->
 
+<!-- START: script for deleted data modal -->
 <?php if (isset($_GET['delete'])){ ?>
     <script type="text/javascript">
     $(document).ready(function(){
@@ -745,13 +800,62 @@ $(document).ready(function () {
     });
     </script>
 <?php } ?>
+<!-- END: script for deleted data modal -->
 
-<script>
+<!-- START: script for unsuccessful delete modal -->
+<?php if (isset($_GET['notdelete'])){ ?>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $("#deletemodal").modal("show");
+    });
+    </script>
+<?php } ?>
+<!-- END: script for unsuccessful delete modal -->
+
+<!-- START: success add section -->
+<?php if (isset($_GET['successadd'])){ ?>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $("#successaddsec").modal("show");
+    });
+    </script>
+<?php } ?>
+<!-- END: success add section -->
+
+<!-- START: success edit section -->
+<?php if (isset($_GET['successedit'])){ ?>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $("#successeditsec").modal("show");
+    });
+    </script>
+<?php } ?>
+<!-- END: success edit section -->
+
+<!-- START: utk process delete dlm modal delete confirmation -->
+<!-- <script>
     $('#confirm-edit').on('show.bs.modal', function(e) {
         $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
     $('.debug-url').html('Delete URL: <strong>' + $(this).find('.btn-ok').attr('href') + '</strong>');
         });
-</script>
+
+$(document).ready(function(){
+    $("form#deleteButton").submit(function(event) {
+        event.preventDefault();
+        var toid = $("#token").val();
+        // var newmsg = $("#newmsg").val();
+
+        $.ajax({
+            type: "POST",
+            url: "section.php",
+            data: "token=" + content,
+            // success: function(){alert('success');}
+        });
+    });
+});
+</script> -->
+<!-- END: utk process delete dlm modal delete confirmation -->
+
 
 </body>
 </html>

@@ -2,18 +2,22 @@
 include("../MyraLogin/connection.php");
 
 
-if(isset($_GET['assignId'])){
+if(isset($_POST['delete_data'])){
 
-    $assignId = $_GET['assignId'];
-    $data = [':assignId' => $assignId];
-  
-    $sql = "DELETE FROM myraroleassignment WHERE Token=:assignId";
-    $stmt= $conn1->prepare($sql);
-    $delete = $stmt->execute($data);
+  $staffid = $_POST['staffid'];
+  // $assignId = $_GET['assignId'];
+  $data = [':staffid' => $staffid];
 
-    if($delete){
-        header("Location: Administrator.php");
+  $sql = "DELETE FROM myraroleassignment WHERE USER_ID=:staffid";
+  $stmt= $conn1->prepare($sql);
+  $delete = $stmt->execute($data);
 
+  if($delete){
+    header("Location: Administrator.php?delete");
+  }
+  else
+  {
+    header("Location: Administrator.php?notdelete");
   }
 
 }

@@ -109,7 +109,7 @@ if(isset($_POST['submit_update']))
             if($query_execute)
             {
                 $_SESSION['message'] = "Section HAS been updated.";
-                header('Location: section.php');
+                header('Location: section.php?successedit');
                 exit(0);
                 // echo 'Section HAS been updated.';
             }
@@ -171,7 +171,7 @@ if(isset($_POST['submit_update']))
             if($query_execute)
             {
                 $_SESSION['message'] = "Section HAS been updated.";
-                header('Location: section.php');
+                header('Location: section.php?successedit');
                 exit(0);
                 // echo 'Section HAS been updated.';
             }

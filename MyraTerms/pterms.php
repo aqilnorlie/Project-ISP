@@ -24,8 +24,8 @@ $token = generateToken(32);
 // check existing term
 $queryCheck = 'SELECT * FROM myraterm 
 WHERE subSectionId = :subSectionId
-AND termTitleMalay = :termTitleMalay
-OR termTitleEnglish = :termTitleEnglish';
+AND (termTitleMalay = :termTitleMalay
+OR termTitleEnglish = :termTitleEnglish)';
 
 $dataCheck = [
     ':subSectionId' => $data['subSectionId'],
@@ -51,7 +51,7 @@ $statement = $pdo->prepare(
     "INSERT INTO myraterm ( termTitleMalay, termTitleEnglish, termDescription, subSectionId, USER_ID, token) VALUES (:termTitleMalay, :termTitleEnglish, :termDescription, :subSectionId, :USER_ID, :token)"
 );
 // echo "2";
-$statement->execute([
+$successaddterm = $statement->execute([
     
     
     'termTitleMalay' => $data['termTitleMalay'],
@@ -87,6 +87,13 @@ $stmtSectionId->execute();
 
 // echo 'The new section has been successfully inserted into database.';
 
-header('Location: Terms.php');
+if($successaddterm)
+{
+header('Location: Terms.php?successaddterm');
+}
+else
+{
+
+}
 
 ?>

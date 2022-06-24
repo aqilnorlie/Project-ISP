@@ -3,23 +3,28 @@
 include('../MyraSection/sconnection.php'); 
 session_start();
 
-if(isset($_POST['delete_terms']))
+if($_GET[''] == null) 
 {
-    $termToken = $_POST['delete_terms'];
+  header("Location: ../myraerror/myraerror.php");
+}
+
+if(isset($_POST['delete_data']))
+{
+    $tmy = $_POST['tmy'];
     // echo $termToken;
 
     try {
 
         $data = [
-            ':termToken' => $termToken
+            ':tmy' => $tmy
         ];
 
-        $sqlGetSecId = "SELECT termId FROM myraterm WHERE token=:termToken";
+        $sqlGetSecId = "SELECT termId FROM myraterm WHERE termTitleMalay=:tmy";
         $stmtGetSecId = $pdo->prepare($sqlGetSecId);
         $stmtGetSecId->execute($data);
         $result = $stmtGetSecId->fetch(PDO::FETCH_ASSOC);
 
-        $query = "DELETE FROM myraterm WHERE token=:termToken";
+        $query = "DELETE FROM myraterm WHERE termTitleMalay=:tmy";
         $statement = $pdo->prepare($query);
         $query_execute = $statement->execute($data);
 
@@ -37,13 +42,13 @@ if(isset($_POST['delete_terms']))
         {
             // echo $termToken;
             // echo "Deleted Successfully";
-            header('Location: Terms.php');
+            header('Location: Terms.php?delete');
             exit(0);
         }
         else
         {
             echo "Not Deleted";
-            header('Location: Terms.php');
+            header('Location: Terms.php?notdelete');
             exit(0);
         }
 

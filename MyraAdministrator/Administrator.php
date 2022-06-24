@@ -159,11 +159,13 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
                   </div>
                 </div>
                 <!-- /.card-body -->
+             
                 <div class="card-footer">
-
                   <button type="submit" name="btnSearchUser"class="btn btn-primary">Search</button>
                 </div>
               </form>
+
+             
 
               <?php
                 if($_SERVER['REQUEST_METHOD'] == 'POST'){
@@ -191,11 +193,28 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
                   else
                   { ?>
                     <script>
-                      alert("User does not exist.");
-                      window.location.href='Administrator.php';
+                      // alert("User does not exist.");
+                      window.location.href='administrator.php?warning3';
                     </script>
                   <?php 
                   } 
+
+                    // check existing user
+                    
+                    $statement = $conn1->prepare('SELECT * FROM myra.myraroleassignment WHERE USER_ID = :USER_ID');
+                    $statement->execute(['USER_ID' =>  $d['USER_ID']]);
+      
+                    //validation
+                    if (!empty($statement->fetch())) { 
+                        // echo 'Inserted section number already exists.';
+                        // echo  $_SESSION['idUserAdd'] ;
+                        // exit; ?>
+                        <script>
+                            // alert("Inserted sub-section number already exists.");
+                            window.location.href='administrator.php?warning2';
+                        </script>
+                   <?php }
+                  
                   
 
                 }
@@ -334,7 +353,7 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
                    
                     <tr>
                     <td><?php echo $count++; ?></td>
-                    <td><?php echo $data["USER_ID"]; ?></td>
+                    <td class="staffid"><?php echo $data["USER_ID"]; ?></td>
                     <td><?php echo $data["USER_NAME"]; ?></td>
                     <td><?php echo $data["roleTitle"]; ?></td>
                     <td><?php echo $data["createdAt"]; ?></td>
@@ -357,8 +376,8 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
                       <button type="submit" name="view" class="f"><i class="fas fa-eye" title="View User"></i></button>
                     </form>
 
-                    <form action="AdministratorDelete.php?assignId=<?=$data['token'];?>" method="post" style="margin-block-end: 0.3em;">
-                      <button type="submit" name="Delete" class="delete"><i class="fas fa-trash" title="View User"></i></button>
+                    <form action="Administrator.php" id="deleteButton" method="post" style="margin-block-end: 0.3em;">
+                      <button type="submit" data-toggle="modal" data-target="#confirmdeleteuser" class="delete-button delete"><i class="fas fa-trash" title="Delete User"></i></button>
                     </form>
                     </td>
                   </tr>
@@ -395,6 +414,217 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
+
+  <!-- START: modal if inserted user already exists -->
+
+  <div class="modal fade" id="modal-warning2">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Warning</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <p>Searched lecturer <b>already exist</b>. Please insert a new Staff ID.</p>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
+  <!-- END: modal if inserted user already exists -->
+
+  <!-- START: modal if user does not exist -->
+
+    <div class="modal fade" id="modal-warning3">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Warning</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <p>Searched Staff ID <b>does not exist</b>. Please insert a new Staff ID.</p>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
+  <!-- END: modal if user does not exist -->
+
+  <!-- START: modal unauthorized access -->
+
+  <div class="modal fade" id="modal-warning4">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Warning</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <p><b>Unauthorized report access!</b></p>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
+  <!-- END: modal unauthorized access -->
+
+  <!-- START: successful add user -->
+  <div class="modal fade" id="successadduser">
+      <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content bg-blue">
+          <div class="modal-header">
+            <h4 class="modal-title">Notice</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span></button>
+          </div>
+          <div class="modal-body">
+            <p>User has been <b>added</b> successfully.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- END: successful add user -->
+
+      <!-- START: successful edit user -->
+  <div class="modal fade" id="successedituser">
+      <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content bg-blue">
+          <div class="modal-header">
+            <h4 class="modal-title">Notice</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span></button>
+          </div>
+          <div class="modal-body">
+            <p>User has been <b>edited</b> successfully.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- END: successful edit user -->
+
+      <!-- START: unsuccessful add user -->
+  <div class="modal fade" id="failadduser">
+      <div class="modal-dialog">
+        <div class="modal-content bg-red">
+          <div class="modal-header">
+            <h4 class="modal-title">Notice</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span></button>
+          </div>
+          <div class="modal-body">
+            <p>Fail to add user.</p>
+          </div>
+          <div class="modal-footer justify-content-between">
+            <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- END: unsuccessful add user -->
+
+  <!-- START: modal ask to confirm delete user -->
+  <div class="modal fade" id="confirmdeleteuser" tabindex="-1" role="dialog" aria-labelledby="confirmEditDataLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-warning">
+            
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Confirm Delete</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>                    
+                </div>
+                <form action="administratordelete.php" method="POST">
+                  <div class="modal-body">
+                      <input type="hidden" name="staffid" id="delete_id">
+                      <p>You are about to delete this user.</p>
+                      <p>Do you want to proceed?</p>
+                      <!--<p class="debug-url"></p>-->
+                  </div>
+                  
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                      <button type="submit" name="delete_data" class="btn btn-danger">Yes</button>
+                      <!-- <a class="btn btn-danger btn-ok" onclick="window.location='deletesection.php'">Yes</a> -->
+                  </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- END: modal ask to confirm delete user -->
+
+    <!-- START: modal success message delete user -->
+    <div class="modal fade" id="modal-delete">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-success">
+        <div class="modal-header">
+          <h4 class="modal-title">Success</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <p>The user has been successfully deleted.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+   <!-- END: modal success message delete user -->
+
+  <!-- START: unsuccessful delete modal -->
+  <div class="modal fade" id="deletemodal">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-blue">
+          <div class="modal-header">
+            <h4 class="modal-title">Notice</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span></button>
+          </div>
+          <div class="modal-body">
+            <p>Unsuccessful user deletion.</p>
+          </div>
+          <div class="modal-footer justify-content-between">
+            <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- END: unsuccessful delete modal -->
+
   <footer class="main-footer">
     <strong>MYRA Copyright &copy; 2022-2025.</strong>
     All rights reserved.
@@ -481,10 +711,105 @@ $(function () {
     "bSortable": true,
     "bPaginate":true,
     "sPaginationType":"full_numbers",
-      "iDisplayLength": 5
+      "iDisplayLength": 10
   });
 });
 </script>
+
+<!-- START: warning2 modal -->
+<?php if (isset($_GET['warning2'])){ ?>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $("#modal-warning2").modal("show");
+    });
+    </script>
+<?php } ?>
+<!-- END: warning2 modal -->
+
+<!-- START: warning3 modal -->
+<?php if (isset($_GET['warning3'])){ ?>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $("#modal-warning3").modal("show");
+    });
+    </script>
+<?php } ?>
+<!-- END: warning3 modal -->
+
+<!-- START: unauthorized access modal -->
+<?php if (isset($_GET['warning4'])){ ?>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $("#modal-warning4").modal("show");
+    });
+    </script>
+<?php } ?>
+<!-- END: unauthorized access modal -->
+
+<!-- START: success add user -->
+<?php if (isset($_GET['successadduser'])){ ?>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $("#successadduser").modal("show");
+    });
+    </script>
+<?php } ?>
+<!-- END: success add user -->
+
+<!-- START: success edit user -->
+<?php if (isset($_GET['successedituser'])){ ?>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $("#successedituser").modal("show");
+    });
+    </script>
+<?php } ?>
+<!-- END: success edit user -->
+
+<!-- START: fail add user -->
+<?php if (isset($_GET['failadduser'])){ ?>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $("#failadduser").modal("show");
+    });
+    </script>
+<?php } ?>
+<!-- END: fail add user -->
+
+<!-- START: script for deleted user modal -->
+<?php if (isset($_GET['delete'])){ ?>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $("#modal-delete").modal("show");
+    });
+    </script>
+<?php } ?>
+<!-- END: script for deleted data modal -->
+
+<!-- START: script for unsuccessful delete modal -->
+<?php if (isset($_GET['notdelete'])){ ?>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $("#deletemodal").modal("show");
+    });
+    </script>
+<?php } ?>
+<!-- END: script for unsuccessful delete modal -->
+
+<script>
+$(document).ready(function () {
+
+    $('.delete-button').click(function (e) {
+        e.preventDefault();
+
+        var staffid = $(this).closest('tr').find('.staffid').text();
+        // console.log(secNum);
+        $('#delete_id').val(staffid);
+        $('#confirmdeleteuser').modal('show');
+
+    });
+  });
+  </script>
 
 </body>
 </html>

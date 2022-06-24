@@ -438,7 +438,7 @@ try
                   <tr>
                     <td><?php echo $data['sectionNumber'] . " - " . $data["sectionTitleMalay"] . " / " . $data["sectionTitleEnglish"];?></td>
                     <td><?php echo $data['subSectionTitleMalay'] . " / " . $data["subSectionTitleEnglish"];?></td>
-                    <td><?php echo $data['termTitleMalay'];?></td>
+                    <td class="tmy"><?php echo $data['termTitleMalay'];?></td>
                     <td><?php echo $data['termTitleEnglish'];?></td>
                     <td><?php echo $data['createdAt'];?></td>
                     <td>
@@ -455,8 +455,8 @@ try
                       <button type="submit" name="view" class="f"><i class="fas fa-eye" title="View section"></i></button>
                     </form>
                      <!-- delete button -->
-                     <form action="deleteterms.php?termIdToken=<?= $data['token']; ?>" method="post" style="margin-block-end: 0.3em;" style="margin-block-end: 0.3em;">
-                      <button type="submit" value="<?= $data['token']; ?>" name="delete_terms" class="delete"><i class="fas fa-trash" title="Delete Terms"></i></button>
+                     <form action="terms.php" id="deleteButton" method="post" style="margin-block-end: 0.3em;" style="margin-block-end: 0.3em;">
+                      <button type="submit" data-toggle="modal" data-target="#confirm-edit" class="delete-button delete"><i class="fas fa-trash" title="Delete Terms"></i></button>
                     </form>
                     </td>
                   </tr>
@@ -529,12 +529,12 @@ try
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title">Warning</h4>
+          <h4 class="modal-title">Already Exist</h4>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span></button>
         </div>
         <div class="modal-body">
-          <p>Inserted term already exists. Please insert a new term.</p>
+          <p>Inserted term already exist. Please insert a new term.</p>
         </div>
         <div class="modal-footer justify-content-between">
           <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
@@ -546,6 +546,122 @@ try
   </div>
 
   <!-- END: modal if inserted term already exists -->
+
+  <!-- START: modal ask to confirm delete data -->
+  <div class="modal fade" id="confirmEditData" tabindex="-1" role="dialog" aria-labelledby="confirmEditDataLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-warning">
+            
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Confirm Delete</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>                    
+                </div>
+                <form action="deleteterms.php" method="POST">
+                  <div class="modal-body">
+                      <input type="hidden" name="tmy" id="delete_id">
+                      <p>You are about to delete this term.</p>
+                      <p>Do you want to proceed?</p>
+                      <!--<p class="debug-url"></p>-->
+                  </div>
+                  
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                      <button type="submit" name="delete_data" class="btn btn-danger">Yes</button>
+                      <!-- <a class="btn btn-danger btn-ok" onclick="window.location='deletesection.php'">Yes</a> -->
+                  </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- END: modal ask to confirm delete data -->
+
+    <!-- START: modal success message delete data -->
+    <div class="modal fade" id="modal-delete">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-success">
+        <div class="modal-header">
+          <h4 class="modal-title">Success</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <p>The term has been successfully deleted.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+   <!-- END: modal success message delete data -->
+
+  <!-- START: unsuccessful delete modal -->
+  <div class="modal fade" id="deletemodal">
+      <div class="modal-dialog">
+        <div class="modal-content bg-blue">
+          <div class="modal-header">
+            <h4 class="modal-title">Notice</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span></button>
+          </div>
+          <div class="modal-body">
+            <p>Unsuccessful term deletion.</p>
+          </div>
+          <div class="modal-footer justify-content-between">
+            <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- END: unsuccessful delete modal -->
+
+      <!-- START: successful add term -->
+      <div class="modal fade" id="successaddterm">
+      <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content bg-blue">
+          <div class="modal-header">
+            <h4 class="modal-title">Notice</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span></button>
+          </div>
+          <div class="modal-body">
+            <p>Term has been <b>added</b> successfully.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- END: successful add section -->
+
+  <!-- START: edit section success -->
+  <div class="modal fade" id="successeditterm">
+      <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content bg-blue">
+          <div class="modal-header">
+            <h4 class="modal-title">Notice</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span></button>
+          </div>
+          <div class="modal-body">
+            <p>Term has been <b>edited</b> successfully.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- END: edit section success -->
 
   <!-- END: bootstrap modal -->
 
@@ -637,7 +753,7 @@ try
       "bSort":true,
       "bPaginate":true,
       "sPaginationType":"full_numbers",
-       "iDisplayLength": 5
+       "iDisplayLength": 10
     });
   });
 </script>
@@ -680,6 +796,61 @@ tinymce.init({
     </script>
 <?php } ?>
 <!-- END: warning2 modal -->
+
+<!-- START: script for deleted data modal -->
+<?php if (isset($_GET['delete'])){ ?>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $("#modal-delete").modal("show");
+    });
+    </script>
+<?php } ?>
+<!-- END: script for deleted data modal -->
+
+<!-- START: script for unsuccessful delete modal -->
+<?php if (isset($_GET['notdelete'])){ ?>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $("#deletemodal").modal("show");
+    });
+    </script>
+<?php } ?>
+<!-- END: script for unsuccessful delete modal -->
+
+<script>
+$(document).ready(function () {
+
+    $('.delete-button').click(function (e) {
+        e.preventDefault();
+
+        var tmy = $(this).closest('tr').find('.tmy').text();
+        // console.log(secNum);
+        $('#delete_id').val(tmy);
+        $('#confirmEditData').modal('show');
+
+    });
+  });
+  </script>
+
+  <!-- START: success add term -->
+<?php if (isset($_GET['successaddterm'])){ ?>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $("#successaddterm").modal("show");
+    });
+    </script>
+<?php } ?>
+<!-- END: success add tern -->
+
+<!-- START: success edit term -->
+<?php if (isset($_GET['successeditterm'])){ ?>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $("#successeditterm").modal("show");
+    });
+    </script>
+<?php } ?>
+<!-- END: success edit term -->
 
 </body>
 </html>
