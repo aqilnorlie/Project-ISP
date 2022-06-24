@@ -26,8 +26,8 @@ $token = generateToken(32);
 // exit;
 $sqlCheckExistedSS = "SELECT * FROM myrasubsection
 WHERE sectionId = :sectionId
-AND subSectionTitleMalay = :subSectionTitleMalay
-OR subSectionTitleEnglish = :subSectionTitleEnglish";
+AND (subSectionTitleMalay = :subSectionTitleMalay
+OR subSectionTitleEnglish = :subSectionTitleEnglish)";
 
 $data12 = [
     ":sectionId" => $data["sectionNumber"],
@@ -53,7 +53,7 @@ if (!empty($statement12->fetch())) {
 $statement = $pdo->prepare(
     'INSERT INTO myrasubsection ( subSectionTitleMalay, subSectionTitleEnglish, subSectionDescription, sectionId, USER_ID, token) VALUES (:subSectionTitleMalay, :subSectionTitleEnglish, :subSectionDescription, :sectionNumber, :USER_ID, :token)'
 );
-$statement->execute([
+$addsssuccess = $statement->execute([
     
     'subSectionTitleMalay' => $data['subSectionTitleMalay'],
     'subSectionTitleEnglish' => $data['subSectionTitleEnglish'],
@@ -91,6 +91,12 @@ $stmtSectionId->execute();
 
 //echo 'The new section has been successfully inserted into database.';
 
-header('Location: Subsection.php');
+if($addsssuccess)
+{
+header('Location: Subsection.php?successaddss');
+}
+else
+{
 
+}
 ?>

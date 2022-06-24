@@ -44,6 +44,30 @@ if($row > 0){
 include("connection.php");
 include("MyraFunctionLogin.php");
 
+
+// if(isset($_POST['btnLog']) && checkCredentials($conn1, $_POST['btnLog']) == false) 
+// {
+//     header("Location: login.php?warning");
+// } 
+
+// function checkCredentials($pdo, $token)
+// {
+//     $found = false;
+//     $data = [":token" => $token];
+//     $sql = "SELECT token FROM myraroleassignment WHERE BINARY token = :token";
+//     $stmt = $pdo->prepare($sql);
+//     $stmt->execute($data);
+//     $rowCount = $stmt->rowCount();
+//     if($rowCount > 0)
+//     {
+//         $found = true;    
+//     }
+    
+//     return $found;
+// }
+// ?>
+
+<?php
 if(isset($_POST['btnLog']))
 {
     $userid = trim($_POST['userid']);
@@ -88,7 +112,7 @@ if(isset($_POST['btnLog']))
     }
     else if($json['status'] == "false")
     {
-        header("Location: login.php");
+        header("Location: login.php?warning");
     }
     // end i-staff portal api
 }

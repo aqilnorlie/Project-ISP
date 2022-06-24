@@ -4,30 +4,45 @@ include("../Myralogin/MyraFunctionLogin.php");
 
 session_start();
 
-  // check existing section number
+  // check existing user
   if(isset( $_POST["btnAddUser"]) ){
   $statement = $conn1->prepare('SELECT * FROM myra.myraroleassignment WHERE USER_ID = :USER_ID');
   $statement->execute(['USER_ID' =>  $_SESSION['idUserAdd'] ]);
 
   //validation
-  if (!empty($statement->fetch())) {
+  if (!empty($statement->fetch())) 
+  {
       echo 'Inserted section number already exists.';
       echo  $_SESSION['idUserAdd'] ;
       exit;
-  }else{
+  }
+  else
+  {
     $role = $_POST["RoleStaff"];
     $acess = $_POST["checkAccess"];
     $userID = $_SESSION["idUserAdd"];
 
-    insertNewUSer($conn1,$acess, $role,$userID);
+    // insertNewUSer($conn1,$acess, $role,$userID);
     //echo  $_SESSION['idUserAdd'];
-    header("Location: Administrator.php");
-  
 
   }
 
-  
 }
+
+insertNewUSer($conn1,$acess, $role,$userID);
+header("Location: Administrator.php?successadduser");
+//   exit(0);
+// }
+
+// else 
+// {
+//   header("Location: Administrator.php?failadduser");
+//   exit(0);
+// }
+
+
+
+
   
 
 

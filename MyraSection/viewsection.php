@@ -57,6 +57,11 @@ session_start();
 // kalau url token ditukar (token yg takde dlm database)
 // if(isset($_GET['id'])            && checkReportToken($dbh, $_SESSION['userid'], $_GET['id']) == false)
 
+if($_GET[''] == null) 
+{
+  header("Location: ../myraerror/myraerror.php");
+}
+
 if(isset($_GET['sectionNumber']) && checkReportToken($pdo, $_SESSION['userid'], $_GET['sectionNumber']) == false) 
 {
     header("Location: Section.php?warning");

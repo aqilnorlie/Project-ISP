@@ -16,7 +16,7 @@ $(function () {
       "bSort":true,
       "bPaginate":true,
       "sPaginationType":"full_numbers",
-       "iDisplayLength": 5
+       "iDisplayLength": 10
     });
   });
 

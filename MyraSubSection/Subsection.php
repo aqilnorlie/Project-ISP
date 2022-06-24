@@ -178,8 +178,7 @@ try
                             // The value we usually set is the primary key
                             ?>"><?php echo $output ["sectionNumber"] . " - " . $output ["sectionTitleMalay"] . " / " . $output ["sectionTitleEnglish"];?></option>
                           <?php }?>
-
-                      </select>
+                        </select>
                       </div>
                     </div>
                   </div>
@@ -248,12 +247,11 @@ try
                // $dsn = "mysql:host=$host;dbname=$dbname1;";
 
                // $pdo = new PDO($dsn, $username, $password);
-                 $sql = "SELECT t.sectionNumber, t.sectionTitleMalay, t.sectionTitleEnglish, ss.subSectionTitleMalay, ss.subSectionTitleEnglish, ss.createdAt, ss.updatedAt, d.dataStatusId, ss.token, d.dataStatusTitle FROM myra.myrasubsection ss 
-                 JOIN myra.datastatus d 
-                 ON ss.dataStatusId = d.dataStatusId 
+                 $sql = "SELECT t.sectionNumber, t.sectionTitleMalay, t.sectionTitleEnglish, ss.subSectionTitleMalay, ss.subSectionTitleEnglish, ss.createdAt, ss.updatedAt, d.dataStatusId, ss.token, d.dataStatusTitle 
+                 FROM myra.myrasubsection ss 
+                 JOIN myra.datastatus d ON ss.dataStatusId = d.dataStatusId 
                  JOIN myra.myrasection t ON t.sectionId = ss.sectionId
-                 JOIN classbook_backup_jengka.vw_staff_phg c 
-                 ON c.USER_ID = ss.USER_ID";
+                 JOIN classbook_backup_jengka.vw_staff_phg c ON c.USER_ID = ss.USER_ID";
 
                   $stmt = $pdo->prepare($sql);
                   $stmt->execute();
@@ -265,7 +263,7 @@ try
                   
                   <tr>
                     <td><?php echo $data['sectionNumber'] . " - " . $data["sectionTitleMalay"] . " / " . $data["sectionTitleEnglish"];?></td>
-                    <td><?php echo $data['subSectionTitleMalay'];?></td>
+                    <td class="ssmy"><?php echo $data['subSectionTitleMalay'];?></td>
                     <td><?php echo $data['subSectionTitleEnglish'];?></td>
                     <!-- <td><?php //echo $data['subSectionDescription'];?></td> -->
                     <!-- <td><?php //echo $data['USER_ID'];?></td> -->
@@ -292,8 +290,8 @@ try
                       <button type="submit" name="view" class="f"><i class="fas fa-eye" title="View sub-section"></i></button>
                     </form>
                     <!-- delete button -->
-                    <form action="deletesubsection.php" method="post" style="margin-block-end: 0.3em;">
-                      <button type="submit" value="<?= $data['token']; ?>" name="delete_section" class="delete"><i class="fas fa-trash" title="Delete section"></i></button>
+                    <form action="subsection.php" id="deleteButton" method="post" style="margin-block-end: 0.3em;">
+                      <button type="submit" class="delete-button delete" data-toggle="modal" data-target="#confirm-edit"><i class="fas fa-trash" title="Delete sub-section"></i></button>
                     </form>
                     </td>
                   </tr>
@@ -359,18 +357,90 @@ try
 
   <!-- END: modal if token url diubah (token tak wujuk dlm database) -->
 
+  <!-- START: modal ask to confirm delete data -->
+  <div class="modal fade" id="confirmEditData" tabindex="-1" role="dialog" aria-labelledby="confirmEditDataLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-warning">
+            
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Confirm Delete</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>                    
+                </div>
+                <form action="deletesubsection.php" method="POST">
+                  <div class="modal-body">
+                      <input type="hidden" name="ssmy" id="delete_id">
+                      <p>Are you sure you want to delete this sub-section? <br> <b>All available term(s) under this sub-section will also be deleted</b>.</p>
+                      <p>Do you want to proceed?</p>
+                      <!--<p class="debug-url"></p>-->
+                  </div>
+                  
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                      <button type="submit" name="delete_data" class="btn btn-danger">Yes</button>
+                      <!-- <a class="btn btn-danger btn-ok" onclick="window.location='deletesection.php'">Yes</a> -->
+                  </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- END: modal ask to confirm delete data -->
+
+    <!-- START: modal success message delete data -->
+    <div class="modal fade" id="modal-delete">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-success">
+        <div class="modal-header">
+          <h4 class="modal-title">Success</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <p>The sub-section has been successfully deleted.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+   <!-- END: modal success message delete data -->
+
+  <!-- START: unsuccessful delete modal -->
+  <div class="modal fade" id="deletemodal">
+      <div class="modal-dialog">
+        <div class="modal-content bg-blue">
+          <div class="modal-header">
+            <h4 class="modal-title">Notice</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span></button>
+          </div>
+          <div class="modal-body">
+            <p>Unsuccessful sub-section deletion.</p>
+          </div>
+          <div class="modal-footer justify-content-between">
+            <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- END: unsuccessful delete modal -->
+
   <!-- START: modal if inserted ss already exists -->
 
   <div class="modal fade" id="modal-warning2">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title">Warning</h4>
+          <h4 class="modal-title">Already Exist</h4>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span></button>
         </div>
         <div class="modal-body">
-          <p>Inserted sub-section already exists. Please insert a new sub-section.</p>
+          <p>Inserted sub-section already exist. Please insert a new sub-section.</p>
         </div>
         <div class="modal-footer justify-content-between">
           <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
@@ -382,6 +452,50 @@ try
   </div>
 
   <!-- END: modal if inserted ss already exists -->
+
+        <!-- START: successful add ss -->
+  <div class="modal fade" id="successaddss">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-blue">
+          <div class="modal-header">
+            <h4 class="modal-title">Notice</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span></button>
+          </div>
+          <div class="modal-body">
+            <p>Sub-section has been <b>added</b> successfully.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- END: successful add ss -->
+
+  <!-- START: edit section success -->
+  <div class="modal fade" id="successeditss">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-blue">
+          <div class="modal-header">
+            <h4 class="modal-title">Notice</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span></button>
+          </div>
+          <div class="modal-body">
+            <p>Sub-section has been <b>edited</b> successfully.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- END: edit section success -->
 
   <!-- END: bootstrap modal -->
 
@@ -473,7 +587,7 @@ $(function () {
       "bSort":true,
       "bPaginate":true,
       "sPaginationType":"full_numbers",
-       "iDisplayLength": 5
+       "iDisplayLength": 10
     });
   });
 </script>
@@ -516,6 +630,61 @@ tinymce.init({
     </script>
 <?php } ?>
 <!-- END: warning2 modal -->
+
+<!-- START: script for deleted data modal -->
+<?php if (isset($_GET['delete'])){ ?>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $("#modal-delete").modal("show");
+    });
+    </script>
+<?php } ?>
+<!-- END: script for deleted data modal -->
+
+<!-- START: script for unsuccessful delete modal -->
+<?php if (isset($_GET['notdelete'])){ ?>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $("#deletemodal").modal("show");
+    });
+    </script>
+<?php } ?>
+<!-- END: script for unsuccessful delete modal -->
+
+<!-- START: success add ss -->
+<?php if (isset($_GET['successaddss'])){ ?>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $("#successaddss").modal("show");
+    });
+    </script>
+<?php } ?>
+<!-- END: success add ss -->
+
+<!-- START: success edit section -->
+<?php if (isset($_GET['successeditss'])){ ?>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $("#successeditss").modal("show");
+    });
+    </script>
+<?php } ?>
+<!-- END: success edit section -->
+
+<script>
+$(document).ready(function () {
+
+    $('.delete-button').click(function (e) {
+        e.preventDefault();
+
+        var ssmy = $(this).closest('tr').find('.ssmy').text();
+        // console.log(secNum);
+        $('#delete_id').val(ssmy);
+        $('#confirmEditData').modal('show');
+
+    });
+  });
+  </script>
 
 </body>
 </html>

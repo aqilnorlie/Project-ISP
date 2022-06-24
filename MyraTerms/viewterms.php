@@ -45,6 +45,11 @@ session_start();
 
 <?php
 
+if($_GET[''] == null) 
+{
+  header("Location: ../myraerror/myraerror.php");
+}
+
 // kalau url token ditukar (token yg takde dlm database)
 // if(isset($_GET['id'])            && checkReportToken($dbh, $_SESSION['userid'], $_GET['id']) == false)
 
