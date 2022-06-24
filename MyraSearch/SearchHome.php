@@ -38,11 +38,11 @@
   </div>
 
   <!-- Navbar -->
-  <nav class="main-header navbar navbar-expand navbar-white navbar-light" style= margin-left:0>
+  <nav class="main-header navbar navbar-expand navbar-blue navbar-light" style= margin-left:0>
     <!-- Left navbar links -->
     <ul class="navbar-nav ml-auto">
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="../MyraLogin/login.php" class="nav-link">Login</a>
+        <a href="../MyraLogin/login.php" class="nav-link" style="font-size:20px; background-color:yellow; border-radius:20px;"><b>Login</b></a>
       </li>
     </ul>
 
@@ -57,15 +57,15 @@
 
             <!-- Main content -->
             <section class="content" style= height:1000px>
-                <div class="container-fluid">
-                    <h2 class="text-center display-4">Search</h2>
+                <div class="container-fluid"><br>
+                    <h2 class="text-center display-4">Myra Search</h2>
                     <div class="row">
                         <div class="col-md-8 offset-md-2">
-                            <form action="simple-results.html">
+                            <form >
                                 <div class="input-group">
-                                    <input type="search" class="form-control form-control-lg" placeholder="Type your keywords here">
+                                    <input type="search" name = "search" class="form-control form-control-lg" placeholder="Type your keywords here">
                                     <div class="input-group-append">
-                                        <button type="submit" class="btn btn-lg btn-default">
+                                        <button id="test"type="submit" class="btn btn-lg btn-default">
                                             <i class="fa fa-search"></i>
                                         </button>
                                     </div>
@@ -74,6 +74,60 @@
                         </div>
                     </div>
                 </div>
+                
+              
+             
+              <!-- /.card-header -->
+              <div class="card-body table1">
+
+                    <table id="example2" class="table table-bordered table-hover table2">
+                      <thead>
+                      <tr>
+                        <th>No</th>
+                        <th>Staff No</th>
+                        <th>Name</th>
+                        <th>Roles</th>
+                        <th>Date</th>
+                        <th>Update</th>
+                        <th>Action</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                    
+                        <tr>
+                        <td>1</td>
+                        <td>123</td>
+                        <td>aqil</td>
+                        <td>test</td>
+                        <td>test</td>
+                        <td>
+                        
+                        </td>
+                        <td style="text-align:center;">
+
+                        <form action="AdministratorEdit.php?assignId=<?= $data['token']; ?>"  method="post" style="margin-block-end: 0.3em;">
+                          <button type="submit" name="edit" class="f"><i class="fas fa-edit" title="Edit User"></i></button>
+                        </form>
+                        </td>
+                      </tr>
+                      
+                      </tbody>
+                      <tfoot>
+                      <tr>
+                        <th>No</th>
+                        <th>Staff No</th>
+                        <th>Name</th>
+                        <th>Roles</th>
+                        <th>Date</th>
+                        <th>Update</th>
+                        <th>Action</th>
+                      </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+              <!-- /.card-body -->
+            </div>
+
             </section>
     </div>
   <!-- /.content-wrapper -->
@@ -95,6 +149,7 @@
 
 <!-- jQuery -->
 <script src="../plugins/jquery/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <!-- jQuery UI 1.11.4 -->
 <script src="../plugins/jquery-ui/jquery-ui.min.js"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
@@ -116,7 +171,7 @@
 <script src="../plugins/moment/moment.min.js"></script>
 <script src="../plugins/daterangepicker/daterangepicker.js"></script> 
 <!-- Tempusdominus Bootstrap 4 -->
-<script src="../plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script> -->
+<script src="../plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script> 
 <!-- Summernote -->
 <script src="../plugins/summernote/summernote-bs4.min.js"></script> -->
 <!-- overlayScrollbars -->
@@ -127,5 +182,52 @@
 <script src="../dist/js/demo.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="../dist/js/pages/dashboard.js"></script>
+
+<!-- DataTables  & Plugins -->
+<script src="../plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="../plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="../plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="../plugins/jszip/jszip.min.js"></script>
+<script src="../plugins/pdfmake/pdfmake.min.js"></script>
+<script src="../plugins/pdfmake/vfs_fonts.js"></script>
+<script src="../plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="../plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+
+<script>
+$(function () {
+  $("#example1").DataTable({
+    "responsive": true, "lengthChange": false, "autoWidth": false,
+    "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+  }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+  $('#example2').DataTable({
+    "paging": true,
+    "lengthChange": false,
+    "searching": false,
+    "ordering": true,
+    "info": true,
+    "autoWidth": false,
+    "responsive": true,
+    "bJQueryUI":true,
+    "bSort":true,
+    "bSortable": true,
+    "bPaginate":true,
+    "sPaginationType":"full_numbers",
+      "iDisplayLength": 5
+  });
+});
+</script>
+
+<script>
+$(document).ready(function(){
+          $("#test").click(function(){
+             $(".card-body table1").hide();
+        });
+ });
+<script>
+
 </body>
 </html>
