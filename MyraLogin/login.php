@@ -34,9 +34,9 @@
           <span aria-hidden="true">&times;</span></button>
       </div>
       <div class="modal-body" style="text-align:center">
-        <p><b>Incorrect login credentials.</b> <br> Please enter the correct User ID and password.</p>
+        <p><b>Incorrect login credentials.</b> <br> Make sure the correct User ID and password is entered.</p>
       </div>
-      <div class="modal-footer justify-content-between">
+      <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
       </div>
     </div>
@@ -49,7 +49,7 @@
 
 <div class="login-box">
   <div class="login-logo">
-    <a href="login.php"><b>MYRA</b>UITM</a>
+    <a href="login.php"><b>MyRA </b>UiTM</a>
   </div>
   <!-- /.login-logo -->
   <div class="card">
@@ -75,19 +75,19 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-8">
-            <div class="icheck-primary">
+          <!-- <div class="col-8"> -->
+            <!-- <div class="icheck-primary">
               <input type="checkbox" id="remember">
               <label for="remember">
                 Remember Me
               </label>
-            </div>
-          </div>
+            </div> -->
+          <!-- </div> -->
           <!-- /.col -->
-          <div class="col-4">
+          <!-- <div class="col-4"> -->
             <!--<button type="submit" class="btn btn-primary btn-block">Sign In</button>-->
             <input type="submit" name="btnLog" class="btnLog" value="Log In">
-          </div>
+          <!-- </div> -->
           <!-- /.col -->
         </div>
       </form>

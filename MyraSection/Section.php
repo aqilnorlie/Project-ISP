@@ -118,8 +118,7 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
     </a>
 
     <!-- Sidebar -->
-
-
+    <?php include("../MyraSidebar/sidebar.php")?>
     <!-- /.sidebar -->
   </aside>
 

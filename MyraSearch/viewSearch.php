@@ -10,7 +10,7 @@ session_start();
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Edit Term</title>
+  <title>Search Result Details</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -44,183 +44,110 @@ session_start();
 <body class="hold-transition sidebar-mini layout-fixed">
 
 <?php
-
-if($_GET['termIdToken'] == null) 
-{
-  header("Location: ../myraerror/myraerror.php");
-}
-
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%111
+// if($_GET['searchToken'] == null) 
+// {
+//   header("Location: ../myraerror/myraerror.php");
+// }
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%111
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 // kalau url token ditukar (token yg takde dlm database)
 // if(isset($_GET['id'])            && checkReportToken($dbh, $_SESSION['userid'], $_GET['id']) == false)
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%111
+// if(isset($_GET['searchToken']) && checkReportToken($pdo, $_GET['searchToken']) == false) 
+// {
+//     // $$$$$$$$$$$$$$$  KENA BUAT MODAL YG NI $$$$$$$$$$$$$$$
+//     header("Location: searchhome.php?warning");
+// } 
 
-if(isset($_GET['termIdToken']) && checkReportToken($pdo, $_SESSION['userid'], $_GET['termIdToken']) == false) 
-{
-    header("Location: terms.php?warning");
-} 
-
-function checkReportToken($pdo, $userid, $token)
-{
-    $found = false;
-    $data = [":userid" => $userid, ":token" => $token];
-    $sql = "SELECT token FROM myraterm WHERE USER_ID = :userid AND BINARY token = :token";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute($data);
-    $rowCount = $stmt->rowCount();
-    if($rowCount > 0)
-    {
-        $found = true;    
-    }
+// function checkReportToken($pdo, $token)
+// {
+//     $found = false;
+//     $data = [":token" => $token];
+//     $sql = "SELECT token FROM myraterm WHERE BINARY token = :token";
+//     $stmt = $pdo->prepare($sql);
+//     $stmt->execute($data);
+//     $rowCount = $stmt->rowCount();
+//     if($rowCount > 0)
+//     {
+//         $found = true;    
+//     }
     
-    return $found;
-}
-?>
+//     return $found;
+// }
+// ?>
+<!-- // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%111
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
 
-<div class="wrapper">
-
-  <!-- Preloader -->
-  <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="../dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
-  </div>
-
-  <!-- Navbar -->
-  <nav  class="main-header navbar navbar-expand navbar-white navbar-light">
-    <!-- Left navbar links -->
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-      </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="../MyraDashboard/index.php" class="nav-link">Home</a>
-      </li>
-    </ul>
-
-    <!-- Right navbar links -->
-    <ul class="navbar-nav ml-auto">
-      
-
-      <!-- Notifications Dropdown Menu -->
-      <li class="nav-item dropdown">
-        <a class="nav-link" data-toggle="dropdown" href="#">
-          <i class="far fa-bell"></i>
-          <span class="badge badge-warning navbar-badge">15</span>
-        </a>
-        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <span class="dropdown-item dropdown-header">15 Notifications</span>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-envelope mr-2"></i> 4 new messages
-            <span class="float-right text-muted text-sm">3 mins</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-users mr-2"></i> 8 friend requests
-            <span class="float-right text-muted text-sm">12 hours</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-file mr-2"></i> 3 new reports
-            <span class="float-right text-muted text-sm">2 days</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
-        </div>
-      </li>
-      
-    </ul>
-  </nav>
-  <!-- /.navbar -->
-
-  <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <!-- Brand Logo -->
-    <a href="../MyraDashboard/index.php" class="brand-link">
-      <img src="../dist/img/search-modified.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">MYRA</span>
-    </a>
-
-    <!-- Sidebar -->
-    <?php include("../MyraSidebar/sidebar.php")?>
-    <!-- /.sidebar -->
-  </aside>
-
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1>Edit Term</h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="../MyraDashboard/index.php">Home</a></li>
-              <li class="breadcrumb-item active">Edit Term</li>
-            </ol>
-          </div>
-        </div>
-      </div><!-- /.container-fluid -->
-    </section>
-
-    <!-- Main content -->
-    <section class="content">
-      <div class="container-fluid">
-        <div class="row">
-          <!-- left column -->
-          <div class="col-md-6">
-            <!-- general form elements -->
-            <div style="width:1250px" class="card card-primary">
-              <div class="card-header">
-                <h3 class="card-title">Edit Term</h3>
-              </div>
-              <!-- /.card-header -->
-
-              <!-- form start -->
-
-              <?php
-              if(isset($_GET['termIdToken']))
+<?php
+              if(isset($_GET['searchToken']))
               {
-                $termIdToken = $_GET['termIdToken'];
+                $searchToken = $_GET['searchToken'];
+                $data = [':searchToken' => $searchToken];
 
-                $query = "SELECT ss.subSectionTitleMalay, ss.subSectionTitleEnglish, s.sectionNumber, s.sectionTitleMalay, s.sectionTitleEnglish, t.termTitleMalay, t.termTitleEnglish, t.termDescription, t.dataStatusId, t.token FROM myraterm t
-                JOIN myrasubsection ss ON ss.subSectionId = t.subSectionId
-                JOIN myrasection s ON s.sectionId = ss.sectionId
-                WHERE t.token=:termIdToken";
-                $statement = $pdo->prepare($query);
-                $data = [':termIdToken' => $termIdToken];
+                // $query = "SELECT * FROM myraterm WHERE token=:termId";
+
+                // $query = "SELECT ss.subSectionTitleMalay, ss.subSectionTitleEnglish, t.termTitleMalay, t.termTitleEnglish, t.termDescription, t.createdAt, t.updatedAt, c.USER_NAME, t.token, s.sectionNumber, s.sectionTitleMalay, s.sectionTitleEnglish, d.dataStatusTitle FROM myraterm t
+                // JOIN myrasubsection ss ON t.subSectionId = ss.subSectionId
+                // JOIN dataStatus d ON d.dataStatusId = t.dataStatusId
+                // JOIN classbook_backup_jengka.vw_staff_phg c ON c.USER_ID = t.USER_ID
+                // JOIN myrasection s ON s.sectionId = ss.sectionId
+                // WHERE t.token=:termIdToken LIMIT 1";
+
+                $sqlsearch = "SELECT s.sectionNumber, s.sectionTitleMalay, s.sectionTitleEnglish, s.sectionDescription, ss.subSectionTitleMalay, ss.subSectionTitleEnglish, ss.subSectionDescription, t.termTitleMalay, t.termTitleEnglish, t.termDescription, t.token 
+                FROM 
+                    myraterm t 
+                JOIN 
+                    myrasubsection ss ON t.subSectionId = ss.subSectionId 
+                JOIN 
+                    myrasection s ON s.sectionId = ss.sectionId 
+                WHERE 
+                    t.token = :searchToken";
+
+                $statement = $pdo->prepare($sqlsearch);
                 $statement->execute($data);
 
                 $result = $statement->fetch(PDO::FETCH_ASSOC); //PDO::FETCH_ASSOC
-                // $_SESSION["subSectionTitleMalayNew"]=$result['subSectionTitleMalay'];  
-                //  $_SESSION["subSectionTitleMalayNew"]=$result['subSectionTitleMalay'];
-                $_SESSION["termToken"] = $termIdToken;
-                $_SESSION["sectionNumberTerm"]=$result['sectionNumber'];
-                $_SESSION["subSectionTitleMalayTerm"]=$result['subSectionTitleMalay'];
+                // $_SESSION["sectionNumberNew"]=$result['sectionNumber'];
               }
               ?>
 
-              <form action="peditterms.php" method="POST">
+                  <form style="padding-right:50px;padding-left:50px;padding-top:10px">
+                    <div class="card-body">
+                      <div class="form-group">
+                        <label for="sectionNumber">Section</label>
+                        <input type="text" class="form-control" id="sectionNumber" name="sectionNumber" disabled value="<?= $result["sectionNumber"] . " - " . $result["sectionTitleMalay"] . " / " . $result["sectionTitleEnglish"]; ?>">
+                      </div>
+                    </div>
 
-                <!-- <input type="hidden" name="sectionId" value="<? //= $result['sectionId']; ?>"> -->
+                    <div class="card-body">
+                      <div class="form-group">
+                        <label for="subSectionTitle">Sub-Section Title</label>
+                        <input type="text" class="form-control" id="subSectionTitle" disabled value="<?= $result["subSectionTitleMalay"] . " / " . $result["subSectionTitleEnglish"]; ?>">
+                      </div>
+                    </div>
 
-                <div class="card-body">
-                  <div class="form-group">
-                    <label for="sectionNumber">Section Number</label>
-                    <input type="text" class="form-control" id="sectionNumber" name="sectionNumber" value="<?=  $result["sectionNumber"] . " - " . $result["sectionTitleMalay"] . " / " . $result["sectionTitleEnglish"]; ?>" disabled>
-                  </div>
-                </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="subSectionDescription">Sub-Section Description</label><br>
+                            <textarea name="subSectionDescription" id="myTextarea" cols="150" rows="4">
+                            <?php 
+                            if($result['subSectionDescription'] != NULL) 
+                            { echo $result['subSectionDescription']; } 
+                            else
+                            { echo "---"; } ?>
+                            </textarea>
+                        </div>
+                    </div>
 
-                <div class="card-body">
-                  <div class="form-group">
-                    <label for="subSectionTitleMalay">Sub-Section Title</label>
-                    <!--(TEST) <input type="text" class="form-control" id="sectionNumber" placeholder="SELECT ONE" nama="sectionNumber"> -->
-                    <!-- <div class="card-body"> amik ni dr roles -->
-                      <!-- <div class="form-group"> -->
-                        <!-- <label for="sectionNumber">Section Title (Malay)</label> -->
-
-                        <!-- <input type="text" class="form-control" id="sectionNumber" name="sectionNumber" value="<? //= $result['sectionNumber']; ?>" maxlength="1"> -->
-
-                        <input type="text" class="form-control" id="subSectionTitleMalay" name="subSectionTitleMalay" disabled value="<?= $result["subSectionTitleMalay"] . " / " . $result["subSectionTitleEnglish"]; ?>">
+                    <!-- <div class="card-body">
+                      <div class="form-group">
+                        <label for="subSectionTitleMalay">Sub-Section Description</label>
+                        <input type="text" class="form-control" id="subSectionDescription" name="subSectionDescription" disabled value="<?//= $result["subSectionDescription"]; ?>">
+                      </div>
+                    </div> -->
 
                         <!-- <select class="form-control" name="sectionNumber" id="sectionNumber">
                           <option value="" disabled selected hidden>SELECT ONE</option>
@@ -235,20 +162,27 @@ function checkReportToken($pdo, $userid, $token)
                         </select> -->
                       <!-- </div> -->
                     <!-- </div> -->
-                  </div>
-                </div>
+               
                 <div class="card-body">
+                    <div class="form-group">
+                    <label for="termTitle">Term Title</label>
+                    <input type="text" id="termTitle" class="form-control" disabled value="<?= $result["termTitleMalay"] . " / " . $result["termTitleEnglish"]; ?>">
+                    </div>
+                </div>
+
+                <!-- <div class="card-body">
                   <div class="form-group">
                     <label for="termTitleMalay">Term Title (Malay)</label>
-                    <input type="text" class="form-control" id="termTitleMalay" name="termTitleMalay" value="<?=  $result["termTitleMalay"]; ?>">
+                    <input type="text" class="form-control" id="termTitleMalay" name="termTitleMalay" disabled value="<?//= $result['termTitleMalay']; ?>">
                   </div>
                 </div>
                 <div class="card-body">
                   <div class="form-group">
                     <label for="termTitleEnglish">Term Title (English)</label>
-                    <input type="text" class="form-control" id="termTitleEnglish" name="termTitleEnglish" value="<?= $result['termTitleEnglish']; ?>">
+                    <input type="text" class="form-control" id="termTitleEnglish" name="termTitleEnglish" disabled value="<?//= $result['termTitleEnglish']; ?>">
                   </div>
-                </div>
+                </div> -->
+
                 <!-- <div class="card-body">
                   <div class="form-group">
                     <label for="sectionHistoryProcess">Edit Process Details</label>
@@ -257,31 +191,90 @@ function checkReportToken($pdo, $userid, $token)
                 </div> -->
                 <div class="card-body">
                   <div class="form-group">
-                    <label for="termDescription">Description</label><br>
+                    <label for="termDescription">Term Description</label><br>
                     <textarea name="termDescription" id="myTextarea" cols="150" rows="4">
                       <?php 
                       if($result['termDescription'] != NULL) 
                       { echo $result['termDescription']; } 
                     else
                     { echo "---"; } ?>
-                      </textarea>
+                    </textarea>
                   </div>
                 </div>
 
-                <div style="padding-left:30px; padding-top:20px; padding-bottom:20px; font-size:20px;" class="form-check">
-                    <input type="hidden" name="dataStatus" value="1" />
-                    <input type="checkbox" id="dataStatus" name="dataStatus" value="0" <?php if($result["dataStatusId"] == 0) echo "checked='checked'"; ?> style="width: 15px; height: 15px;">
-                    <label class="form-check-label" for="dataStatus" style="padding-left:5px">Check this box to <b>HIDE</b> the data; Uncheck to <b>UNHIDE</b> the data.</label>
-                </div>
-
-                <!-- /.card-body -->
-                <div class="card-footer">
-                  <input type="submit" name="submit_update" value="Save Edit" class="btn btn-primary">
-                  <a href="Terms.php" class="btn btn-primary">Back to Add Term</a>
+                   <!-- /.card-body -->
+                <div class="card-footer" style="background-color:transparent">
+                  <!-- <a href="editterms.php?termIdToken=<?//= $result['token'];?>" class="btn btn-primary">Edit</a> -->
+                  <a href="searchhome.php" class="btn btn-primary">Back</a>
+                  <!-- <input type="submit" name="submit_update" value="Save Edit" class="btn btn-primary"> -->
                   <!-- <input type="reset" value="Reset" class="btn btn-primary"> -->
                 </div>
               </form>
-            </div>
+
+<div class="wrapper">
+
+  <!-- Preloader -->
+  <div class="preloader flex-column justify-content-center align-items-center">
+    <img class="animation__shake" src="../dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
+  </div>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content">
+    
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <!-- left column -->
+          <div class="col-md-8 offset-md-2">
+            <!-- general form elements -->
+            
+
+              <!-- form start -->
+
+
+
+              <!-- <form action="peditsection.php" method="POST"> -->
+
+            <!-- </div> -->
+
+              <!-- <div class="card-body">
+                <div class="row paddingBottomForInputBahagianBwh">
+                  <div class="form-group col-xs-6 paddingRightForInputBahagianBwh padding-left">
+                    <label for="USER_ID">Added By</label>
+                    <input type="text" class="form-control userName" id="USER_ID" name="USER_ID" disabled value="<?//= $result["USER_NAME"]; ?>">
+                  </div> -->
+                <!-- </div> -->
+
+                <!-- <div class="card-body"> -->
+                  <!-- <div class="form-group col-xs-6 paddingRightForInputBahagianBwh">
+                    <label for="dataStatus">Data Status</label>
+                    <input type="text" class="form-control dataStatus" id="dataStatus" name="dataStatus" disabled value="<?//= $result["dataStatusTitle"]; ?>">
+                  </div> -->
+                <!-- </div> -->
+
+                <!-- <div class="card-body"> -->
+                  <!-- <div class="form-group col-xs-6 paddingRightForInputBahagianBwh">
+                    <label for="createdAt">Created At</label>
+                    <input type="text" class="form-control timestamp" id="createdAt" name="createdAt" disabled value="<?//= $result["createdAt"]; ?>">
+                  </div> -->
+                <!-- </div> -->
+
+                <!-- <div class="card-body" style="padding-bottom:1em"> -->
+                  <!-- <div class="form-group col-xs-6">
+                    <label for="updatedAt">Updated At</label>
+                    <input type="text" class="form-control timestamp" id="updatedAt" name="updatedAt" disabled value="<?//php 
+                    //   if($result["updatedAt"] != NULL) 
+                    //     { echo $result["updatedAt"]; } 
+                    //   else
+                    //   { echo "---"; } ?> "> -->
+                      <?//php //$_SESSION["updatedAt"]; ?>
+                  <!-- </div> -->
+                <!-- </div> -->
+              <!-- </div> -->
+
+             
             
             <!-- add User form elements -->
             <!-- <div style="width:1250px"class="card card-primary">
@@ -402,7 +395,7 @@ function checkReportToken($pdo, $userid, $token)
                 </table>
               </div> -->
               <!-- /.card-body -->
-            </div>
+            <!-- </div> -->
 
           </div>
           <!--/.col (left) -->
@@ -416,7 +409,7 @@ function checkReportToken($pdo, $userid, $token)
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-  <footer class="main-footer">
+  <footer class="main-footer" style="margin-left:0;">
     <strong>MYRA Copyright &copy; 2022-2025.</strong>
     All rights reserved.
     <div class="float-right d-none d-sm-inline-block">
@@ -425,9 +418,9 @@ function checkReportToken($pdo, $userid, $token)
   </footer>
 
   <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
+  <!-- <aside class="control-sidebar control-sidebar-dark"> -->
     <!-- Control sidebar content goes here -->
-  </aside>
+  <!-- </aside> -->
   <!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
@@ -505,13 +498,10 @@ function checkReportToken($pdo, $userid, $token)
 </script>
 
 <script>
-tinymce.init({
-  selector: '#myTextarea',
-  plugins: 'lists image save wordcount table',
-  // plugins: 'image',
-  // menubar: 'file edit view insert format',
-  toolbar: 'undo redo styleselect bold italic alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table tabledelete | tableprops tablerowprops tablecellprops | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol',
-  height: "350"
+    tinymce.init({
+    selector: "#myTextarea",
+    readonly: true,
+    height: "700"   
 });
 
 // tinymce.init({
