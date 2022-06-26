@@ -13,6 +13,9 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Dashboard</title>
 
+  <!-- graf -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
@@ -33,18 +36,15 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
   <!--<link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
    
   <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css"> -->
-
   <link rel="stylesheet" href=
   "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css">
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
-
   <!-- Preloader -->
   <div class="preloader flex-column justify-content-center align-items-center">
     <img class="animation__shake" src="../dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
   </div>
-
   <!-- Navbar -->
   <nav class="main-header navbar navbar-expand navbar-white navbar-light">
     <!-- Left navbar links -->
@@ -56,11 +56,9 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
         <a href="index.php" class="nav-link">Home</a>
       </li>
     </ul>
-
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
       
-
       <!-- Notifications Dropdown Menu -->
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
@@ -92,7 +90,6 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
     </ul>
   </nav>
   <!-- /.navbar -->
-
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
@@ -100,12 +97,10 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
       <img src="../dist/img/search-modified.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">MYRA</span>
     </a>
-
     <!-- Sidebar -->
    <?php  include("../MyraSidebar/sidebar.php")?>
     <!-- /.sidebar -->
   </aside>
-
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -125,7 +120,6 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
-
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
@@ -137,20 +131,15 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
             <?php 
             $sql = "SELECT count(assignId) as total from myraroleassignment 
             where roleId = 1;";
-
             $stmt = $conn1->prepare($sql);
             $stmt->execute();
             $data = $stmt->fetch(PDO::FETCH_ASSOC);
-
             $adminCount = $data["total"];
             
-
             ?>
-
             <div class="small-box bg-info">
               <div class="inner">
                 <h3><?php echo $adminCount; ?></h3>
-
                 <p>Total Administrator</p>
               </div>
               <div class="icon">
@@ -159,26 +148,20 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
              
             </div>
           </div>
-
           <div class="col-lg-3 col-6">
             <!-- small box -->
             <?php 
             $sql = "SELECT count(assignId) as total from myraroleassignment 
             where roleId = 2;";
-
             $stmt = $conn1->prepare($sql);
             $stmt->execute();
             $data = $stmt->fetch(PDO::FETCH_ASSOC);
-
             $MoCount = $data["total"];
             
-
             ?>
-
             <div class="small-box bg-purple">
               <div class="inner">
                 <h3><?php echo $MoCount; ?></h3>
-
                 <p>Total Moderator</p>
               </div>
               <div class="icon">
@@ -186,28 +169,21 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
               </div>
             </div>
           </div>
-
           <!-- ./col -->
           <div class="col-lg-3 col-6">
-
           <?php 
             $sql = "SELECT count(sectionId) as total from myrasection;";
-
             $stmt = $conn1->prepare($sql);
             $stmt->execute();
             $data = $stmt->fetch(PDO::FETCH_ASSOC);
-
             $sectionCount = $data["total"];
             
-
             ?>
-
             <!-- small box -->
             
             <div class="small-box bg-success">
               <div class="inner">
                 <h3><?php echo $sectionCount;?></h3>
-
                 <p>Total Section</p>
               </div>
               <div class="icon">
@@ -216,26 +192,19 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
              
             </div>
           </div>
-
           <div class="col-lg-3 col-6">
-
           <?php 
             $sql = "SELECT count(subSectionId) as total from myrasubsection;";
-
             $stmt = $conn1->prepare($sql);
             $stmt->execute();
             $data = $stmt->fetch(PDO::FETCH_ASSOC);
-
             $subCount = $data["total"];
             
-
             ?>
-
             <!-- small box -->
             <div class="small-box bg-yellow">
               <div class="inner">
                 <h3> <?php echo $subCount; ?></h3>
-
                 <p>Total Sub-Section</p>
               </div>
               <div class="icon">
@@ -244,136 +213,170 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
              
             </div>
           </div>
-
           <div class="col-lg-3 col-6">
             <!-- small box -->
-
             <?php 
             $sql = "SELECT count(termId) as total from myraterm;";
-
             $stmt = $conn1->prepare($sql);
             $stmt->execute();
             $data = $stmt->fetch(PDO::FETCH_ASSOC);
-
             $termCount = $data["total"];
             
-
             ?>
-
             <div class="small-box bg-red">
               <div class="inner">
                 <h3><?php echo $termCount;?></h3>
-
-                <p>Total Terms <br>
-                <?php $month = date('m');
-
-            echo $_SESSION['countsearch'];
-            if ($month =="January" ){
-              $jan= $_SESSION['countsearch'];
-              // echo "<br />December is the month :)";
-            }
-
-
-// $jan = session["countsearch"];
-// // if xValue["januarey"] = $jan;
-
-// }else{
-// xvalue["january"] = 0;
-// }else {
-//   echo "<br /> The month is probably not December";
-// } ?>
-// </p>
+                <p>Total Terms</p>
               </div>
               <div class="icon">
                 <i class="ion ion-stats-bars"></i>
               </div>
-             
+
             </div>
           </div>
-          <br><br>
-
-          <div>
-        
-
-
+          <!-- <br> -->
           
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-                <script src="https://d3js.org/d3.v3.min.js"></script>
-                <script src="http://gopeter.de/misc/c3/c3.js"></script>
-                <script src="http://gopeter.de/misc/c3/c3.css"></script> 
+              <!-- /.card-body -->
+            </div>
+            <div class="card card-success">
+              <div class="card-header">
+                <h3 class="card-title">Monthly Search Report</h3>
 
-                <body>
-                <br><br><br><canvas id="myChart" style="width:400%;max-width:900px"></canvas>
-
-                <br><script>
-    
-
-              <html>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-<body>
-<canvas id="myChart" style="width:100%;max-width:600px"></canvas>
-
-<script>
-
-          
-var xValues = ["January","February","March","April","Mei","Jun","July","August","September","October","November","Disember"];
-                var yValues = [10,8,8,9,9,9,10,11,14,14,15];
-  new Chart("myChart", {
-  type : "line",
-  data: {
-    labels: xValues,
-    datasets: [{
-      fill: false,
-      lineTension: 0,
-      backgroundColor: "rgba(0,0,255,1.0)",
-      borderColor: "rgba(0,0,255,0.1)",
-      data: yValues
-    }]
-
-    
-  },
-  options: {
-    legend: {display: false},
-    scales: {
-      yAxes: [{ticks: {min: 6, max:16}}],
-    }
-  }
-});
-</script>
-
-</body>
-</html>
-
-
-                
-
-
-               
-                
-
-  <head>
-    <script defer src="index.js"></script>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <div>Total of Search:</div>
-    <div class="website-counter"></div>
-  </body>
-</html>
-
-
-
-
-
-          
-          
-          
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                  <!-- <button type="button" class="btn btn-tool" data-card-widget="remove">
+                    <i class="fas fa-times"></i>
+                  </button> -->
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="chart">
+                  <canvas id="myChart" style="min-height: 250px; height: 250px; width: 0px;"></canvas>
+                </div>
+              </div>
 
 
 
 
             <!-- ./col -->
+            <?php
+
+            // 1
+            $sql1 = "SELECT count(searchDateTime) AS total FROM auditSearch WHERE MONTH(searchDateTime) = 1";
+            $stmt1 = $conn1->prepare($sql1);
+            $stmt1->execute();
+            $data1 = $stmt1->fetch(PDO::FETCH_ASSOC);
+            $jan = $data1["total"];
+            // 2
+            $sql2 = "SELECT count(searchDateTime) AS total FROM auditSearch WHERE MONTH(searchDateTime) = 2";
+            $stmt2 = $conn1->prepare($sql2);
+            $stmt2->execute();
+            $data2 = $stmt2->fetch(PDO::FETCH_ASSOC);
+            $feb = $data2["total"];
+            // 3
+            $sql3 = "SELECT count(searchDateTime) AS total FROM auditSearch WHERE MONTH(searchDateTime) = 3";
+            $stmt3 = $conn1->prepare($sql3);
+            $stmt3->execute();
+            $data3 = $stmt3->fetch(PDO::FETCH_ASSOC);
+            $march = $data3["total"];
+            // 4
+            $sql4 = "SELECT count(searchDateTime) AS total FROM auditSearch WHERE MONTH(searchDateTime) = 4";
+            $stmt4 = $conn1->prepare($sql4);
+            $stmt4->execute();
+            $data4 = $stmt4->fetch(PDO::FETCH_ASSOC);
+            $april = $data4["total"];
+            // 5
+            $sql5 = "SELECT count(searchDateTime) AS total FROM auditSearch WHERE MONTH(searchDateTime) = 5";
+            $stmt5 = $conn1->prepare($sql5);
+            $stmt5->execute();
+            $data5 = $stmt5->fetch(PDO::FETCH_ASSOC);
+            $may = $data5["total"];
+            // 6
+            $sql6 = "SELECT count(searchDateTime) AS total FROM auditSearch WHERE MONTH(searchDateTime) = 6";
+            $stmt6 = $conn1->prepare($sql6);
+            $stmt6->execute();
+            $data6 = $stmt6->fetch(PDO::FETCH_ASSOC);
+            $june = $data6["total"];
+            // 7
+            $sql7 = "SELECT count(searchDateTime) AS total FROM auditSearch WHERE MONTH(searchDateTime) = 7";
+            $stmt7 = $conn1->prepare($sql7);
+            $stmt7->execute();
+            $data7 = $stmt7->fetch(PDO::FETCH_ASSOC);
+            $july = $data7["total"];
+            // 8
+            $sql8 = "SELECT count(searchDateTime) AS total FROM auditSearch WHERE MONTH(searchDateTime) = 8";
+            $stmt8 = $conn1->prepare($sql8);
+            $stmt8->execute();
+            $data8 = $stmt8->fetch(PDO::FETCH_ASSOC);
+            $aug = $data8["total"];
+            // 9
+            $sql9 = "SELECT count(searchDateTime) AS total FROM auditSearch WHERE MONTH(searchDateTime) = 9";
+            $stmt9 = $conn1->prepare($sql9);
+            $stmt9->execute();
+            $data9 = $stmt9->fetch(PDO::FETCH_ASSOC);
+            $sep = $data9["total"];
+            // 10
+            $sql10 = "SELECT count(searchDateTime) AS total FROM auditSearch WHERE MONTH(searchDateTime) = 10";
+            $stmt10 = $conn1->prepare($sql10);
+            $stmt10->execute();
+            $data10 = $stmt10->fetch(PDO::FETCH_ASSOC);
+            $oct = $data10["total"];
+            // 11
+            $sql11 = "SELECT count(searchDateTime) AS total FROM auditSearch WHERE MONTH(searchDateTime) = 11";
+            $stmt11 = $conn1->prepare($sql11);
+            $stmt11->execute();
+            $data11 = $stmt11->fetch(PDO::FETCH_ASSOC);
+            $nov = $data11["total"];
+            // 12
+            $sql12 = "SELECT count(searchDateTime) AS total FROM auditSearch WHERE MONTH(searchDateTime) = 12";
+            $stmt12 = $conn1->prepare($sql12);
+            $stmt12->execute();
+            $data12 = $stmt12->fetch(PDO::FETCH_ASSOC);
+            $dec = $data12["total"];
+
+            ?>
+            
+
          </div>
+
+        <canvas id="myChart" style="width:0px;max-width:0px"></canvas>
+
+        <script>
+        var xValues = ["JANUARY","FEBRUARY","MARCH","APRIL","MAY","JUNE","JULY","AUGUST","SEPTEMBER","OCTOBER","NOVEMBER","DECEMBER"];
+        var yValues = [<?php echo $jan; ?>,<?php echo $feb; ?>,<?php echo $march; ?>,<?php echo $april; ?>,<?php echo $may; ?>,<?php echo $june; ?>,<?php echo $july; ?>,<?php echo $aug; ?>,<?php echo $sep; ?>,<?php echo $oct; ?>,<?php echo $nov; ?>,<?php echo $dec; ?>];
+
+        new Chart("myChart", {
+        type: "line",
+        data: {
+            labels: xValues,
+            datasets: [{
+            fill: false,
+            lineTension: 0,
+            backgroundColor: "rgba(0,0,255,1.0)",
+            borderColor: "rgba(0,0,255,0.1)",
+            data: yValues
+            }]
+        },
+        options: {
+            legend: {display: false},
+            scales: {
+            yAxes: [{
+                ticks: {min: 0, max:100},
+                scaleLabel: {
+                    display: true,
+                    labelString: 'NUMBER OF SEARCHES'
+                }}],
+            xAxes: [{
+                scaleLabel: {
+                    display: true,
+                    labelString: 'MONTH'
+                }}]
+            }
+        }
+        });
+        </script>
 
          <?php } else{?>
 
@@ -387,12 +390,12 @@ var xValues = ["January","February","March","April","Mei","Jun","July","August",
               $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
               $sectionCount = $data["total"];
-              
+
 
               ?>
 
               <!-- small box -->
-              
+
               <div class="small-box bg-success">
                 <div class="inner">
                   <h3><?php echo $sectionCount;?></h3>
@@ -402,10 +405,10 @@ var xValues = ["January","February","March","April","Mei","Jun","July","August",
                 <div class="icon">
                   <i class="ion ion-stats-bars"></i>
                 </div>
-              
+
               </div>
             </div>
-         
+
           <div class="col-lg-3 col-6">
 
           <?php 
@@ -416,7 +419,7 @@ var xValues = ["January","February","March","April","Mei","Jun","July","August",
             $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
             $subCount = $data["total"];
-            
+
 
             ?>
 
@@ -430,7 +433,7 @@ var xValues = ["January","February","March","April","Mei","Jun","July","August",
               <div class="icon">
                 <i class="ion ion-stats-bars"></i>
               </div>
-             
+
             </div>
           </div>
 
@@ -445,7 +448,7 @@ var xValues = ["January","February","March","April","Mei","Jun","July","August",
             $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
             $termCount = $data["total"];
-            
+
 
             ?>
 
@@ -458,17 +461,16 @@ var xValues = ["January","February","March","April","Mei","Jun","July","August",
               <div class="icon">
                 <i class="ion ion-stats-bars"></i>
               </div>
-             
+
             </div>
           </div>
 
           <?php } ?>
 
-          
-        <!-- /.row -->
-   
+  <!-- /.row -->
+
         <!-- /.row (main row) -->
-      </div><!-- /.container-fluid -->
+        </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->
   </div>
@@ -480,7 +482,6 @@ var xValues = ["January","February","March","April","Mei","Jun","July","August",
       <b>Version</b> 1.0.0
     </div>
   </footer>
-
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">
     <!-- Control sidebar content goes here -->
@@ -488,7 +489,6 @@ var xValues = ["January","February","March","April","Mei","Jun","July","August",
   <!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
-
 <!-- jQuery -->
 <script src="../plugins/jquery/jquery.min.js"></script>
 <!-- jQuery UI 1.11.4 -->
@@ -497,24 +497,185 @@ var xValues = ["January","February","March","April","Mei","Jun","July","August",
 <script>
   $.widget.bridge('uibutton', $.ui.button)
 </script>
-
-
-
-
-
+<script>
+  $(function () {
+    /* ChartJS
+     * -------
+     * Here we will create a few charts using ChartJS
+     */
+    //--------------
+    //- AREA CHART -
+    //--------------
+    // Get context with jQuery - using jQuery's .get() method.
+    var areaChartCanvas = $('#areaChart').get(0).getContext('2d')
+    var areaChartData = {
+      labels  : ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+      datasets: [
+        {
+          label               : 'Digital Goods',
+          backgroundColor     : 'rgba(60,141,188,0.9)',
+          borderColor         : 'rgba(60,141,188,0.8)',
+          pointRadius          : false,
+          pointColor          : '#3b8bba',
+          pointStrokeColor    : 'rgba(60,141,188,1)',
+          pointHighlightFill  : '#fff',
+          pointHighlightStroke: 'rgba(60,141,188,1)',
+          data                : [28, 48, 40, 19, 86, 27, 90]
+        },
+        {
+          label               : 'Electronics',
+          backgroundColor     : 'rgba(210, 214, 222, 1)',
+          borderColor         : 'rgba(210, 214, 222, 1)',
+          pointRadius         : false,
+          pointColor          : 'rgba(210, 214, 222, 1)',
+          pointStrokeColor    : '#c1c7d1',
+          pointHighlightFill  : '#fff',
+          pointHighlightStroke: 'rgba(220,220,220,1)',
+          data                : [65, 59, 80, 81, 56, 55, 40]
+        },
+      ]
+    }
+    var areaChartOptions = {
+      maintainAspectRatio : false,
+      responsive : true,
+      legend: {
+        display: false
+      },
+      scales: {
+        xAxes: [{
+          gridLines : {
+            display : false,
+          }
+        }],
+        yAxes: [{
+          gridLines : {
+            display : false,
+          }
+        }]
+      }
+    }
+    // This will get the first returned node in the jQuery collection.
+    new Chart(areaChartCanvas, {
+      type: 'line',
+      data: areaChartData,
+      options: areaChartOptions
+    })
+    //-------------
+    //- LINE CHART -
+    //--------------
+    var lineChartCanvas = $('#lineChart').get(0).getContext('2d')
+    var lineChartOptions = $.extend(true, {}, areaChartOptions)
+    var lineChartData = $.extend(true, {}, areaChartData)
+    lineChartData.datasets[0].fill = false;
+    lineChartData.datasets[1].fill = false;
+    lineChartOptions.datasetFill = false
+    var lineChart = new Chart(lineChartCanvas, {
+      type: 'line',
+      data: lineChartData,
+      options: lineChartOptions
+    })
+    //-------------
+    //- DONUT CHART -
+    //-------------
+    // Get context with jQuery - using jQuery's .get() method.
+    var donutChartCanvas = $('#donutChart').get(0).getContext('2d')
+    var donutData        = {
+      labels: [
+          'Chrome',
+          'IE',
+          'FireFox',
+          'Safari',
+          'Opera',
+          'Navigator',
+      ],
+      datasets: [
+        {
+          data: [700,500,400,600,300,100],
+          backgroundColor : ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'],
+        }
+      ]
+    }
+    var donutOptions     = {
+      maintainAspectRatio : false,
+      responsive : true,
+    }
+    //Create pie or douhnut chart
+    // You can switch between pie and douhnut using the method below.
+    new Chart(donutChartCanvas, {
+      type: 'doughnut',
+      data: donutData,
+      options: donutOptions
+    })
+    //-------------
+    //- PIE CHART -
+    //-------------
+    // Get context with jQuery - using jQuery's .get() method.
+    var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
+    var pieData        = donutData;
+    var pieOptions     = {
+      maintainAspectRatio : false,
+      responsive : true,
+    }
+    //Create pie or douhnut chart
+    // You can switch between pie and douhnut using the method below.
+    new Chart(pieChartCanvas, {
+      type: 'pie',
+      data: pieData,
+      options: pieOptions
+    })
+    //-------------
+    //- BAR CHART -
+    //-------------
+    var barChartCanvas = $('#barChart').get(0).getContext('2d')
+    var barChartData = $.extend(true, {}, areaChartData)
+    var temp0 = areaChartData.datasets[0]
+    var temp1 = areaChartData.datasets[1]
+    barChartData.datasets[0] = temp1
+    barChartData.datasets[1] = temp0
+    var barChartOptions = {
+      responsive              : true,
+      maintainAspectRatio     : false,
+      datasetFill             : false
+    }
+    new Chart(barChartCanvas, {
+      type: 'bar',
+      data: barChartData,
+      options: barChartOptions
+    })
+    //---------------------
+    //- STACKED BAR CHART -
+    //---------------------
+    var stackedBarChartCanvas = $('#stackedBarChart').get(0).getContext('2d')
+    var stackedBarChartData = $.extend(true, {}, barChartData)
+    var stackedBarChartOptions = {
+      responsive              : true,
+      maintainAspectRatio     : false,
+      scales: {
+        xAxes: [{
+          stacked: true,
+        }],
+        yAxes: [{
+          stacked: true
+        }]
+      }
+    }
+    new Chart(stackedBarChartCanvas, {
+      type: 'bar',
+      data: stackedBarChartData,
+      options: stackedBarChartOptions
+    })
+  })
+</script>
 <!-- Bootstrap 4 -->
 <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-
 <!-- ChartJS -->
 <script src="../plugins/chart.js/Chart.min.js"></script> 
 <!-- Sparkline -->
 <!--<script src="plugins/sparklines/sparkline.js"></script>
-
 <script src="plugins/jqvmap/jquery.vmap.min.js"></script>
 <script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script> -->
 <!-- jQuery Knob Chart -->
 <!--<script src="plugins/jquery-knob/jquery.knob.min.js"></script>
-
 <script src="plugins/moment/moment.min.js"></script>
 <script src="plugins/daterangepicker/daterangepicker.js"></script> -->
 <!-- Tempusdominus Bootstrap 4 -->
