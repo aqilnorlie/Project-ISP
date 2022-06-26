@@ -105,10 +105,10 @@ if(isset($_POST['btnLog']))
         
         if(checkStaffLogin($conn2, $conn1, $userid) == true) //look for this function in MyrafunctionsLogin.php file
 
-            header("Location: ../MyraDashboard/index.php");
+            header("Location: ../MyraDashboard/report.php");
         else
            
-            header("Location: login.php");
+            header("Location: login.php?warning");
     }
     else if($json['status'] == "false")
     {
