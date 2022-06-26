@@ -205,7 +205,7 @@ session_start();
                    <!-- /.card-body -->
                 <div class="card-footer" style="background-color:transparent">
                   <!-- <a href="editterms.php?termIdToken=<?//= $result['token'];?>" class="btn btn-primary">Edit</a> -->
-                  <a href="searchhome.php" class="btn btn-primary">Back</a>
+                  <a href="index.php" class="btn btn-primary">Back</a>
                   <!-- <input type="submit" name="submit_update" value="Save Edit" class="btn btn-primary"> -->
                   <!-- <input type="reset" value="Reset" class="btn btn-primary"> -->
                 </div>

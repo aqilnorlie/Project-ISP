@@ -103,7 +103,7 @@ session_start();
                     <h2 class="text-center display-4">MyRA Search</h2>
                     <div class="row">
                         <div class="col-md-8 offset-md-2">
-                            <form action="searchhome.php" method="POST">
+                            <form action="index.php" method="POST">
                                 <div class="input-group">
                                     <input type="search" id="keyword" name="keyword" class="form-control form-control-lg" placeholder="Type your keywords here">
                                     <div class="input-group-append">
