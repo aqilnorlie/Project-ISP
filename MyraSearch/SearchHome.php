@@ -124,28 +124,45 @@ session_start();
                 
                 <?php
                 if(isset($_POST["submitsearch"])){
-                  $count=1;
-                  $count++;
-                  $_SESSION['countsearch'] = $count;
+                  // $count=1;
+                  // $count++;
+                  $_SESSION['countsearch']++;
                 
                 if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
                   if($_POST['keyword'] != null)
                   {
                     $keyword = $_POST['keyword'];
-                  }
+                    $newkeyword = str_replace(" ","|",$keyword);
+
+                    $sqlkeyword = "INSERT INTO auditsearch (searchKeyword, searchDateTime) VALUES (:searchKeyword, now())";
+                    $stmtkeyword = $pdo->prepare($sqlkeyword);
+                    $datakeyword = [
+                          ':searchKeyword' => $keyword
+                          
+                    ];
+                    $stmtkeyword->execute($datakeyword);  
+                  
                   // echo $_POST['keyword'];
-                  $newkeyword = str_replace(" ","|",$keyword);
+                  
+                  // $sqlHistory = "INSERT INTO myrasectionhistory (sectionHistoryProcess, USER_ID) VALUES (:sectionHistoryProcess, :USER_ID)";
+                  // $stmtHistory = $pdo->prepare($sqlHistory);
+                  // $data = [
+                  //     ':sectionHistoryProcess' => "ADDED",
+                  //     // ':sectionId' => $_SESSION['sectionNumber'],
+                  //     ':USER_ID' => $_SESSION['userid']
+                  //     // ':sectionId' => $sectionid,
+                  // ];
+                  // $stmtHistory->execute($data);
+
                   // echo $newkeyword; 
-                
                  
-                  
-                  
-                    // echo $test['termTitleMalay'] . "---" . $test['termTitleEnglish'];
+                
+                  // echo $test['termTitleMalay'] . "---" . $test['termTitleEnglish'];
                   // }
                   // if($test)
                   // {echo $test["termTitleMalay"];}else{echo "takde";}
-                }
+                
                 
                 ?>
              
@@ -218,7 +235,7 @@ session_start();
                       </tfoot>
 
                     </table>
-
+                  <?php }} ?>
                   </div>
               <!-- /.card-body -->
             </div>
