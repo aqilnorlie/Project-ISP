@@ -48,9 +48,6 @@
 
   </nav>
   <!-- /.navbar -->
-
- 
-
   <!-- Content Wrapper. Contains page content -->
    <!-- Content Wrapper. Contains page content -->
    <div class="content">
@@ -61,11 +58,11 @@
                     <h2 class="text-center display-4">Myra Search</h2>
                     <div class="row">
                         <div class="col-md-8 offset-md-2">
-                            <form >
+                            <form>
                                 <div class="input-group">
                                     <input type="search" name = "search" class="form-control form-control-lg" placeholder="Type your keywords here">
                                     <div class="input-group-append">
-                                        <button id="test"type="submit" class="btn btn-lg btn-default">
+                                        <button type="submit" class="btn btn-lg btn-default">
                                             <i class="fa fa-search"></i>
                                         </button>
                                     </div>
@@ -74,60 +71,6 @@
                         </div>
                     </div>
                 </div>
-                
-              
-             
-              <!-- /.card-header -->
-              <div class="card-body table1">
-
-                    <table id="example2" class="table table-bordered table-hover table2">
-                      <thead>
-                      <tr>
-                        <th>No</th>
-                        <th>Staff No</th>
-                        <th>Name</th>
-                        <th>Roles</th>
-                        <th>Date</th>
-                        <th>Update</th>
-                        <th>Action</th>
-                      </tr>
-                      </thead>
-                      <tbody>
-                    
-                        <tr>
-                        <td>1</td>
-                        <td>123</td>
-                        <td>aqil</td>
-                        <td>test</td>
-                        <td>test</td>
-                        <td>
-                        
-                        </td>
-                        <td style="text-align:center;">
-
-                        <form action="AdministratorEdit.php?assignId=<?= $data['token']; ?>"  method="post" style="margin-block-end: 0.3em;">
-                          <button type="submit" name="edit" class="f"><i class="fas fa-edit" title="Edit User"></i></button>
-                        </form>
-                        </td>
-                      </tr>
-                      
-                      </tbody>
-                      <tfoot>
-                      <tr>
-                        <th>No</th>
-                        <th>Staff No</th>
-                        <th>Name</th>
-                        <th>Roles</th>
-                        <th>Date</th>
-                        <th>Update</th>
-                        <th>Action</th>
-                      </tr>
-                      </tfoot>
-                    </table>
-                  </div>
-              <!-- /.card-body -->
-            </div>
-
             </section>
     </div>
   <!-- /.content-wrapper -->
@@ -149,7 +92,6 @@
 
 <!-- jQuery -->
 <script src="../plugins/jquery/jquery.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <!-- jQuery UI 1.11.4 -->
 <script src="../plugins/jquery-ui/jquery-ui.min.js"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
@@ -220,14 +162,6 @@ $(function () {
   });
 });
 </script>
-
-<script>
-$(document).ready(function(){
-          $("#test").click(function(){
-             $(".card-body table1").hide();
-        });
- });
-<script>
 
 </body>
 </html>
