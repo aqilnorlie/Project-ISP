@@ -2,11 +2,6 @@
 include('../MyraSubSection/sconnection.php');
 session_start();
 
-// $pageWasRefreshed = isset($_SERVER['HTTP_CACHE_CONTROL']) && $_SERVER['HTTP_CACHE_CONTROL'] === 'max-age=0';
-// if($pageWasRefreshed ) {
-//   $keyword="";
-//   unset($_POST["submitsearch"]);
-// } 
 ?>
 
 <!DOCTYPE html>
@@ -126,7 +121,7 @@ session_start();
                 if(isset($_POST["submitsearch"])){
                   // $count=1;
                   // $count++;
-                  $_SESSION['countsearch']++;
+                  // $_SESSION['countsearch']++;
                 
                 if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
@@ -139,7 +134,6 @@ session_start();
                     $stmtkeyword = $pdo->prepare($sqlkeyword);
                     $datakeyword = [
                           ':searchKeyword' => $keyword
-                          
                     ];
                     $stmtkeyword->execute($datakeyword);  
                   
@@ -352,6 +346,14 @@ $(document).ready(function(){
 // location.reload();
 // </script>';
 // } ?>
+
+<?php
+$pageWasRefreshed = isset($_SERVER['HTTP_CACHE_CONTROL']) && $_SERVER['HTTP_CACHE_CONTROL'] === 'max-age=0';
+if($pageWasRefreshed ) {
+  unset($keyword);
+  unset($newkeyword);
+  unset($_POST["submitsearch"]);
+} ?>
 
 </body>
 </html>
