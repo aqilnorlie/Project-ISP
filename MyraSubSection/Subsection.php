@@ -1,4 +1,6 @@
-<?php include('../MyraSection/sconnection.php');
+<?php 
+
+include("../MyraLogin/connection.php"); 
 
 $sql= "SELECT * from myrasection
 ORDER BY sectionNumber";
@@ -11,7 +13,7 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
 
 try
 {
-    $stmt=$pdo->prepare($sql);
+    $stmt=$conn1->prepare($sql);
     $stmt->execute();
     $results=$stmt->fetchAll();
 }
@@ -40,8 +42,7 @@ try
   <link rel="stylesheet" href=../plugins/fontawesome-free/css/all.min.css>
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-  <!-- Tempusdominus Bootstrap 4 -->
-  <link rel="stylesheet" href="../plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+>
   <!-- iCheck -->
   <link rel="stylesheet" href="../plugins/icheck-bootstrap/icheck-bootstrap.min.css">
   <!-- JQVMap -->
@@ -50,10 +51,7 @@ try
   <link rel="stylesheet" href="../dist/css/adminlte.min.css">
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="../plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
-  <!-- Daterange picker -->
-  <link rel="stylesheet" href="../plugins/daterangepicker/daterangepicker.css">
-  <!-- summernote -->
-  <link rel="stylesheet" href="../plugins/summernote/summernote-bs4.min.css">
+
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css">
   <!-- DataTables -->
@@ -66,11 +64,8 @@ try
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
-  <!-- Preloader -->
-  <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="../dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
-  </div>
-
+<!-- Preloader -->
+  <?php include("../MyraPreloader/preloader.php") ?>
   <!-- Navbar -->
   <nav  class="main-header navbar navbar-expand navbar-white navbar-light">
     <!-- Left navbar links -->
@@ -79,41 +74,13 @@ try
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="../MyraDashboard/index.php" class="nav-link">Home</a>
+        <a href="../MyraDashboard/report.php" class="nav-link">Home</a>
       </li>
     </ul>
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
-      
 
-      <!-- Notifications Dropdown Menu -->
-      <li class="nav-item dropdown">
-        <a class="nav-link" data-toggle="dropdown" href="#">
-          <i class="far fa-bell"></i>
-          <span class="badge badge-warning navbar-badge">15</span>
-        </a>
-        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <span class="dropdown-item dropdown-header">15 Notifications</span>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-envelope mr-2"></i> 4 new messages
-            <span class="float-right text-muted text-sm">3 mins</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-users mr-2"></i> 8 friend requests
-            <span class="float-right text-muted text-sm">12 hours</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-file mr-2"></i> 3 new reports
-            <span class="float-right text-muted text-sm">2 days</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
-        </div>
-      </li>
       
     </ul>
   </nav>
@@ -121,12 +88,7 @@ try
 
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <!-- Brand Logo -->
-    <a href="../MyraDashboard/index.php" class="brand-link">
-      <img src="../dist/img/search-modified.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">MYRA</span>
-    </a>
-
+   
     <!-- Sidebar -->
     <?php include("../MyraSidebar/sidebar.php")?>
     <!-- /.sidebar -->
@@ -184,21 +146,17 @@ try
                   </div>
                 </div>
 
-                
-                    
-                <!-- <input type="hidden" name="sectionId" value="<?php //$results['sectionNumber'];?>"> -->
-                  
 
                 <div class="card-body">
                   <div class="form-group required">
                     <label for="subSectionTitleMalay">Sub-Section Title (Malay)</label>
-                    <input type="text" class="form-control" id="subSectionTitleMalay" name="subSectionTitleMalay" required>
+                    <input type="text" class="form-control" id="subSectionTitleMalay" name="subSectionTitleMalay" required autocomplete="off">
                   </div>
                 </div>
                 <div class="card-body">
                   <div class="form-group required">
                     <label for="subSectiontitleEnglish">Sub-Section Title (English)</label>
-                    <input type="text" class="form-control" id="subSectiontitleEnglish" name="subSectionTitleEnglish" required>
+                    <input type="text" class="form-control" id="subSectiontitleEnglish" name="subSectionTitleEnglish" required autocomplete="off">
                   </div>
                 </div>
                 <div class="card-body">
@@ -227,8 +185,6 @@ try
                     <th>Section Number</th>
                     <th>Sub-Section Title (Malay)</th>
                     <th>Sub-Section Title (English)</th>
-                    <!-- <th>Section Description</th> -->
-                    <!-- <th>USER_ID</th> -->
                     <th>Created At</th>
                     <th>Updated At</th>
                     <th>Data Status</th>
@@ -238,25 +194,17 @@ try
                   <tbody>
                     
                   <?php
-                      //database connect
-                   // $host = 'localhost';
-                  // $dbname1 = 'myra';
-                   // $username = 'root';
-                  // $password = '';
-
-               // $dsn = "mysql:host=$host;dbname=$dbname1;";
-
-               // $pdo = new PDO($dsn, $username, $password);
+                  
                  $sql = "SELECT t.sectionNumber, t.sectionTitleMalay, t.sectionTitleEnglish, ss.subSectionTitleMalay, ss.subSectionTitleEnglish, ss.createdAt, ss.updatedAt, d.dataStatusId, ss.token, d.dataStatusTitle 
                  FROM myra.myrasubsection ss 
                  JOIN myra.datastatus d ON ss.dataStatusId = d.dataStatusId 
                  JOIN myra.myrasection t ON t.sectionId = ss.sectionId
                  JOIN classbook_backup_jengka.vw_staff_phg c ON c.USER_ID = ss.USER_ID";
 
-                  $stmt = $pdo->prepare($sql);
+                  $stmt = $conn1->prepare($sql);
                   $stmt->execute();
-                            // $d = $pdo->query($sql);               
-                        ?>
+                                         
+                  ?>
                   <?php while($data = $stmt->fetch(PDO::FETCH_ASSOC)) 
                   {
                   ?>
@@ -265,8 +213,6 @@ try
                     <td><?php echo $data['sectionNumber'] . " - " . $data["sectionTitleMalay"] . " / " . $data["sectionTitleEnglish"];?></td>
                     <td class="ssmy"><?php echo $data['subSectionTitleMalay'];?></td>
                     <td><?php echo $data['subSectionTitleEnglish'];?></td>
-                    <!-- <td><?php //echo $data['subSectionDescription'];?></td> -->
-                    <!-- <td><?php //echo $data['USER_ID'];?></td> -->
                     <td><?php echo $data['createdAt'];?></td>
                     <td>
                       <?php 
@@ -282,10 +228,9 @@ try
                     <td style="text-align: center;">
                     
                     <form action="editsubsection.php?subSectionIdToken=<?= $data['token']; ?>" method="post" style="margin-block-end: 0.3em;">
-                      <!-- <a href="editsection.php"><button type="button" class="f"><i class="fas fa-edit" title="Edit section"></i></button></a> -->
                       <button type="submit" name="edit" class="f"><i class="fas fa-edit" title="Edit sub-section"></i></button>
                     </form>
-                      <!-- <a href="viewsubsection.php"><button type="button" class="f"><i class="fas fa-eye" title="View sub section"></i></button></a> -->
+                      
                     <form action="viewsubsection.php?subSectionIdToken=<?= $data['token']; ?>" method="post" style="margin-block-end: 0.3em;">
                       <button type="submit" name="view" class="f"><i class="fas fa-eye" title="View sub-section"></i></button>
                     </form>
@@ -305,8 +250,6 @@ try
                   <th>Section Number</th>
                     <th>Sub-Section Title (Malay)</th>
                     <th>Sub-Section Title (English)</th>
-                    <!-- <th>Section Description</th> -->
-                    <!-- <th>USER_ID</th> -->
                     <th>Created At</th>
                     <th>Updated At</th>
                     <th>Data Status</th>
@@ -499,13 +442,7 @@ try
 
   <!-- END: bootstrap modal -->
 
-  <footer class="main-footer">
-    <strong>MYRA Copyright &copy; 2022-2025.</strong>
-    All rights reserved.
-    <div class="float-right d-none d-sm-inline-block">
-      <b>Version</b> 1.0.0
-    </div>
-  </footer>
+  <?php include("../MyraVersion/version.php") ?>
 
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">
@@ -545,10 +482,7 @@ try
 <script src="../plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- AdminLTE App -->
 <script src="../dist/js/adminlte.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="../dist/js/demo.js"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="../dist/js/pages/dashboard.js"></script>
+
 
 <!-- Bootstrap 4 -->
 <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -602,13 +536,7 @@ tinymce.init({
   height: "350"
 });
 
-// tinymce.init({
-//     selector: '#myTextarea',
-//     width: 600,
-//     height: 200,
-//     plugins: 'lists',
-//     toolbar: 'numlist bullist'
-// });
+
 </script>
 
 <!-- START: script for warning modal -->

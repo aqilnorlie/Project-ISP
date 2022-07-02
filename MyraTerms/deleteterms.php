@@ -1,6 +1,6 @@
 <?php
 
-include('../MyraSection/sconnection.php'); 
+include("../MyraLogin/connection.php");
 session_start();
 
 if($_GET[''] == null) 
@@ -20,16 +20,16 @@ if(isset($_POST['delete_data']))
         ];
 
         $sqlGetSecId = "SELECT termId FROM myraterm WHERE termTitleMalay=:tmy";
-        $stmtGetSecId = $pdo->prepare($sqlGetSecId);
+        $stmtGetSecId = $conn1->prepare($sqlGetSecId);
         $stmtGetSecId->execute($data);
         $result = $stmtGetSecId->fetch(PDO::FETCH_ASSOC);
 
         $query = "DELETE FROM myraterm WHERE termTitleMalay=:tmy";
-        $statement = $pdo->prepare($query);
+        $statement = $conn1->prepare($query);
         $query_execute = $statement->execute($data);
 
         $sqlHistory = "INSERT INTO myratermhistory (termHistoryProcess, termId, USER_ID) VALUES (:termHistoryProcess, :termId, :USER_ID)";
-        $stmtHistory = $pdo->prepare($sqlHistory);
+        $stmtHistory = $conn1->prepare($sqlHistory);
         $data2 = [
             ':termHistoryProcess' => "DELETED",
             ':termId' => $result['termId'],

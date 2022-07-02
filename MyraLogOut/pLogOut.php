@@ -2,5 +2,5 @@
 session_start();
 session_unset();
 session_destroy();
-header("Location:../MyraLogin/login.php");
+header("Location:../index.php");
 ?>

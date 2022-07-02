@@ -1,4 +1,5 @@
-<?php include('../MyraSubSection/sconnection.php');
+<?php 
+include("../MyraLogin/connection.php");
 session_start();
 
 if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
@@ -16,25 +17,11 @@ order by s.sectionNumber ";
 try
 {
 
-  // $statement = $pdo->prepare($query);
-  // // $stmt_username = $pdo->prepare($sql_username);
-  
-  // $statement->execute($data);
-  // // $stmt_username->execute();
-
-  // $result = $statement->fetch(PDO::FETCH_ASSOC);
-
-  // $stmt = $pdo->prepare($sql);
-  //                 $stmt->execute();
-                  
-
-                  
-  //                 <?php while($data = $stmt->fetch(PDO::FETCH_ASSOC)) 
-    $stmt=$pdo->prepare($sql);
+    $stmt=$conn1->prepare($sql);
     $stmt->execute();
     $results=$stmt->fetchAll();
 
-    $stmt_secNum=$pdo->prepare($sql_sectionNumber);
+    $stmt_secNum=$conn1->prepare($sql_sectionNumber);
     $stmt_secNum->execute();
     $secNum = $stmt_secNum->fetchAll();
     
@@ -45,20 +32,8 @@ try
   {
     echo($ex -> getMessage());
   }
-
-  
-  //database connect
- // $host = 'localhost';
-// $dbname1 = 'myra';
- // $username = 'root';
-// $password = '';
-
-// $dsn = "mysql:host=$host;dbname=$dbname1;";
-
-// $pdo = new PDO($dsn, $username, $password);
-
-          // $d = $pdo->query($sql);               
-      ?>
+           
+    ?>
 
 
 <!DOCTYPE html>
@@ -85,10 +60,7 @@ try
   <link rel="stylesheet" href="../dist/css/adminlte.min.css">
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="../plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
-  <!-- Daterange picker -->
-  <link rel="stylesheet" href="../plugins/daterangepicker/daterangepicker.css">
-  <!-- summernote -->
-  <link rel="stylesheet" href="../plugins/summernote/summernote-bs4.min.css">
+
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css">
   <!-- DataTables -->
@@ -101,11 +73,9 @@ try
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
-  <!-- Preloader -->
-  <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="../dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
-  </div>
 
+  <!-- Preloader -->
+  <?php include("../MyraPreloader/preloader.php") ?>
   <!-- Navbar -->
   <nav  class="main-header navbar navbar-expand navbar-white navbar-light">
     <!-- Left navbar links -->
@@ -121,34 +91,6 @@ try
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
       
-
-      <!-- Notifications Dropdown Menu -->
-      <li class="nav-item dropdown">
-        <a class="nav-link" data-toggle="dropdown" href="#">
-          <i class="far fa-bell"></i>
-          <span class="badge badge-warning navbar-badge">15</span>
-        </a>
-        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <span class="dropdown-item dropdown-header">15 Notifications</span>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-envelope mr-2"></i> 4 new messages
-            <span class="float-right text-muted text-sm">3 mins</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-users mr-2"></i> 8 friend requests
-            <span class="float-right text-muted text-sm">12 hours</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-file mr-2"></i> 3 new reports
-            <span class="float-right text-muted text-sm">2 days</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
-        </div>
-      </li>
       
     </ul>
   </nav>
@@ -156,11 +98,7 @@ try
 
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <!-- Brand Logo -->
-    <a href="../MyraDashboard/index.php" class="brand-link">
-      <img src="../dist/img/search-modified.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">MYRA</span>
-    </a>
+  
 
     <!-- Sidebar -->
     <?php include("../MyraSidebar/sidebar.php")?>
@@ -201,15 +139,10 @@ try
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-              
-                <!-- <input autocomplete = "false" name ="hidden" type="text" style= "display:none" > -->
+
                 <div class="card-body">
                   <div class="form-group">
                   <form action="Terms.php" method="post"> 
-                            <!-- <label for="SearchUserID">Search</label>
-                            <input type="search" class="form-control" name="SearchUserID"id="SearchUSerID" placeholder="" required>
-                          </div>
-                        </div> -->
                         
                           <div class="form-group required">
                             <label for="sectionNumber">Section Number</label>
@@ -220,7 +153,7 @@ try
                                 
                                 <?php foreach ($secNum as $output) {?>
                                   <option value="<?php echo $output["sectionId"];
-                                    //The value we usually set is the primary key
+                                   
                                     ?>"><?php echo $output ["sectionNumber"] . " - " . $output["sectionTitleMalay"] . " / " . $output["sectionTitleEnglish"];?></option>
                                   <?php }?>
 
@@ -248,29 +181,18 @@ try
 
                   $data = [":sectionNumber" => $_POST['sectionNumber']];
                   $sql = "SELECT * FROM myrasubsection WHERE sectionId = :sectionNumber";
-                  $stmtsecnum = $pdo->prepare($sql);
+                  $stmtsecnum = $conn1->prepare($sql);
                   $stmtsecnum->execute($data);
                   $sectionNumberDisabled = $_POST['sectionNumber'];
-                  // $rowCount = $stmtsecnum->rowCount();
-                  // if($rowCount > 0)
-                  // $nameUserAdd = "";
-
+   
                   $sql_SecNumDisabled="SELECT * FROM myrasection WHERE sectionId = :sectionNumber";
                   $secId = [":sectionNumber" =>  $sectionNumberDisabled];
-                  $stmtSecNumDisabled = $pdo->prepare($sql_SecNumDisabled);
+                  $stmtSecNumDisabled = $conn1->prepare($sql_SecNumDisabled);
                   $stmtSecNumDisabled->execute($secId);
                   $secNumDisabled = $stmtSecNumDisabled->fetch(PDO::FETCH_ASSOC);
 
-                  // $idUserAdd = "";
-                  //$results=$stmt->fetchAll();
                   $sectionNumber = $stmtsecnum->fetchAll();
-                  // $sectionNumber = $stmtsecnum->fetch(PDO::FETCH_ASSOC);
-                  
-                  // $nameUserAdd = $d['USER_NAME'];
-                  // $idUserAdd = $d['USER_ID'];
-                 
-                  // $_SESSION['idUserAdd'] = $idUserAdd;
-                  // $_SESSION['nameUserAdd'] = $nameUserAdd;
+               
                 }?>
 
             <div style="width:1250px"class="card card-primary">
@@ -293,7 +215,7 @@ try
                     <label for="subSectionTitleMalay">Sub-Section Title</label>
                     <div class="input-group">
                       <div class="custom-file">
-                        <select class="form-control" name="subSectionId" id="subSectionTitleMalay" required>
+                        <select class="form-control" name="subSectionId" id="subSectionTitleMalay" required >
                         <option value="" disabled selected hidden>SELECT SUB SECTION TITLE</option>
                         <?php foreach ($sectionNumber as $output1) {?>
                           <option value="<?php echo $output1["subSectionId"]; ?>"><?php echo $output1["subSectionTitleMalay"] . " / " . $output1["subSectionTitleEnglish"];?></option>
@@ -308,13 +230,13 @@ try
                 <div class="card-body">
                   <div class="form-group required">
                     <label for="termTitleMalay">Term Title (Malay)</label>
-                    <input type="text" class="form-control" id="termTitleMalay" name="termTitleMalay" required>
+                    <input type="text" class="form-control" id="termTitleMalay" name="termTitleMalay" required autocomplete="off">
                   </div>
                 </div>
                 <div class="card-body">
                   <div class="form-group required">
                     <label for="termTitleEnglish">Term Title (English)</label>
-                    <input type="text" class="form-control" id="termTitleEnglish" name="termTitleEnglish" required>
+                    <input type="text" class="form-control" id="termTitleEnglish" name="termTitleEnglish" required autocomplete="off">
                   </div>
                 </div>
                 <div class="card-body">
@@ -345,13 +267,10 @@ try
                     <th>Sub-Section Title</th>
                     <th>Term Title (Malay)</th>
                     <th>Term Title (English)</th>
-                    <!-- <th>Section Description</th> -->
-                    <!-- <th>USER_ID</th> -->
                     <th>Created At</th>
-                    <!-- <th>Updated At</th> -->
                     <th>Data Status</th>
                     <th>Action</th>
-                    <!-- <th>Date</th> -->
+
                    
                   </tr>
                   </thead>
@@ -363,7 +282,7 @@ try
                   JOIN myra.myrasection s ON s.sectionId = ss.sectionId 
                   JOIN classbook_backup_jengka.vw_staff_phg c ON c.USER_ID = t.USER_ID";
 
-                  $stmt = $pdo->prepare($sql);
+                  $stmt = $conn1->prepare($sql);
                   $stmt->execute();
                   ?>
 
@@ -384,10 +303,9 @@ try
                     <td style="text-align: center;">
                     
                     <form action="editterms.php?termIdToken=<?= $data['token']; ?>" method="post" style="margin-block-end: 0.3em;">
-                      <!-- <a href="editsection.php"><button type="button" class="f"><i class="fas fa-edit" title="Edit section"></i></button></a> -->
                       <button type="submit" name="edit" class="f"><i class="fas fa-edit" title="Edit section"></i></button>
                     </form>
-                      <!-- <a href="viewterms.php"><button type="button" class="f"><i class="fas fa-eye" title="View sub section"></i></button></a> -->
+                    
                     <form action="viewterms.php?termIdToken=<?= $data['token']; ?>" method="post" style="margin-block-end: 0.3em;">
                       <button type="submit" name="view" class="f"><i class="fas fa-eye" title="View section"></i></button>
                     </form>
@@ -407,13 +325,10 @@ try
                     <th>Sub-Section Title</th>
                     <th>Term Title (Malay)</th>
                     <th>Term Title (English)</th>
-                    <!-- <th>Section Description</th> -->
-                    <!-- <th>USER_ID</th> -->
                     <th>Created At</th>
-                    <!-- <th>Updated At</th> -->
                     <th>Data Status</th>
                     <th>Action</th>
-                    <!-- <th>Date</th> -->
+                    
                   </tr>
                   </tfoot>
                 </table>
@@ -602,13 +517,7 @@ try
 
   <!-- END: bootstrap modal -->
 
-  <footer class="main-footer">
-    <strong>MYRA Copyright &copy; 2022-2025.</strong>
-    All rights reserved.
-    <div class="float-right d-none d-sm-inline-block">
-      <b>Version</b> 1.0.0
-    </div>
-  </footer>
+  <?php include("../MyraVersion/version.php") ?>
 
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">
@@ -628,30 +537,16 @@ try
 </script>
 <!-- Bootstrap 4 -->
 <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- ChartJS -->
-<script src="../plugins/chart.js/Chart.min.js"></script>
-<!-- Sparkline -->
-<script src="../plugins/sparklines/sparkline.js"></script>
+
 <!-- JQVMap -->
 <script src="../plugins/jqvmap/jquery.vmap.min.js"></script>
 <script src="../plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
-<!-- jQuery Knob Chart -->
-<script src="../plugins/jquery-knob/jquery.knob.min.js"></script>
-<!-- daterangepicker -->
-<script src="../plugins/moment/moment.min.js"></script>
-<script src="../plugins/daterangepicker/daterangepicker.js"></script>
-<!-- Tempusdominus Bootstrap 4 -->
-<script src="../plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-<!-- Summernote -->
-<script src="../plugins/summernote/summernote-bs4.min.js"></script>
+
 <!-- overlayScrollbars -->
 <script src="../plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- AdminLTE App -->
 <script src="../dist/js/adminlte.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="../dist/js/demo.js"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="../dist/js/pages/dashboard.js"></script>
+
 
 <!-- Bootstrap 4 -->
 <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -699,17 +594,11 @@ try
 tinymce.init({
   selector: '#myTextarea',
   plugins: 'lists image save wordcount table',
-  // plugins: 'image',
-  // menubar: 'file edit view insert format',
   toolbar: 'undo redo styleselect bold italic alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table tabledelete | tableprops tablerowprops tablecellprops | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol',
   height: "350"
 });
 
-// tinymce.init({
-//     selector: '#myTextarea',
-//     width: 600,
-//     height: 200,
-// });
+
 </script>
 
 <script type=”text/javascript” src=”https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js”></script>

@@ -1,10 +1,4 @@
 <?php
-///////start: general functions//////
-function nameRoleGreeting($dbh, $userfullname, $roleid)
-{
-    echo "Hi, " . $userfullname . "<br />" . "Role: " . getRoleTitles($dbh, $roleid);
-}
-
 
 
 function generateToken($length)
@@ -65,7 +59,6 @@ function checkStaffLogin($dbh, $dbh3, $userid)
     
     return $found;
 }
-
 
 
 //Insert New User in database

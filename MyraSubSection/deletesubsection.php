@@ -1,6 +1,6 @@
 <?php
 
-include('sconnection.php'); 
+include("../MyraLogin/connection.php");
 session_start();
 
 if($_GET[''] == null) 
@@ -20,16 +20,16 @@ if(isset($_POST['delete_data']))
 
         // get subSectionId
         $sqlGetSecId = "SELECT subSectionId FROM myrasubsection WHERE subSectionTitleMalay=:sstitlemy";
-        $stmtGetSecId = $pdo->prepare($sqlGetSecId);
+        $stmtGetSecId = $conn1->prepare($sqlGetSecId);
         $stmtGetSecId->execute($data);
         $result = $stmtGetSecId->fetch(PDO::FETCH_ASSOC);
 
         $query = "DELETE FROM myrasubsection WHERE subSectionTitleMalay=:sstitlemy";
-        $statement = $pdo->prepare($query);
+        $statement = $conn1->prepare($query);
         $query_execute = $statement->execute($data);
 
         $sqlHistory = "INSERT INTO myrasubsectionhistory (subSectionHistoryProcess, subSectionId, USER_ID) VALUES (:subSectionHistoryProcess, :subSectionId, :USER_ID)";
-        $stmtHistory = $pdo->prepare($sqlHistory);
+        $stmtHistory = $conn1->prepare($sqlHistory);
         $data2 = [
             ':subSectionHistoryProcess' => "DELETED",
             ':subSectionId' => $result['subSectionId'],
@@ -42,17 +42,17 @@ if(isset($_POST['delete_data']))
 
         // delete all terms under sub-section
         $sqlgettermid = "SELECT termId FROM myraterm WHERE subSectionId=:ssid";
-        $stmtgettermid = $pdo->prepare($sqlgettermid);
+        $stmtgettermid = $conn1->prepare($sqlgettermid);
         $stmtgettermid->execute($dataterm);
         $resultterm = $stmtgettermid->fetch(PDO::FETCH_ASSOC);
 
         $querydelterm = "DELETE FROM myraterm WHERE subSectionId=:ssid";
-        $statementdelterm = $pdo->prepare($querydelterm);
+        $statementdelterm = $conn1->prepare($querydelterm);
         $statementdelterm->execute($dataterm);
 
         if($resultterm != null){
             $sqlHistoryterm = "INSERT INTO myratermhistory (termHistoryProcess, termId, USER_ID) VALUES (:termHistoryProcess, :termId, :USER_ID)";
-            $stmtHistoryterm = $pdo->prepare($sqlHistoryterm);
+            $stmtHistoryterm = $conn1->prepare($sqlHistoryterm);
             $data2term = [
                 ':termHistoryProcess' => "DELETED",
                 ':termId' => $resultterm['termId'],
