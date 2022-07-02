@@ -186,8 +186,8 @@ function checkReportToken($pdo, $token)
                         $data = $stmt->fetchAll();
 
                       ?>
-                        <select class="form-control" name="RoleStaff" id="RoleStaff">
-                           <option value="" disabled selected hidden><?php echo $result["roleTitle"] ?></option> 
+                        <select class="form-control" name="RoleStaff" id="RoleStaff" required>
+                           <option value="" disabled selected hidden><?php echo "---".$result["roleTitle"]."---" ?></option> 
                           
                           <?php
                            foreach($data as $d) { ?>
