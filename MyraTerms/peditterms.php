@@ -1,37 +1,18 @@
 <?php
 
-include('../MyraSubSection/sconnection.php');
+
+include("../MyraLogin/connection.php");
 session_start();
 
-//database connect
-// $host = 'localhost';
-// $dbname1 = 'myra';
-// $username = 'root';
-// $password = '';
-
-// $dsn = "mysql:host=$host;dbname=$dbname1;";
-
-// $options = [
-//     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-//     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-//     PDO::ATTR_EMULATE_PREPARES   => false,
-// ];
-
-// try {
-//     $pdo = new PDO($dsn, $username, $password, $options);
-// } catch (\PDOException $e) {
-//     throw new \PDOException($e->getMessage(), (int)$e->getCode());
-// }
 
 if(isset($_POST['submit_update']))
 {
-    // $sectionid = $_POST['sectionId'];
-    // $sectionNumber = $_SESSION["sectionNumberNew"];
+   
     $sectionNumberTerm = $_SESSION["sectionNumberTerm"];
     $subSectionTitleMalayTerm = $_SESSION["subSectionTitleMalayTerm"];
     $termToken = $_SESSION["termToken"];
 
-    // $_POST['sectionNumber'];
+
     $termTitleMalay = $_POST['termTitleMalay'];
     $termTitleEnglish = $_POST['termTitleEnglish'];
     $termDescription = $_POST['termDescription'];
@@ -49,13 +30,12 @@ if(isset($_POST['submit_update']))
             WHERE 
                 token=:token LIMIT 1";
 
-            $statement = $pdo->prepare($query);
+            $statement = $conn1->prepare($query);
 
             $data = [
                 ':termTitleMalay' => $termTitleMalay,
                 ':termTitleEnglish' => $termTitleEnglish,
                 ':termDescription' => $termDescription,
-                // ':sectionId' => $sectionid,
                 ':token' => $termToken,
                 ':dataStatusId' => 0
             ];
@@ -63,12 +43,11 @@ if(isset($_POST['submit_update']))
             $query_execute = $statement->execute($data);
 
             $sqlHistory = "INSERT INTO myratermhistory (termHistoryProcess, USER_ID) VALUES (:termHistoryProcess, :USER_ID)";
-            $stmtHistory = $pdo->prepare($sqlHistory);
+            $stmtHistory = $conn1->prepare($sqlHistory);
             $data = [
                 ':termHistoryProcess' => "EDITED",
-                // ':sectionId' => $_SESSION['sectionNumber'],
                 ':USER_ID' => $_SESSION['userid']
-                // ':sectionId' => $sectionid,
+
             ];
             $stmtHistory->execute($data);
 
@@ -80,7 +59,7 @@ if(isset($_POST['submit_update']))
                 ss.termId = s.termId
             WHERE 
                 ss.createdAt = s.updatedAt";
-            $stmtSectionId = $pdo->prepare($querySecId);
+            $stmtSectionId = $conn1->prepare($querySecId);
             $stmtSectionId->execute();
 
             if($query_execute)
@@ -111,7 +90,7 @@ if(isset($_POST['submit_update']))
             WHERE 
                 token=:token LIMIT 1";
 
-            $statement = $pdo->prepare($query);
+            $statement = $conn1->prepare($query);
 
             $data = [
                 ':termTitleMalay' => $termTitleMalay,
@@ -125,7 +104,7 @@ if(isset($_POST['submit_update']))
             $query_execute = $statement->execute($data);
 
             $sqlHistory = "INSERT INTO myratermhistory (termHistoryProcess, USER_ID) VALUES (:termHistoryProcess, :USER_ID)";
-            $stmtHistory = $pdo->prepare($sqlHistory);
+            $stmtHistory = $conn1->prepare($sqlHistory);
             $data = [
                 ':termHistoryProcess' => "EDITED",
                 // ':sectionId' => $_SESSION['sectionNumber'],
@@ -142,7 +121,7 @@ if(isset($_POST['submit_update']))
                 ss.termId = s.termId
             WHERE 
                 ss.createdAt = s.updatedAt";
-            $stmtSectionId = $pdo->prepare($querySecId);
+            $stmtSectionId = $conn1->prepare($querySecId);
             $stmtSectionId->execute();
 
             if($query_execute)
@@ -168,16 +147,6 @@ if(isset($_POST['submit_update']))
     }
 }
 
-    // $query = "UPDATE myrasection
-    // SET sectionTitleMalay='$titlemy', 
-    // sectionTitleEnglish='$titleeng', 
-    // sectionDescription='$desc' 
-    // WHERE sectionNumber='$sectionnumber'";
 
-    // // $query_run = mysqli_query($con, $query);
-
-    // $stmt = $pdo->query($query);
-
-    // echo 'Section has been updated.';
 
 ?>

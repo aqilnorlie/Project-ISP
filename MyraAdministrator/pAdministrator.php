@@ -31,43 +31,8 @@ session_start();
 
 insertNewUSer($conn1,$acess, $role,$userID);
 header("Location: Administrator.php?successadduser");
-//   exit(0);
-// }
-
-// else 
-// {
-//   header("Location: Administrator.php?failadduser");
-//   exit(0);
-// }
 
 
-
-
-  
-
-
-
-
-/*if(isset( $_POST["btnAddUser"]) ){
-
-   
-
-
-    $role = $_POST["RoleStaff"];
-    $acess = $_POST["checkAccess"];
-    $userID = $_SESSION["idUserAdd"];
-
-    insertNewUSer($conn1,$acess, $role,$userID);
-
-    header("Location: Administrator.php");
-    
-
-  
-}else{
-
-    echo "data not saved";
-
-}*/
 
 ?>
 

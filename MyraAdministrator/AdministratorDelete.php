@@ -5,7 +5,6 @@ include("../MyraLogin/connection.php");
 if(isset($_POST['delete_data'])){
 
   $staffid = $_POST['staffid'];
-  // $assignId = $_GET['assignId'];
   $data = [':staffid' => $staffid];
 
   $sql = "DELETE FROM myraroleassignment WHERE USER_ID=:staffid";

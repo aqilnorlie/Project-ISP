@@ -1,49 +1,16 @@
 <!DOCTYPE
 <html>
 
-
-<head>
-<meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Term</title>
-  
-  <link rel=”stylesheet” href=”https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css” />
-  <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="../plugins/fontawesome-free/css/all.min.css">
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="../https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-  <!-- Tempusdominus Bootstrap 4 -->
-  <link rel="stylesheet" href="../plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
-  <!-- iCheck -->
-  <link rel="stylesheet" href="../plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-  <!-- JQVMap -->
-  <link rel="stylesheet" href="../plugins/jqvmap/jqvmap.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="../dist/css/adminlte.min.css">
-  <!-- overlayScrollbars -->
-  <link rel="stylesheet" href="../plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
-  <!-- Daterange picker -->
-  <link rel="stylesheet" href="../plugins/daterangepicker/daterangepicker.css">
-  <!-- summernote -->
-  <link rel="stylesheet" href="../plugins/summernote/summernote-bs4.min.css">
-  
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css">
-  <!-- DataTables -->
-  <link rel="stylesheet" href="../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-  <link rel="stylesheet" href="../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-  <link rel="stylesheet" href="../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-
-  <link rel="stylesheet" href="../Mystyle.css">
-</head>
-
 <body>
-<div class="sidebar">
+<a href="../MyraDashboard/report.php" class="brand-link" style="background-color: white; ">
+      <img src="../dist/img/MyraBG.png" alt="MyRa Logo"  style="opacity: .7; margin-left:15%; max-width:70%; text-align:center;"><br>
+      <!-- <span class="brand-text font-weight-light">Myra</span> -->
+    </a>
+<div class="sidebar" >
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="../dist/img/lecturerjpg.jpg" class="img-circle elevation-2" alt="User Image" style="width:50px; vertical-align:center;">
+          <img src="../dist/img/lecturerjpg.jpg" class="img-circle elevation-2" alt="User Image" style="width:44px; vertical-align:center;">
         </div>
         <div class="info">
           
@@ -68,7 +35,7 @@
           <?php if ($_SESSION['roleid'] == 1) { ?>
           <li class="nav-item menu-open">
               <li class="nav-item">
-                <a href="../MyraDashboard/index.php" class="nav-link ">
+                <a href="../MyraDashboard/report.php" class="nav-link ">
                   <i class="nav-icon fas fa-home"></i></i>
                   <p>Dashboard</p>
                 </a>
@@ -98,7 +65,7 @@
 
             <li class="nav-item menu-open">
               <li class="nav-item">
-                <a href="../MyraDashboard/index.php" class="nav-link ">
+                <a href="../MyraDashboard/report.php" class="nav-link ">
                   <i class="nav-icon fas fa-home"></i></i>
                   <p>Dashboard</p>
                 </a>

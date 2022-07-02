@@ -1,27 +1,16 @@
 <?php
 
-include('sconnection.php');
 include('../MyraLogin/MyraFunctionLogin.php');
+include("../MyraLogin/connection.php");
 session_start();
 
 $data = $_POST;
 $_SESSION['sectionNumber'] = $data['sectionNumber'];
 $token = generateToken(32);
 
-// validate required fields
-// $errors = [];
-// foreach (['sectionNumber', 'sectionTitleMalay', 'sectionTitleEnglish', 'sectionDescription'] as $field) {
-//     if (empty($data[$field])) {
-//         $errors[] = sprintf('The %s is a required field.', $field);
-//     }
-// }
-// if (!empty($errors)) {
-//     echo implode('<br />', $errors);
-//     exit;
-// }
 
 // check existing section number
-$statement = $pdo->prepare('SELECT * FROM myra.myrasection WHERE sectionNumber = :sectionNumber');
+$statement = $conn1->prepare('SELECT * FROM myra.myrasection WHERE sectionNumber = :sectionNumber');
 $statement->execute(['sectionNumber' => $data['sectionNumber']]);
 
 if (!empty($statement->fetch())) { //header('Location: section.php');?>
@@ -37,7 +26,7 @@ if (!empty($statement->fetch())) { //header('Location: section.php');?>
 }
 
 //insert new data
-$statement = $pdo->prepare(
+$statement = $conn1->prepare(
     'INSERT INTO myrasection (sectionNumber, sectionTitleMalay, sectionTitleEnglish, sectionDescription, USER_ID, token) VALUES (:sectionNumber, :sectionTitleMalay, :sectionTitleEnglish, :sectionDescription, :USER_ID, :token)'
 );
 $addsectionsuccess = $statement->execute([
@@ -49,12 +38,11 @@ $addsectionsuccess = $statement->execute([
     'token' => $token
 ]);
 
-// $secId = $pdo -> lastInsertId();
 
 // START: SECTION HISTORY
 
 $sqlHistory = "INSERT INTO myrasectionhistory (sectionHistoryProcess, USER_ID) VALUES (:sectionHistoryProcess, :USER_ID)";
-$stmtHistory = $pdo->prepare($sqlHistory);
+$stmtHistory = $conn1->prepare($sqlHistory);
 $data = [
     ':sectionHistoryProcess' => "ADDED",
     // ':sectionId' => $_SESSION['sectionNumber'],
@@ -71,29 +59,10 @@ SET
     ss.sectionId = s.sectionId
 WHERE 
     ss.createdAt = s.createdAt";
-$stmtSectionId = $pdo->prepare($querySecId);
+$stmtSectionId = $conn1->prepare($querySecId);
 $stmtSectionId->execute();
 
-// END: SECTION HISTORY
 
-// $sqlSectionId = "SELECT * FROM myrasection WHERE sectionId = :sectionId";
-
-// $dataSectionId = ['sectionId' => $_SESSION['sectionNumber']];
-// $stmtSectionId = $pdo->prepare($sqlSectionId);
-// $stmtSectionId->execute($dataSectionId);
-// $resultSecId = $stmtSectionId->fetch(PDO::FETCH_ASSOC);
-
-// $sqlHistorySecId = "INSERT INTO myrasectionhistory (sectionId) VALUES (:sectionId)";
-// $stmtHistorySecId = $pdo->prepare($sqlHistorySecId);
-// $dataHistorySecId = [
-//     ':sectionId' => $_SESSION['sectionNumber']
-//     // ':sectionId' => $dataSectionId['sectionId'],
-//     // ':USER_ID' => $_SESSION['userid']
-//     // ':sectionId' => $sectionid,
-// ];
-// $stmtHistorySecId->execute($dataHistorySecId);
-
-//echo 'The new section has been successfully inserted into database.';
 
 if($addsectionsuccess)
 {

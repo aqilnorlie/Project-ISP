@@ -1,6 +1,6 @@
 <?php
 
-include('sconnection.php'); 
+include("../MyraLogin/connection.php"); 
 session_start();
 
 if($_GET[''] == null) 
@@ -20,17 +20,17 @@ if(isset($_POST['delete_data']))
         ];
         
         $sqlGetSecId = "SELECT sectionId FROM myrasection WHERE sectionNumber=:sectionNo";
-        $stmtGetSecId = $pdo->prepare($sqlGetSecId);
+        $stmtGetSecId = $conn1->prepare($sqlGetSecId);
         $stmtGetSecId->execute($data);
         $result = $stmtGetSecId->fetch(PDO::FETCH_ASSOC);
         // echo $result['sectionId'];
 
         $query = "DELETE FROM myrasection WHERE sectionNumber=:sectionNo";
-        $statement = $pdo->prepare($query);
+        $statement = $conn1->prepare($query);
         $query_execute = $statement->execute($data);
 
         $sqlHistory = "INSERT INTO myrasectionhistory (sectionHistoryProcess, sectionId, USER_ID) VALUES (:sectionHistoryProcess, :sectionId, :USER_ID)";
-        $stmtHistory = $pdo->prepare($sqlHistory);
+        $stmtHistory = $conn1->prepare($sqlHistory);
         $data2 = [
             ':sectionHistoryProcess' => "DELETED",
             ':sectionId' => $result['sectionId'],
@@ -44,17 +44,17 @@ if(isset($_POST['delete_data']))
         // delete all sub-section under a section to be deleted
         // get subSectionId
         $sqlGetSSId = "SELECT subSectionId FROM myrasubsection WHERE sectionId=:sectionId13";
-        $stmtGetSSId = $pdo->prepare($sqlGetSSId);
+        $stmtGetSSId = $conn1->prepare($sqlGetSSId);
         $stmtGetSSId->execute($data13);
         $resultSS = $stmtGetSSId->fetch(PDO::FETCH_ASSOC);
 
         $querydelss = "DELETE FROM myrasubsection WHERE sectionId=:sectionId13";
-        $statementdelss = $pdo->prepare($querydelss);
+        $statementdelss = $conn1->prepare($querydelss);
         $statementdelss->execute($data13);
 
         if($resultSS != null){
             $sqlHistoryss = "INSERT INTO myrasubsectionhistory (subSectionHistoryProcess, subSectionId, USER_ID) VALUES (:subSectionHistoryProcess, :subSectionId, :USER_ID)";
-            $stmtHistoryss = $pdo->prepare($sqlHistoryss);
+            $stmtHistoryss = $conn1->prepare($sqlHistoryss);
             $data2ss = [
                 ':subSectionHistoryProcess' => "DELETED",
                 ':subSectionId' => $resultSS['subSectionId'],
@@ -68,17 +68,17 @@ if(isset($_POST['delete_data']))
 
         // delete all terms under a section to be deleted
         $sqlgettermid = "SELECT termId FROM myraterm WHERE subSectionId=:subSectionId";
-        $stmtgettermid = $pdo->prepare($sqlgettermid);
+        $stmtgettermid = $conn1->prepare($sqlgettermid);
         $stmtgettermid->execute($dataTerm);
         $resultterm = $stmtgettermid->fetch(PDO::FETCH_ASSOC);
 
         $querydelterm = "DELETE FROM myraterm WHERE subSectionId=:subSectionId";
-        $statementdelterm = $pdo->prepare($querydelterm);
+        $statementdelterm = $conn1->prepare($querydelterm);
         $statementdelterm->execute($dataTerm);
 
         if($resultterm != null){
             $sqlHistoryterm = "INSERT INTO myratermhistory (termHistoryProcess, termId, USER_ID) VALUES (:termHistoryProcess, :termId, :USER_ID)";
-            $stmtHistoryterm = $pdo->prepare($sqlHistoryterm);
+            $stmtHistoryterm = $conn1->prepare($sqlHistoryterm);
             $data2term = [
                 ':termHistoryProcess' => "DELETED",
                 ':termId' => $resultterm['termId'],
@@ -88,27 +88,7 @@ if(isset($_POST['delete_data']))
             $stmtHistoryterm->execute($data2term);
         }
 
-        // START: LAST_INSERT_ID() utk amik sectionId FROM myrasection
-
-        // $sqlGetSecId = "SELECT sectionId FROM myrasection WHERE token=:sectionNo";
-        // $data = [
-        //     ':sectionNo' => $sectionNo
-        // ];
-        // $stmtGetSecId = $pdo->prepare($sqlGetSecId);
-        // $stmtGetSecId->execute($data);
-        // $result = $stmtGetSecId->fetch(PDO::FETCH_ASSOC);
-
-        // // END: LAST_INSERT_ID() utk amik sectionId FROM myrasection
-
-        // $querySecId = 
-        // "UPDATE 
-        //     myrasectionhistory
-        // SET 
-        //     sectionId = :sectionId";
-
-        // $dataGetSecId = [':sectionId' => $result];
-        // $stmtSectionId = $pdo->prepare($querySecId);
-        // $stmtSectionId->execute($dataGetSecId);
+       
 
         if($query_execute)
         {
@@ -128,8 +108,6 @@ if(isset($_POST['delete_data']))
     }
 }
 
-// else {
-//     // header('Location: section.php?notdelete');
-// }
+
 
 ?>

@@ -1,34 +1,16 @@
 <?php
 
-include('sconnection.php'); 
+include("../MyraLogin/connection.php");
 session_start();
 
-//database connect
-// $host = 'localhost';
-// $dbname1 = 'myra';
-// $username = 'root';
-// $password = '';
 
-// $dsn = "mysql:host=$host;dbname=$dbname1;";
-
-// $options = [
-//     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-//     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-//     PDO::ATTR_EMULATE_PREPARES   => false,
-// ];
-
-// try {
-//     $pdo = new PDO($dsn, $username, $password, $options);
-// } catch (\PDOException $e) {
-//     throw new \PDOException($e->getMessage(), (int)$e->getCode());
-// }
 
 if(isset($_POST['submit_updatess']))
 {
-    // $sectionid = $_POST['sectionId'];
+   
     // $sectionId = amik sub section punya token sebenarnya 
     $sectionId = $_SESSION["subSectionToken"];
-    // $_POST['sectionNumber'];
+ 
     $subSectionTitleMalay = $_POST['subSectionTitleMalay'];
     $subSectionTitleEnglish = $_POST['subSectionTitleEnglish'];
     $subSectionDescription = $_POST['subSectionDescription'];
@@ -46,7 +28,7 @@ if(isset($_POST['submit_updatess']))
             WHERE 
                 token=:sectionId LIMIT 1";
 
-            $statement = $pdo->prepare($query);
+            $statement = $conn1->prepare($query);
 
             $data = [
                 ':subSectionTitleMalay' => $subSectionTitleMalay,
@@ -62,12 +44,12 @@ if(isset($_POST['submit_updatess']))
             // START: SS HISTORY
             
             $sqlHistory = "INSERT INTO myrasubsectionhistory (subSectionHistoryProcess, USER_ID) VALUES (:subSectionHistoryProcess, :USER_ID)";
-            $stmtHistory = $pdo->prepare($sqlHistory);
+            $stmtHistory = $conn1->prepare($sqlHistory);
             $data = [
                 ':subSectionHistoryProcess' => "EDITED",
-                // ':sectionId' => $_SESSION['sectionNumber'],
+                
                 ':USER_ID' => $_SESSION['userid']
-                // ':sectionId' => $sectionid,
+               
             ];
             $stmtHistory->execute($data);
 
@@ -79,7 +61,7 @@ if(isset($_POST['submit_updatess']))
                 ss.subSectionId = s.subSectionId
             WHERE 
                 ss.createdAt = s.updatedAt";
-            $stmtSectionId = $pdo->prepare($querySecId);
+            $stmtSectionId = $conn1->prepare($querySecId);
             $stmtSectionId->execute();
 
             // END: SS HISTORY
@@ -88,8 +70,7 @@ if(isset($_POST['submit_updatess']))
             {
                 // $_SESSION['message'] = "Section HAS been updated.";
                 header('Location: Subsection.php?successeditss');
-                // exit(0);
-                // echo 'Section HAS been updated.';
+                
             }
             else
             {
@@ -112,7 +93,7 @@ if(isset($_POST['submit_updatess']))
             WHERE 
                 token=:sectionId LIMIT 1";
 
-            $statement = $pdo->prepare($query);
+            $statement = $conn1->prepare($query);
 
             $data = [
                 ':subSectionTitleMalay' => $subSectionTitleMalay,
@@ -128,7 +109,7 @@ if(isset($_POST['submit_updatess']))
             // START: SS HISTORY
             
             $sqlHistory = "INSERT INTO myrasubsectionhistory (subSectionHistoryProcess, USER_ID) VALUES (:subSectionHistoryProcess, :USER_ID)";
-            $stmtHistory = $pdo->prepare($sqlHistory);
+            $stmtHistory = $conn1->prepare($sqlHistory);
             $data = [
                 ':subSectionHistoryProcess' => "EDITED",
                 // ':sectionId' => $_SESSION['sectionNumber'],
@@ -145,7 +126,7 @@ if(isset($_POST['submit_updatess']))
                 ss.subSectionId = s.subSectionId
             WHERE 
                 ss.createdAt = s.updatedAt";
-            $stmtSectionId = $pdo->prepare($querySecId);
+            $stmtSectionId = $conn1->prepare($querySecId);
             $stmtSectionId->execute();
 
             // END: SS HISTORY
@@ -172,16 +153,5 @@ if(isset($_POST['submit_updatess']))
     }
 }
 
-    // $query = "UPDATE myrasection
-    // SET sectionTitleMalay='$titlemy', 
-    // sectionTitleEnglish='$titleeng', 
-    // sectionDescription='$desc' 
-    // WHERE sectionNumber='$sectionnumber'";
-
-    // // $query_run = mysqli_query($con, $query);
-
-    // $stmt = $pdo->query($query);
-
-    // echo 'Section has been updated.';
 
 ?>
