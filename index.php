@@ -104,7 +104,7 @@ session_start();
                         <div class="col-md-8 offset-md-2">
                             <form action="index.php" method="POST">
                                 <div class="input-group">
-                                    <input type="search" id="keyword" name="keyword" class="form-control form-control-lg" placeholder="Type your keywords here" required autocomplete="off">
+                                    <input type="search" id="keyword" name="keyword" class="form-control form-control-lg" placeholder="Type your keywords here" required autocomplete="on">
                                     <div class="input-group-append">
                                         <button id="test" type="submit" name="submitsearch" class="btn btn-lg btn-default">
                                             <i class="fa fa-search"></i>

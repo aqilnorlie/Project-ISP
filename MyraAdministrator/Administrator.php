@@ -378,7 +378,7 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title">Warning</h4>
+          <h4 class="modal-title">Notice</h4>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span></button>
         </div>

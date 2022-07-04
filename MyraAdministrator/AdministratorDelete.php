@@ -1,6 +1,10 @@
 <?php
 include("../MyraLogin/connection.php");
 
+if($_GET[''] == null) 
+{
+  header("Location: ../myraerror/myraerror.php");
+}
 
 if(isset($_POST['delete_data'])){
 

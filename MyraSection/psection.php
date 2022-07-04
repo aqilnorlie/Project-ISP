@@ -4,6 +4,11 @@ include('../MyraLogin/MyraFunctionLogin.php');
 include("../MyraLogin/connection.php");
 session_start();
 
+if($_GET[''] == null) 
+{
+  header("Location: ../myraerror/myraerror.php");
+}
+
 $data = $_POST;
 $_SESSION['sectionNumber'] = $data['sectionNumber'];
 $token = generateToken(32);
@@ -62,14 +67,12 @@ WHERE
 $stmtSectionId = $conn1->prepare($querySecId);
 $stmtSectionId->execute();
 
-
-
 if($addsectionsuccess)
 {
     header('Location: section.php?successadd');
 }
 else
 {
-    
+    header('Location: section.php?notsuccessadd');
 }
 ?>

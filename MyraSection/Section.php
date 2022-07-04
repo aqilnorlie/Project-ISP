@@ -417,6 +417,28 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
     </div>
     <!-- END: successful add section -->
 
+    <!-- START: unsuccessful add section -->
+  <div class="modal fade" id="notsuccessaddsec">
+      <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content bg-red">
+          <div class="modal-header">
+            <h4 class="modal-title">Notice</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span></button>
+          </div>
+          <div class="modal-body">
+            <p><b>Fail</b> to add section.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- END: unsuccessful add section -->
+
   <!-- START: edit section success -->
   <div class="modal fade" id="successeditsec">
       <div class="modal-dialog modal-dialog-centered modal-sm">
@@ -591,6 +613,16 @@ $(document).ready(function () {
     </script>
 <?php } ?>
 <!-- END: success add section -->
+
+<!-- START: unsuccessful add section -->
+<?php if (isset($_GET['notsuccessadd'])){ ?>
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $("#notsuccessaddsec").modal("show");
+    });
+    </script>
+<?php } ?>
+<!-- END: unsuccessful add section -->
 
 <!-- START: success edit section -->
 <?php if (isset($_GET['successedit'])){ ?>

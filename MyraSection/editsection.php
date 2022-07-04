@@ -135,7 +135,7 @@ function checkReportToken($conn1, $token)
       <div class="container-fluid">
         <div class="row">
           <!-- left column -->
-          <div class="col-md-6">
+          <div class="col-xl-20">
             <!-- general form elements -->
             <div style="width:1250px" class="card card-primary ">
               <div class="card-header">
