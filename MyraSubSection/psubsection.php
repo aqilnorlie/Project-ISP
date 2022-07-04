@@ -3,6 +3,12 @@
 include('../MyraLogin/MyraFunctionLogin.php');
 include("../MyraLogin/connection.php");
 session_start();
+
+if($_GET[''] == null) 
+{
+  header("Location: ../myraerror/myraerror.php");
+}
+
 $data = $_POST;
 $token = generateToken(32);
 

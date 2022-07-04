@@ -3,6 +3,8 @@
 include("../MyraLogin/connection.php");
 session_start();
 
+
+
 ?>
 
 <!DOCTYPE html>
@@ -46,6 +48,12 @@ session_start();
 
 
 <?php
+
+if($_GET['searchToken'] == null) 
+{
+  header("Location: ../myraerror/myraerror.php");
+}
+
               if(isset($_GET['searchToken']))
               {
                 $searchToken = $_GET['searchToken'];

@@ -4,6 +4,11 @@ include("../Myralogin/MyraFunctionLogin.php");
 
 session_start();
 
+if($_GET[''] == null) 
+{
+  header("Location: ../myraerror/myraerror.php");
+}
+
   // check existing user
   if(isset( $_POST["btnAddUser"]) ){
   $statement = $conn1->prepare('SELECT * FROM myra.myraroleassignment WHERE USER_ID = :USER_ID');

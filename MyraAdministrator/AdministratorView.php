@@ -3,6 +3,8 @@ include("../MyraLogin/connection.php");
 include("../MyraLogin/MyraFunctionLogin.php");
 session_start();
 
+
+
 if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
   header("Location: ../MyraLogin/login.php");
 }
@@ -44,6 +46,12 @@ if(!isset($_SESSION['userislogged']) || $_SESSION['userislogged'] != 1){
 <body class="hold-transition sidebar-mini layout-fixed">
 
 <?php
+
+if($_GET['assignId'] == null) 
+{
+  header("Location: ../myraerror/myraerror.php");
+}
+
 if(isset($_GET['assignId']) && checkReportToken($conn1, $_GET['assignId']) == false) 
 {
     header("Location: administrator.php?warning4");

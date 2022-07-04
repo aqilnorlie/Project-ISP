@@ -1,9 +1,11 @@
 <?php
-
-
 include("../MyraLogin/connection.php");
 session_start();
 
+if($_GET[''] == null) 
+{
+  header("Location: ../myraerror/myraerror.php");
+}
 
 if(isset($_POST['submit_update']))
 {

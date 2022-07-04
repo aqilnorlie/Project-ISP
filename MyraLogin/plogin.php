@@ -3,9 +3,14 @@
 include("connection.php");
 include("MyraFunctionLogin.php");
 
- ?>
+ 
 
-<?php
+if($_GET[''] == null) 
+{
+  header("Location: ../myraerror/myraerror.php");
+}
+
+
 if(isset($_POST['btnLog']))
 {
     $userid = trim($_POST['userid']);
